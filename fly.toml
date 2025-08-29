@@ -1,7 +1,8 @@
 app = "yoobee-clash-hub-api"
 
 [build]
-  builder = "heroku/buildpacks:20"
+  builder = "heroku/buildpacks:20-cnb"
+
 
 [env]
   PORT = "8080"
