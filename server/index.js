@@ -46,6 +46,6 @@ app.get('/', (req, res) => {
   res.send('Hello, Fly.io! Server is running.');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running at http://0.0.0.0:${PORT}`);
 });
