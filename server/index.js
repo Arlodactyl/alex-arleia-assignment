@@ -1,41 +1,39 @@
 // server/index.js
-// Backend API for Clash Hub app (Fly.io ready)
-
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config(); // Load environment variables from .env
+require('dotenv').config(); // Load your .env variables
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Fly.io sets this automatically
+const PORT = process.env.PORT || 3000;
 
-// Enable CORS so frontend can call API
+// Allow frontend to make requests
 app.use(cors());
 
-// Serve static files from public folder
+// Serve static frontend files (from public folder)
 app.use(express.static(path.join(process.cwd(), 'public')));
 
 // ----------------------------
-// Test route to check server
+// Test route
 // ----------------------------
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Server is running!' });
 });
 
 // ----------------------------
-// Fetch player data from Clash Royale API
+// Fetch player from Clash Royale API
 // Example: /api/player/9U0L2QR0
 // ----------------------------
 app.get('/api/player/:tag', async (req, res) => {
   const playerTag = req.params.tag;
-  const token = process.env.CLASH_API_TOKEN; // Use Fly.io secret
+  const token = process.env.CLASH_API_TOKEN;
 
   if (!token) {
     return res.status(500).json({ error: 'Missing Clash API token' });
   }
 
   try {
-    // Node 18+ has built-in fetch, no node-fetch required
+    // Use built-in fetch in Node 18+
     const response = await fetch(`https://api.clashroyale.com/v1/players/%23${playerTag}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -53,14 +51,14 @@ app.get('/api/player/:tag', async (req, res) => {
   }
 });
 
-// Optional: root route
+// Optional root route
 app.get('/', (req, res) => {
   res.send('Hello, Fly.io! Server is running.');
 });
 
 // ----------------------------
-// Start server
+// Start server on 0.0.0.0 (required for Fly.io)
 // ----------------------------
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server is running at http://0.0.0.0:${PORT}`);
+  console.log(`Server running at http://0.0.0.0:${PORT}`);
 });
