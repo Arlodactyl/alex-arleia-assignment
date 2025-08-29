@@ -3,10 +3,8 @@
 # The name of your app on Fly.io
 app = "yoobee-clash-hub-api"
 
-# Build section - tells Fly.io which builder to use
 [build]
-  # Use the supported Heroku Cloud Native Buildpack
-  builder = "heroku/buildpacks:20-cnb"
+  builder = "paketobuildpacks/builder:base"
 
 # Environment variables
 [env]
