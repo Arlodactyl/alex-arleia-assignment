@@ -1,18 +1,28 @@
+# fly.toml - Fly.io configuration for your Clash Hub API app
+
+# The name of your app on Fly.io
 app = "yoobee-clash-hub-api"
 
+# Build section - tells Fly.io which builder to use
 [build]
+  # Use the supported Heroku Cloud Native Buildpack
   builder = "heroku/buildpacks:20-cnb"
 
-
+# Environment variables
 [env]
+  # The port your Node.js server will listen on inside the container
   PORT = "8080"
 
+# Services - defines which ports your app will accept connections on
 [[services]]
+  # The internal port your app uses (Node.js listens here)
   internal_port = 3000
   protocol = "tcp"
 
+  # External port 80 (HTTP)
   [[services.ports]]
     port = 80
 
+  # External port 443 (HTTPS)
   [[services.ports]]
     port = 443
