@@ -1,4 +1,5 @@
-// matches.js - handles the recent matches page functionality
+
+  // matches.js - handles the recent matches page functionality
 // loads battle data from clash royale api and displays match history
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // process and display the data
             displayMatches(matches);
-            calculateAndShowStats(matches);
+            calculateAndShowStats(matches);      // ← last-25 stats
             showRecentGamePattern(matches.slice(0, 5));
             
             // show everything
@@ -87,9 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadRecentMatches(tag) {
         // clean up the tag for the url
         const cleanTag = encodeURIComponent(String(tag).replace(/^#/, ""));
-        // updated: point to vercel /api/royale proxy instead of /api/player
         const apiUrl = `/api/royale?path=players&tag=${cleanTag}&battlelog=true`;
-
         
         console.log('calling api:', apiUrl);
         
@@ -100,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('proxy error:', response.status, text);
             throw new Error(`api call failed: ${response.status}`);
         }
-
+        
         return JSON.parse(text);
     }
 
@@ -123,8 +122,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // figure out if we won or lost
         const result = analyzeMatchResult(match);
-        const timeAgo = formatTimeAgo(match.battleTime);
+        const timeAgo = formatTimeAgo(match.battleTime);   // ← fixed parsing
         const opponentInfo = getOpponentInfo(match);
+
+        // pick the right-side icon based on result
+        const iconSrc = getResultIcon(result.status);  // down-arrow.png on loss, winarrow.png on win
         
         // build the html
         card.innerHTML = `
@@ -142,6 +144,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     ${opponentInfo.clan ? `<span class="opponent-clan">[${opponentInfo.clan}]</span>` : ''}
                 </div>
                 ${match.arena?.name ? `<div class="arena-name">${match.arena.name}</div>` : ''}
+                <div class="result-icon-right">
+                    <img src="${iconSrc}" alt="${result.status} icon" />
+                </div>
             </div>
         `;
         
@@ -188,11 +193,11 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // calculates win rate and other stats
+    // calculates win rate and other stats (for the returned battle log only)
     function calculateAndShowStats(matches) {
         let totalWins = 0;
         let crownWins = 0;
-        let totalMatches = matches.length;
+        let totalMatches = matches.length; // up to 25
         
         matches.forEach(match => {
             const result = analyzeMatchResult(match);
@@ -207,12 +212,18 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const winPercentage = totalMatches > 0 ? Math.round((totalWins / totalMatches) * 100) : 0;
         
-        console.log(`stats: ${winPercentage}% win rate, ${totalWins}/${totalMatches}, ${crownWins} crown wins`);
+        console.log(`stats(last ${totalMatches}): ${winPercentage}% win rate, ${totalWins}/${totalMatches}, ${crownWins} 3-crown wins`);
         
-        // update the ui
+        // update the ui values
         document.getElementById('winPercentage').textContent = `${winPercentage}%`;
         document.getElementById('totalWins').textContent = totalWins;
         document.getElementById('crownWins').textContent = crownWins;
+
+        // update the labels so it's obvious these are from the log
+        const statLabels = matchesStats.querySelectorAll('.stat-label');
+        if (statLabels[0]) statLabels[0].textContent = 'Win Rate (last 25):';
+        if (statLabels[1]) statLabels[1].textContent = 'Wins (last 25):';
+        if (statLabels[2]) statLabels[2].textContent = '3-Crown Wins (last 25):';
     }
 
     // shows the w/l pattern for last 5 games
@@ -240,30 +251,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // converts api timestamp to readable format
-    function formatTimeAgo(battleTimeString) {
+    // converts CR battleTime ("YYYYMMDDTHHMMSS.000Z") to "xh ago" properly
+    function formatTimeAgo(crTime) {
         try {
-            const battleTime = new Date(battleTimeString);
+            const m = String(crTime).match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/);
+            if (!m) return 'recently';
+            const iso = `${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}Z`;
+            const battleTime = new Date(iso);
+
             const now = new Date();
-            const timeDiffMs = now - battleTime;
-            
-            const minutes = Math.floor(timeDiffMs / (1000 * 60));
-            const hours = Math.floor(minutes / 60);
-            const days = Math.floor(hours / 24);
-            
-            if (days > 0) {
-                return `${days}d ago`;
-            } else if (hours > 0) {
-                return `${hours}h ago`;
-            } else if (minutes > 0) {
-                return `${minutes}m ago`;
-            } else {
-                return 'just now';
-            }
-        } catch (error) {
-            console.error('time formatting failed:', error);
+            const diff = Math.max(0, now - battleTime);
+            const mins = Math.floor(diff / 60000);
+            const hrs  = Math.floor(mins / 60);
+            const days = Math.floor(hrs / 24);
+
+            if (days > 0)  return `${days}d ago`;
+            if (hrs > 0)   return `${hrs}h ago`;
+            if (mins > 0)  return `${mins}m ago`;
+            return 'just now';
+        } catch {
             return 'recently';
         }
+    }
+
+    // pick the arrow icon depending on result
+    function getResultIcon(status) {
+        // put these files in public/assets:
+        //  - winarrow.png  (up/right arrow)
+        //  - down-arrow.png (down arrow)
+        return status === 'WON'
+            ? './assets/winarrow.png'
+            : status === 'LOST'
+                ? './assets/down-arrow.png'
+                : './assets/arrow.png'; // fallback for DRAW/unknown
     }
 
     // ui helper functions
