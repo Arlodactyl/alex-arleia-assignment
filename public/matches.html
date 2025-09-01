@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recent Matches - Clash Hub</title>
+  <!-- Link to our separate CSS file -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- slide-out nav (hidden by default, opens from left) -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <!-- Logo section at top of drawer  -->
+    <div class="drawer-header">
+      <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
+    </div>
+    
+    <!-- Main navigation links with images in the assets folder -->
+    <ul class="nav-list">
+      <!-- main pages -->
+      <li class="nav-item">
+        <a href="./index.html">
+          <img src="./assets/crown.png" alt="Home" />
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./player.html">
+          <img src="./assets/user.png" alt="Player Profile" />
+          <span>Player Profile</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./matches.html">
+          <img src="./assets/trophy.png" alt="Recent Matches" />
+          <span>Recent Matches</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./clans.html">
+          <img src="./assets/magnifier.png" alt="Clan Search" />
+          <span>Clan Search</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./settings.html">
+          <img src="./assets/settings.png" alt="Settings" />
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Secondary links at bottom - less frequently used pages -->
+    <div class="drawer-footer">
+      <a href="./videos.html" class="footer-link">Video Archive</a>
+      <a href="./news.html" class="footer-link">News</a>
+      <a href="./terms.html" class="footer-link">Terms of Service</a>
+    </div>
+  </aside>
+
+  <!-- pull-tab arrow that peeks from left (closer to content now) -->
+  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
+    <span style="color: white; font-size: 14px;">→</span>
+  </button>
+
+  <!-- translucent overlay when drawer is open -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <!-- hamburger – clicking opens drawer (like the site you showed) -->
+      <button id="hamburger" class="hamburger" aria-label="Open menu">
+        <span class="bars"><span class="line"></span></span>
+      </button>
+
+      <!-- Logo and brand - no title text needed since logo includes it -->
+      <div class="brand">
+        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+      </div>
+
+      <button class="icon-btn" title="Settings">
+        <img src="./assets/settings.png" alt="Settings" />
+      </button>
+    </header>
+
+    <!-- player search section - where users enter their tag -->
+    <div class="player-search-section">
+      <div class="hi">Enter Player Tag to View Recent Matches</div>
+      <div class="search-input-container">
+        <input type="text" id="playerTagInput" placeholder="Enter player tag (e.g., 9Q2YJ0U)" class="player-tag-input" />
+        <button id="loadMatchesBtn" class="load-matches-btn">Load Matches</button>
+      </div>
+      <!-- loading and error messages appear here -->
+      <div id="loadingIndicator" class="loading-message hidden">🔍 Fetching your recent matches...</div>
+      <div id="errorMessage" class="error-message hidden"></div>
+    </div>
+
+    <!-- stats overview section - shows win rate and totals -->
+    <section class="matches-stats hidden" id="matchesStats">
+      <h3>MATCH OVERVIEW</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <img src="./assets/trophy.png" alt="Win Rate" />
+          </div>
+          <div class="stat-label">Win Rate:</div>
+          <div class="stat-value" id="winPercentage">--%</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">
+            <img src="./assets/crown.png" alt="Total Wins" />
+          </div>
+          <div class="stat-label">Total Wins:</div>
+          <div class="stat-value" id="totalWins">--</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">
+            <img src="./assets/treasure.png" alt="Crown Wins" />
+          </div>
+          <div class="stat-label">Crown Wins:</div>
+          <div class="stat-value" id="crownWins">--</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- recent matches list - individual battle cards appear here -->
+    <section class="recent-matches-section hidden" id="recentMatchesSection">
+      <h3 class="matches-title">Recent Matches</h3>
+      <div id="matchesList" class="matches-list">
+        <!-- match cards get added here by javascript -->
+      </div>
+    </section>
+
+    <!-- game pattern section - shows w/l pattern for last 5 games -->
+    <section class="game-pattern-section hidden" id="gamePatternSection">
+      <h3 class="pattern-title">LAST 5 GAMES</h3>
+      <div id="gamePattern" class="game-pattern-container">
+        <!-- w/l letters get added here by javascript -->
+      </div>
+    </section>
+
+    <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
+    <footer class="footer">
+      <div class="social-icons">
+        <!-- YouTube - this is where our real YouTube channel link would be if this was a real deployment -->
+        <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
+          <img src="./assets/youtube.png" alt="YouTube" />
+        </a>
+        <!-- Discord - this is where our real Discord server invite would be if this was a real deployment -->
+        <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
+          <img src="./assets/discord.png" alt="Discord" />
+        </a>
+        <!-- Instagram - this is where our real Instagram profile would be if this was a real deployment -->
+        <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
+          <img src="./assets/instagram.png" alt="Instagram" />
+        </a>
+        <!-- Facebook - this is where our real Facebook page would be if this was a real deployment -->
+        <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
+          <img src="./assets/facebook.png" alt="Facebook" />
+        </a>
+      </div>
+      <div class="footer-text">
+        <p>&copy; 2025 Clash Hub. Follow us for the latest updates!</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- tiny JS to handle drawer open/close (no framework) -->
+  <script>
+    const drawer = document.getElementById('drawer');
+    const tab = document.getElementById('drawerTab');
+    const burger = document.getElementById('hamburger');
+    const backdrop = document.getElementById('backdrop');
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    burger.addEventListener('click', openDrawer);
+    tab.addEventListener('click', openDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    window.addEventListener('keydown', (e)=>{ 
+      if(e.key === 'Escape') closeDrawer(); 
+    });
+  </script>
+
+  <!-- matches page functionality -->
+  <script src="./js/matches.js"></script>
+</body>
+</html>
