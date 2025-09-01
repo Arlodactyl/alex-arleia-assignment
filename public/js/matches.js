@@ -87,7 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadRecentMatches(tag) {
         // clean up the tag for the url
         const cleanTag = encodeURIComponent(String(tag).replace(/^#/, ""));
-        const apiUrl = `/api/player/${cleanTag}/battles`;
+        const apiUrl = `/api/royale?endpoint=players/%23${cleanTag}/battlelog`;
+
         
         console.log('calling api:', apiUrl);
         
