@@ -89,10 +89,15 @@
     <section class="page-header">
       <div class="page-header-content">
         <div class="page-icon">
-          <img src="./assets/termsofservice.jpg" alt="Terms of Service" />
+          <img src="./assets/settings.png" alt="Legal Document" />
         </div>
         <h1 class="page-title">Terms of Service</h1>
         <p class="page-subtitle">Last updated: March 2025</p>
+      </div>
+      
+      <!-- Feature image underneath title -->
+      <div class="page-feature-image">
+        <img src="./assets/termsofservice.jpg" alt="Terms of Service Illustration" />
       </div>
     </section>
 
@@ -232,6 +237,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 12px;
     }
 
@@ -245,10 +251,38 @@
       justify-content: center;
     }
 
-    .page-icon img {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+    .page-feature-image {
+      margin: 20px auto 0;
+      width: 100%;
+      max-width: 600px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      position: relative;
+      display: block;
+    }
+
+    .page-feature-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(45, 109, 246, 0.1), rgba(245, 197, 66, 0.1));
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .page-feature-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 300px;
+      object-fit: cover;
+      object-position: center;
+      position: relative;
+      z-index: 0;
     }
 
     .page-title {
@@ -346,8 +380,29 @@
       font-weight: 700;
     }
 
-    /* Mobile responsiveness */
+    .page-icon img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+    }
+
+    /* Mobile adjustments for feature image */
     @media (max-width: 520px) {
+      .page-feature-image {
+        margin-top: 16px;
+        border-radius: var(--radius-md);
+      }
+
+      .page-feature-image img {
+        max-height: 200px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .page-feature-image img {
+        max-height: 160px;
+      }
+    }
       .page-header {
         padding: 20px;
       }
