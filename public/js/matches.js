@@ -87,18 +87,20 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadRecentMatches(tag) {
         // clean up the tag for the url
         const cleanTag = encodeURIComponent(String(tag).replace(/^#/, ""));
+        // updated: point to vercel /api/royale proxy instead of /api/player
         const apiUrl = `/api/royale?endpoint=players/%23${cleanTag}/battlelog`;
-
         
         console.log('calling api:', apiUrl);
         
         const response = await fetch(apiUrl);
-        
+        const text = await response.text();
+
         if (!response.ok) {
+            console.error('proxy error:', response.status, text);
             throw new Error(`api call failed: ${response.status}`);
         }
-        
-        return response.json();
+
+        return JSON.parse(text);
     }
 
     // creates all the match cards and adds them to the page
