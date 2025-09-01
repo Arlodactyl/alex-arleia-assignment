@@ -4,39 +4,46 @@
 
 export default async function handler(req, res) {
   try {
-    const { path, tag, test } = req.query;
+    const { test, path, tag, battlelog } = req.query;
 
-    // ✅ Test endpoint
+    // Health check
     if (test === "true") {
-      return res.status(200).json({
-        status: "ok",
-        message: "Server is running on Vercel!",
-      });
+      return res.status(200).json({ status: "ok", message: "Server is running on Vercel!" });
     }
 
-    // if no path was given, return error
     if (!path) {
-      return res.status(400).json({ error: "Missing path parameter" });
+      return res.status(400).json({ error: "Missing 'path' query param" });
     }
 
-    // build the api url, add %23 before the tag because # must be encoded
-    let url = `https://proxy.royaleapi.dev/v1/${path}`;
-    if (tag) {
-      url += `/%23${tag}`;
-    }
+    // Build proxy URL
+    const cleanPath = String(path).replace(/^\/+/, ""); // remove leading slashes
+    let url = `https://proxy.royaleapi.dev/v1/${cleanPath}`;
 
-    // fetch data from royaleapi proxy, add the secret key from vercel
-    const response = await fetch(url, {
+    // Add tag as /%23TAG if provided (no leading #)
+    if (tag) url += `/%23${encodeURIComponent(String(tag).replace(/^#/, ""))}`;
+
+    // Add /battlelog if requested
+    if (String(battlelog).toLowerCase() === "true") url += "/battlelog";
+
+    // Fetch from RoyaleAPI proxy using your token stored on Vercel
+    const r = await fetch(url, {
       headers: {
         Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
+        Accept: "application/json",
       },
     });
 
-    const data = await response.json();
-    res.status(response.status).json(data);
+    const text = await r.text();
 
+    // (Optional) CORS – safe even if you’re same-origin
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+    try { return res.status(r.status).json(JSON.parse(text)); }
+    catch { return res.status(r.status).send(text); }
   } catch (err) {
     console.error("API error:", err);
-    res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }

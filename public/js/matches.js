@@ -88,7 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // clean up the tag for the url
         const cleanTag = encodeURIComponent(String(tag).replace(/^#/, ""));
         // updated: point to vercel /api/royale proxy instead of /api/player
-        const apiUrl = `/api/royale?endpoint=players/%23${cleanTag}/battlelog`;
+        const apiUrl = `/api/royale?path=players&tag=${cleanTag}&battlelog=true`;
+
         
         console.log('calling api:', apiUrl);
         
