@@ -110,14 +110,14 @@ body{
   flex:1;
 }
 .brand__logo{ 
-  height: 200px; /* made MUCH bigger - was 140px */
+  height: 250px; /* 25% bigger - was 200px */
   width: auto; /* maintains aspect ratio */
 }
 
 /* Tablet and desktop - even bigger logo */
 @media (min-width: 768px) {
   .brand__logo {
-    height: 240px; /* much larger on bigger screens - was 160px */
+    height: 300px; /* 25% bigger - was 240px */
   }
 }
 
@@ -354,7 +354,7 @@ body{
 }
 
 .drawer-logo {
-  height: 80px; /* made bigger - was 60px */
+  height: 120px; /* big logo in the drawer - was 80px */
   width: auto;
 }
 
@@ -568,7 +568,7 @@ body{
   }
   /* Smaller logo on very small screens */
   .brand__logo {
-    height: 160px; /*need to make logo bigger after viewing hifis- was 120px */
+    height: 200px; /* 25% bigger than before - was 160px */
   }
   /* Tighter social icons spacing */
   .social-icons {
@@ -595,7 +595,7 @@ body{
   }
   /* Even smaller logo for tiny screens */
   .brand__logo {
-    height: 140px; /* still much bigger than original - was 100px */
+    height: 175px; /* 25% bigger - was 140px */
   }
   /* More compact social icons */
   .social-link {
