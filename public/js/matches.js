@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const recentMatchesSection = document.getElementById('recentMatchesSection');
     const gamePatternSection = document.getElementById('gamePatternSection');
     const matchesList = document.getElementById('matchesList');
+
+    // new: display current tag bar
+    let currentTagBar = document.getElementById('currentTagBar');
+    let tagText = document.getElementById('tagText');
     
     // button click handler
     loadMatchesBtn.addEventListener('click', handleLoadMatches);
@@ -26,11 +30,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // main function that coordinates everything
     async function handleLoadMatches() {
-        const playerTag = playerTagInput.value.trim();
-        
-        if (!playerTag) {
+        const raw = playerTagInput.value.trim();
+        if (!raw) {
             showError('need a player tag first');
             return;
+        }
+
+        // normalize player tag for api + display
+        const normalized = raw.replace(/^#/, '').toUpperCase();
+        const displayTag = `#${normalized}`;
+
+        // show tag in UI
+        if (tagText && currentTagBar) {
+            tagText.textContent = displayTag;
+            currentTagBar.classList.remove('hidden');
         }
         
         // show loading state
@@ -39,10 +52,10 @@ document.addEventListener('DOMContentLoaded', function() {
         hideAllMatchSections();
         
         try {
-            console.log('fetching matches for:', playerTag);
+            console.log('fetching matches for:', normalized);
             
             // call the api
-            const matches = await loadRecentMatches(playerTag);
+            const matches = await loadRecentMatches(normalized);
             
             console.log('got', matches.length, 'matches');
             
@@ -58,6 +71,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // show everything
             showAllMatchSections();
+
+            // optional: remember tag
+            localStorage.setItem('playerTag', normalized);
             
         } catch (error) {
             console.error('failed to load matches:', error);
@@ -130,8 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // compares crown counts to determine win/loss/draw
     function analyzeMatchResult(match) {
-        const playerCrowns = match.team?.[0]?.crowns || 0;
-        const opponentCrowns = match.opponent?.[0]?.crowns || 0;
+        const playerCrowns = (match.team || []).reduce((sum, p) => sum + (p.crowns || 0), 0);
+        const opponentCrowns = (match.opponent || []).reduce((sum, p) => sum + (p.crowns || 0), 0);
         
         let status;
         if (playerCrowns > opponentCrowns) {
