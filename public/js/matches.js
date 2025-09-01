@@ -1,4 +1,5 @@
-// matches.js - handles the recent matches page functionality
+
+  // matches.js - handles the recent matches page functionality
 // loads battle data from clash royale api and displays match history
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -114,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // builds a single match card element  (← now with a small left icon, no big arrow)
+    // builds a single match card element
     function createMatchCard(match, index) {
         const card = document.createElement('div');
         card.className = 'match-card';
@@ -124,29 +125,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const timeAgo = formatTimeAgo(match.battleTime);   // ← fixed parsing
         const opponentInfo = getOpponentInfo(match);
 
+        // pick the right-side icon based on result
+        const iconSrc = getResultIcon(result.status);  // down-arrow.png on loss, winarrow.png on win
+        
         // build the html
         card.innerHTML = `
-            <!-- small clan-wars icon on the left -->
-            <div class="match-icon">
-                <img src="./assets/icon_menu_clan_wars.png" alt="Clan Wars" />
-            </div>
-
-            <div class="match-body">
-                <div class="match-card-header">
-                    <div class="match-result ${result.status.toLowerCase()}">
-                        <span class="result-badge">${result.status}</span>
-                        <span class="match-score">${result.playerCrowns} - ${result.opponentCrowns}</span>
-                    </div>
-                    <div class="match-time">${timeAgo}</div>
+            <div class="match-card-header">
+                <div class="match-result ${result.status.toLowerCase()}">
+                    <span class="result-badge">${result.status}</span>
+                    <span class="match-score">${result.playerCrowns} - ${result.opponentCrowns}</span>
                 </div>
-
-                <div class="match-details">
-                    <div class="game-mode">${match.gameMode?.name || 'unknown mode'}</div>
-                    <div class="opponent-info">
-                        <strong>vs ${opponentInfo.name}</strong>
-                        ${opponentInfo.clan ? `<span class="opponent-clan">[${opponentInfo.clan}]</span>` : ''}
-                    </div>
-                    ${match.arena?.name ? `<div class="arena-name">${match.arena.name}</div>` : ''}
+                <div class="match-time">${timeAgo}</div>
+            </div>
+            <div class="match-details">
+                <div class="game-mode">${match.gameMode?.name || 'unknown mode'}</div>
+                <div class="opponent-info">
+                    <strong>vs ${opponentInfo.name}</strong>
+                    ${opponentInfo.clan ? `<span class="opponent-clan">[${opponentInfo.clan}]</span>` : ''}
+                </div>
+                ${match.arena?.name ? `<div class="arena-name">${match.arena.name}</div>` : ''}
+                <div class="result-icon-right">
+                    <img src="${iconSrc}" alt="${result.status} icon" />
                 </div>
             </div>
         `;
@@ -275,6 +274,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // pick the arrow icon depending on result
+    function getResultIcon(status) {
+        // put these files in public/assets:
+        //  - winarrow.png  (up/right arrow)
+        //  - down-arrow.png (down arrow)
+        return status === 'WON'
+            ? './assets/winarrow.png'
+            : status === 'LOST'
+                ? './assets/down-arrow.png'
+                : './assets/arrow.png'; // fallback for DRAW/unknown
+    }
+
     // ui helper functions
     function showLoading(show) {
         loadingIndicator.classList.toggle('hidden', !show);
@@ -289,4 +300,15 @@ document.addEventListener('DOMContentLoaded', function() {
         errorMessage.classList.add('hidden');
     }
 
-   
+    function showAllMatchSections() {
+        matchesStats.classList.remove('hidden');
+        recentMatchesSection.classList.remove('hidden');
+        gamePatternSection.classList.remove('hidden');
+    }
+
+    function hideAllMatchSections() {
+        matchesStats.classList.add('hidden');
+        recentMatchesSection.classList.add('hidden');
+        gamePatternSection.classList.add('hidden');
+    }
+});
