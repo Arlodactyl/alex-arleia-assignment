@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>News - Clash Hub</title>
+  <!-- Link to our separate CSS file -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- slide-out nav (hidden by default, opens from left) -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <!-- Logo section at top of drawer  -->
+    <div class="drawer-header">
+      <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
+    </div>
+    
+    <!-- Main navigation links with images in the assets folder -->
+    <ul class="nav-list">
+      <!-- main pages -->
+      <li class="nav-item">
+        <a href="./index.html">
+          <img src="./assets/crown.png" alt="Home" />
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./player.html">
+          <img src="./assets/user.png" alt="Player Profile" />
+          <span>Player Profile</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./matches.html">
+          <img src="./assets/trophy.png" alt="Recent Matches" />
+          <span>Recent Matches</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./clans.html">
+          <img src="./assets/magnifier.png" alt="Clan Search" />
+          <span>Clan Search</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./settings.html">
+          <img src="./assets/settings.png" alt="Settings" />
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Secondary links at bottom - less frequently used pages -->
+    <div class="drawer-footer">
+      <a href="./videos.html" class="footer-link">Video Archive</a>
+      <a href="./news.html" class="footer-link">News</a>
+      <a href="./terms.html" class="footer-link">Terms of Service</a>
+    </div>
+  </aside>
+
+  <!-- pull-tab arrow that peeks from left (closer to content now) -->
+  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
+    <span style="color: white; font-size: 14px;">→</span>
+  </button>
+
+  <!-- translucent overlay when drawer is open -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <!-- hamburger – clicking opens drawer (like the site you showed) -->
+      <button id="hamburger" class="hamburger" aria-label="Open menu">
+        <span class="bars"><span class="line"></span></span>
+      </button>
+
+      <!-- Logo and brand - no title text needed since logo includes it -->
+      <div class="brand">
+        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+      </div>
+
+      <button class="icon-btn" title="Settings">
+        <img src="./assets/settings.png" alt="Settings" />
+      </button>
+    </header>
+
+    <!-- Page title with icon -->
+    <section class="page-header">
+      <div class="page-header-content">
+        <div class="page-icon">
+          <img src="./assets/email.png" alt="News" />
+        </div>
+        <h1 class="page-title">Latest News</h1>
+        <p class="page-subtitle">Stay updated with Clash Royale news and updates</p>
+      </div>
+    </section>
+
+    <!-- Featured news images section - shows the two main news images -->
+    <section class="featured-news-images">
+      <div class="featured-grid">
+        <!-- First featured image -->
+        <div class="featured-image-card">
+          <img src="./assets/news.jpg" alt="Clash Royale Update News" />
+          <div class="featured-overlay">
+            <h3>Game Updates</h3>
+            <p>Latest features and card releases</p>
+          </div>
+        </div>
+        
+        <!-- Second featured image -->
+        <div class="featured-image-card">
+          <img src="./assets/news2.jpg" alt="Clash Royale Community News" />
+          <div class="featured-overlay">
+            <h3>Community News</h3>
+            <p>Tournament results and player highlights</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWS ARTICLES SECTION - displays article cards with summaries and links -->
+    <section class="news-articles">
+      <h2 class="section-title">Recent Articles</h2>
+      
+      <!-- Article 1: Forbes - Why you should be playing Clash Royale -->
+      <article class="news-card">
+        <div class="news-card-header">
+          <div class="news-source">Forbes</div>
+          <div class="news-date">March 2016</div>
+        </div>
+        <h3 class="news-title">Why You Should Be Playing Clash Royale</h3>
+        <div class="news-summary">
+          <p>An early analysis of what made Clash Royale appealing to mobile gamers, examining the game's strategic depth and accessibility. The article explores how Supercell created a game that's easy to learn but difficult to master.</p>
+        </div>
+        <div class="news-actions">
+          <a href="https://www.forbes.com/sites/davidthier/2016/03/04/why-you-should-be-playing-clash-royale/" target="_blank" class="read-more-btn">
+            Read Full Article →
+          </a>
+        </div>
+      </article>
+
+      <!-- Article 2: Times of India - Hunter Evolution Update -->
+      <article class="news-card">
+        <div class="news-card-header">
+          <div class="news-source">Times of India</div>
+          <div class="news-date">Recent Update</div>
+        </div>
+        <h3 class="news-title">Clash Royale Hunter Evolution: New Abilities & Stats</h3>
+        <div class="news-summary">
+          <p>Deep dive into the Hunter card's evolution mechanics, including new abilities, updated statistics, and gameplay impact. Analysis covers whether this evolution is worth the investment for competitive play.</p>
+        </div>
+        <div class="news-actions">
+          <a href="https://timesofindia.indiatimes.com/sports/esports/news/clash-royale-hunter-evolution-all-new-abilities-stats-is-it-good-and-more/articleshow/118537377.cms" target="_blank" class="read-more-btn">
+            Read Full Article →
+          </a>
+        </div>
+      </article>
+
+      <!-- Article 3: New York Times - Tencent Supercell Deal -->
+      <article class="news-card">
+        <div class="news-card-header">
+          <div class="news-source">New York Times</div>
+          <div class="news-date">June 2016</div>
+        </div>
+        <h3 class="news-title">Tencent Nears Deal to Buy Supercell, Maker of Clash of Clans</h3>
+        <div class="news-summary">
+          <p>Business news covering Tencent's acquisition of Supercell, the company behind Clash Royale and Clash of Clans. This major deal reshaped the mobile gaming industry and affected future game development.</p>
+        </div>
+        <div class="news-actions">
+          <a href="https://www.nytimes.com/2016/06/16/business/dealbook/tencent-nears-deal-to-buy-supercell-maker-of-clash-of-clans.html" target="_blank" class="read-more-btn">
+            Read Full Article →
+          </a>
+        </div>
+      </article>
+
+      <!-- Sample local news items - these would be managed by your team -->
+      <article class="news-card local-news">
+        <div class="news-card-header">
+          <div class="news-source">Clash Hub Analysis</div>
+          <div class="news-date">September 2025</div>
+        </div>
+        <h3 class="news-title">Season 75 "Back to Drool" - New Vines Card Analysis</h3>
+        <div class="news-summary">
+          <p>The latest season introduces Vines, a 3-Elixir Epic spell that targets the three highest-HP units within a 2.5-tile radius. This card stuns enemies, deals tick damage, and can ground air troops - potentially shaking up the current meta significantly.</p>
+        </div>
+        <div class="news-actions">
+          <span class="coming-soon">Full Guide Coming Soon</span>
+        </div>
+      </article>
+
+      <article class="news-card local-news">
+        <div class="news-card-header">
+          <div class="news-source">Clash Hub Meta Report</div>
+          <div class="news-date">August 2025</div>
+        </div>
+        <h3 class="news-title">Merge Tactics Game Mode: Strategic Overview</h3>
+        <div class="news-summary">
+          <p>The new turn-based Merge Tactics mode has revolutionized Clash Royale gameplay. Available from Arena 3, this 4-player survival mode requires combining troops strategically while managing unique match modifiers and ruler abilities.</p>
+        </div>
+        <div class="news-actions">
+          <span class="coming-soon">Strategy Guide In Progress</span>
+        </div>
+      </article>
+
+      <article class="news-card local-news">
+        <div class="news-card-header">
+          <div class="news-source">Clash Hub Updates</div>
+          <div class="news-date">July 2025</div>
+        </div>
+        <h3 class="news-title">Trophy Road Extended to 10,000 - What This Means</h3>
+        <div class="news-summary">
+          <p>Supercell extended Trophy Road to 10,000 trophies, introducing new Arena "Valkalla" at 9,000 trophies. This addresses the bottleneck many players experienced between 5,000-8,000 trophies and provides more progression opportunities.</p>
+        </div>
+        <div class="news-actions">
+          <span class="coming-soon">Progression Guide Coming Soon</span>
+        </div>
+      </article>
+
+      <article class="news-card local-news">
+        <div class="news-card-header">
+          <div class="news-source">Clash Hub</div>
+          <div class="news-date">This Month</div>
+        </div>
+        <h3 class="news-title">Weekly Tournament Results</h3>
+        <div class="news-summary">
+          <p>Check out the winners from this week's community tournaments and upcoming events. See who climbed to the top of the leaderboards!</p>
+        </div>
+        <div class="news-actions">
+          <span class="coming-soon">Coming Soon</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
+    <footer class="footer">
+      <div class="social-icons">
+        <!-- YouTube - this is where our real YouTube channel link would be if this was a real deployment -->
+        <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
+          <img src="./assets/youtube.png" alt="YouTube" />
+        </a>
+        <!-- Discord - this is where our real Discord server invite would be if this was a real deployment -->
+        <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
+          <img src="./assets/discord.png" alt="Discord" />
+        </a>
+        <!-- Instagram - this is where our real Instagram profile would be if this was a real deployment -->
+        <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
+          <img src="./assets/instagram.png" alt="Instagram" />
+        </a>
+        <!-- Facebook - this is where our real Facebook page would be if this was a real deployment -->
+        <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
+          <img src="./assets/facebook.png" alt="Facebook" />
+        </a>
+      </div>
+      <div class="footer-text">
+        <p>&copy; 2025 Clash Hub. Follow us for the latest updates!</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- tiny JS to handle drawer open/close (no framework) -->
+  <script>
+    const drawer = document.getElementById('drawer');
+    const tab = document.getElementById('drawerTab');
+    const burger = document.getElementById('hamburger');
+    const backdrop = document.getElementById('backdrop');
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    burger.addEventListener('click', openDrawer);
+    tab.addEventListener('click', openDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    window.addEventListener('keydown', (e)=>{ 
+      if(e.key === 'Escape') closeDrawer(); 
+    });
+  </script>
+
+  <style>
+    /* =============================
+       NEWS PAGE SPECIFIC STYLES
+       Extends the main Clash Hub design
+       ============================= */
+
+    /* Page header styling - consistent with other pages */
+    .page-header {
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .page-header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* Icon container for news page */
+    .page-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(255,255,255,.08);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-icon img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+    }
+
+    /* Main page title */
+    .page-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    /* Subtitle under main title */
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gold);
+      margin: 0;
+      font-style: italic;
+    }
+
+    /* FEATURED NEWS IMAGES SECTION - displays your two news images prominently */
+    .featured-news-images {
+      margin-bottom: 24px;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* two equal columns */
+      gap: var(--gap);
+    }
+
+    /* Individual featured image cards */
+    .featured-image-card {
+      position: relative;
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      aspect-ratio: 16/9; /* maintains consistent card proportions */
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .featured-image-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Images inside featured cards */
+    .featured-image-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* Overlay with text on featured images */
+    .featured-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      padding: 20px 16px 16px;
+      color: white;
+    }
+
+    .featured-overlay h3 {
+      font-family: "Montserrat", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      color: var(--gold);
+    }
+
+    .featured-overlay p {
+      font-size: 12px;
+      margin: 0;
+      opacity: 0.9;
+      line-height: 1.3;
+    }
+
+    /* NEWS ARTICLES SECTION - main content area with article cards */
+    .news-articles {
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Section title for news articles */
+    .section-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      margin: 0 0 20px 0;
+      color: var(--ink);
+      text-align: center;
+    }
+
+    /* Individual news article cards */
+    .news-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--blue);
+      transition: background 0.2s ease;
+    }
+
+    .news-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .news-card:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* Local news cards get different accent color */
+    .news-card.local-news {
+      border-left-color: var(--gold);
+    }
+
+    /* News card header - contains source and date */
+    .news-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    /* News source label (Forbes, NYT, etc.) */
+    .news-source {
+      font-family: "Montserrat", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Local news gets different source color */
+    .local-news .news-source {
+      color: var(--gold);
+    }
+
+    /* Publication date */
+    .news-date {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      font-style: italic;
+    }
+
+    /* Article headlines */
+    .news-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 12px 0;
+      line-height: 1.3;
+    }
+
+    /* Article summary/description */
+    .news-summary {
+      margin-bottom: 16px;
+    }
+
+    .news-summary p {
+      margin: 0;
+      line-height: 1.6;
+      color: var(--ink);
+      opacity: 0.9;
+    }
+
+    /* Actions section with read more buttons */
+    .news-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* Read more button - links to external articles */
+    .read-more-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 16px;
+      background: var(--blue);
+      color: white;
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 14px;
+      font-family: "Montserrat", sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .read-more-btn:hover {
+      background: #1c5ff0;
+      transform: translateY(-1px);
+    }
+
+    /* Coming soon indicator for local content */
+    .coming-soon {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 16px;
+      background: rgba(245, 197, 66, 0.2);
+      color: var(--gold);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 14px;
+      font-family: "Montserrat", sans-serif;
+      border: 1px solid var(--gold);
+    }
+
+    /* MOBILE RESPONSIVENESS - adjusts layout for smaller screens */
+    @media (max-width: 520px) {
+      /* Stack featured images vertically on mobile */
+      .featured-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .page-header {
+        padding: 20px;
+      }
+
+      .page-title {
+        font-size: 24px;
+      }
+
+      .news-articles {
+        padding: 20px;
+      }
+
+      .news-card {
+        padding: 16px;
+      }
+
+      .news-title {
+        font-size: 18px;
+      }
+
+      /* Stack source and date vertically on very small screens */
+      .news-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .featured-overlay h3 {
+        font-size: 14px;
+      }
+
+      .featured-overlay p {
+        font-size: 11px;
+      }
+    }
+
+    /* Very small screens - ultra compact design */
+    @media (max-width: 360px) {
+      .page-header {
+        padding: 16px;
+      }
+
+      .page-title {
+        font-size: 22px;
+      }
+
+      .news-articles {
+        padding: 16px;
+      }
+
+      .page-icon {
+        width: 56px;
+        height: 56px;
+      }
+
+      .page-icon img {
+        width: 36px;
+        height: 36px;
+      }
+
+      .section-title {
+        font-size: 20px;
+      }
+
+      .news-card {
+        padding: 14px;
+      }
+
+      .news-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+</body>
+</html>
