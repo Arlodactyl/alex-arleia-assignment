@@ -1,6 +1,6 @@
 /* =============================
-   Clash Hub Stylesheet (update)
-   vibe: dark navy + gold + blue
+   Clash Hub Stylesheet 
+   dark navy + gold + blue
    fonts: Montserrat + Open Sans
    ============================= */
 
@@ -129,7 +129,7 @@ body{
 }
 .icon-btn img{ width:22px;height:22px; }
 
-/* ---------------- GREETING ---------------- */
+/* ---------------- GREETING & PLAYER SEARCH ---------------- */
 /* Welcome message - styled like a notification */
 .hi{ 
   margin:10px 0 16px; 
@@ -141,9 +141,77 @@ body{
   font-weight: 600;
 }
 
+/* MATCHES PAGE: Player search section - where users enter their tag */
+.player-search-section {
+  margin-bottom: 20px;
+}
+
+.search-input-container {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.player-tag-input {
+  flex: 1;
+  padding: 12px 16px;
+  background: var(--navy-card);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+}
+
+.player-tag-input:focus {
+  border-color: var(--blue);
+  outline: none;
+}
+
+.player-tag-input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.load-matches-btn {
+  padding: 12px 24px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  transition: background 0.2s ease;
+}
+
+.load-matches-btn:hover {
+  background: #1c5ff0;
+}
+
+.loading-message {
+  text-align: center;
+  color: var(--blue);
+  font-weight: 600;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(45, 109, 246, 0.1);
+  border-radius: var(--radius-md);
+}
+
+.error-message {
+  text-align: center;
+  color: #ff6b6b;
+  font-weight: 600;
+  margin-top: 12px;
+  background: rgba(255, 107, 107, 0.1);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
 /* ---------------- PLAYER STATS SECTION ---------------- */
 /* Stats overview card - shows key player metrics */
-.player-stats {
+.player-stats, .matches-stats {
   background: var(--navy-card);
   border-radius: var(--radius-xl);
   padding: 16px;
@@ -151,7 +219,7 @@ body{
   box-shadow: var(--shadow);
 }
 
-.player-stats h3 {
+.player-stats h3, .matches-stats h3 {
   font-family: "Montserrat", sans-serif;
   font-size: 18px;
   font-weight: 700;
@@ -204,6 +272,186 @@ body{
   font-weight: 700;
   font-size: 16px;
   color: var(--gold); /* gold makes numbers pop! */
+}
+
+/* ---------------- MATCHES PAGE: MATCH CARDS ---------------- */
+/* Recent matches section container */
+.recent-matches-section {
+  background: var(--navy-card);
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.matches-title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  text-align: center;
+  color: var(--ink);
+}
+
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Individual match card - shows each battle result */
+.match-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  border-left: 4px solid var(--gold);
+  transition: background 0.2s ease;
+}
+
+.match-card:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.match-card.lost {
+  border-left-color: #ff6b6b;
+}
+
+.match-card.won {
+  border-left-color: #4ecdc4;
+}
+
+.match-card.draw {
+  border-left-color: var(--gold);
+}
+
+/* Match card header with result and time */
+.match-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.match-result {
+  display: flex;
+  align-items: center;
+}
+
+.result-badge {
+  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+}
+
+.won .result-badge {
+  color: #4ecdc4;
+}
+
+.lost .result-badge {
+  color: #ff6b6b;
+}
+
+.draw .result-badge {
+  color: var(--gold);
+}
+
+.match-score {
+  font-size: 18px;
+  font-weight: 700;
+  margin-left: 12px;
+  color: var(--gold);
+  font-family: "Montserrat", sans-serif;
+}
+
+.match-time {
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+}
+
+/* Match details section */
+.match-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.game-mode {
+  font-weight: 600;
+  color: var(--blue);
+  font-size: 14px;
+}
+
+.opponent-info {
+  font-size: 14px;
+}
+
+.opponent-clan {
+  color: var(--gold);
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.arena-name {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  margin-top: 4px;
+}
+
+/* ---------------- MATCHES PAGE: GAME PATTERN ---------------- */
+/* Game pattern section - shows W/L/W/L/W for last 5 games */
+.game-pattern-section {
+  background: var(--navy-card);
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.pattern-title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  text-align: center;
+  color: var(--ink);
+}
+
+.game-pattern-container {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pattern-letter {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  color: white;
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+.pattern-letter:hover {
+  transform: scale(1.1);
+}
+
+.pattern-letter.won {
+  background: #4ecdc4;
+}
+
+.pattern-letter.lost {
+  background: #ff6b6b;
+}
+
+.pattern-letter.draw {
+  background: var(--gold);
 }
 
 /* ---------------- GRID SECTIONS ---------------- */
@@ -574,6 +822,24 @@ body{
   .social-icons {
     gap: 12px;
   }
+  /* MATCHES PAGE: Mobile adjustments */
+  .search-input-container {
+    flex-direction: column;
+  }
+  
+  .pattern-letter {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .match-card {
+    padding: 12px;
+  }
+  
+  .match-score {
+    font-size: 16px;
+  }
 }
 
 /* Very small screens - ultra compact for older phones */
@@ -609,5 +875,22 @@ body{
   .social-link img {
     width: 16px;
     height: 16px;
+  }
+  /* MATCHES PAGE: Tiny screen adjustments */
+  .pattern-letter {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .match-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .player-tag-input {
+    font-size: 14px;
+    padding: 10px 14px;
   }
 }
