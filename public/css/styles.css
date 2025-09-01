@@ -110,14 +110,14 @@ body{
   flex:1;
 }
 .brand__logo{ 
-  height: 250px; /* 25% bigger - was 200px */
+  height: 200px; /* back to previous size */
   width: auto; /* maintains aspect ratio */
 }
 
 /* Tablet and desktop - even bigger logo */
 @media (min-width: 768px) {
   .brand__logo {
-    height: 300px; /* 25% bigger - was 240px */
+    height: 240px; /* back to previous size */
   }
 }
 
@@ -354,7 +354,7 @@ body{
 }
 
 .drawer-logo {
-  height: 120px; /* big logo in the drawer - was 80px */
+  height: 140px; /* much bigger logo in the drawer pull-out menu, a fix needed to be done as noticed when studying lofi*/
   width: auto;
 }
 
@@ -568,7 +568,7 @@ body{
   }
   /* Smaller logo on very small screens */
   .brand__logo {
-    height: 200px; /* 25% bigger than before - was 160px */
+    height: 160px; /* back to previous size */
   }
   /* Tighter social icons spacing */
   .social-icons {
@@ -595,7 +595,7 @@ body{
   }
   /* Even smaller logo for tiny screens */
   .brand__logo {
-    height: 175px; /* 25% bigger - was 140px */
+    height: 140px; /* back to previous size */
   }
   /* More compact social icons */
   .social-link {
