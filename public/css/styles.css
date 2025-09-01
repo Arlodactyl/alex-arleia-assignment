@@ -1,0 +1,613 @@
+/* =============================
+   Clash Hub Stylesheet (update)
+   vibe: dark navy + gold + blue
+   fonts: Montserrat + Open Sans
+   ============================= */
+
+/* import fonts from Google Fonts - makes our app look professional */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap');
+
+/* design tokens we reuse throughout the app - like variables in programming! */
+:root{
+  --navy:#0B0B2B;   /* dark bg from mood board */
+  --navy-card:#15153b; /* slightly lighter card bg */
+  --gold:#F5C542;   /* gold accent */
+  --blue:#2D6DF6;   /* bright blue */
+  --paper:#F2E7C9;  /* light beige text */
+  --ink:#EDECF5;    /* normal light text */
+  --shadow:0 6px 18px rgba(0,0,0,.35); /* nice drop shadow */
+
+  --radius-xl:24px; /* big rounding like hi-fi */
+  --radius-md:14px; /* medium rounding */
+  --gap:12px;      /* reduced for better mobile spacing */
+
+  /* app width: starts mobile-first, grows on bigger screens */
+  --app-max: 400px;  /* optimized for mobile first */
+}
+
+/* Responsive breakpoints - tablet size */
+@media (min-width: 768px){
+  :root{ 
+    --app-max: 480px;
+    --gap: 16px;
+  }
+}
+
+/* Desktop size - much wider and more spacious */
+@media (min-width: 1024px){
+  :root{ 
+    --app-max: 980px;
+    --gap: 20px;
+  }
+  body{ font-size: 18px; }         /* slightly larger base font */
+}
+
+/* CSS reset + base styles - removes browser defaults */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  background:var(--navy);
+  color:var(--ink);
+  font-family:"Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+
+/* Main app container - centers everything and sets max width */
+.app{
+  max-width:var(--app-max);
+  min-height:100dvh; /* dvh = dynamic viewport height, works better on mobile */
+  margin:0 auto;
+  padding:16px;
+}
+
+/* Larger screens get more padding */
+@media (min-width: 768px) {
+  .app {
+    padding: 20px;
+  }
+}
+
+/* ---------------- HEADER ---------------- */
+/* Header layout: hamburger | logo | settings */
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom: 16px;
+}
+
+/* Hamburger menu button (three horizontal lines) */
+.hamburger{
+  display:inline-grid;
+  place-items:center;
+  width:40px;height:40px;
+  border-radius:10px;
+  background:rgba(255,255,255,.08);
+  cursor:pointer;
+  border:none;
+}
+
+/* Creates the three lines effect using CSS pseudo-elements */
+.hamburger .bars{
+  width:20px; height:12px; position:relative;
+}
+.hamburger .bars::before,
+.hamburger .bars::after,
+.hamburger .line{
+  content:""; position:absolute; left:0; right:0; height:2px;
+  background:#fff; border-radius:2px;
+}
+.hamburger .line{ top:5px; }      /* middle line */
+.hamburger .bars::before{ top:0; } /* top line */
+.hamburger .bars::after{ bottom:0; } /* bottom line */
+
+/* Logo and brand - bigger like in hi-fi mockup */
+.brand{ 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; /* center the logo in header */
+  flex:1;
+}
+.brand__logo{ 
+  height: 200px; /* made MUCH bigger - was 140px */
+  width: auto; /* maintains aspect ratio */
+}
+
+/* Tablet and desktop - even bigger logo */
+@media (min-width: 768px) {
+  .brand__logo {
+    height: 240px; /* much larger on bigger screens - was 160px */
+  }
+}
+
+/* Settings gear button on the right */
+.icon-btn{
+  width:40px;height:40px; border-radius:50%;
+  background:rgba(255,255,255,.1);
+  display:grid;place-items:center; border:none; cursor:pointer;
+}
+.icon-btn img{ width:22px;height:22px; }
+
+/* ---------------- GREETING ---------------- */
+/* Welcome message - styled like a notification */
+.hi{ 
+  margin:10px 0 16px; 
+  opacity:.9; 
+  background: var(--blue);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  color: white;
+  font-weight: 600;
+}
+
+/* ---------------- PLAYER STATS SECTION ---------------- */
+/* Stats overview card - shows key player metrics */
+.player-stats {
+  background: var(--navy-card);
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.player-stats h3 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  text-align: center;
+  color: var(--ink);
+}
+
+/* Three stat items laid out horizontally */
+.stats-grid {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+}
+
+/* Individual stat item (icon + label + value) */
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+/* Icon container for each stat */
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,.08);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
+}
+
+.stat-icon img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Stat labels (like "Daily streak:") */
+.stat-label {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 2px;
+}
+
+/* Stat values (the big numbers) */
+.stat-value {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--gold); /* gold makes numbers pop! */
+}
+
+/* ---------------- GRID SECTIONS ---------------- */
+/* Main content area: 4 squares in 2x2 grid + full-width video section */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two equal columns */
+  grid-template-rows: auto auto auto; /* three rows, size to content */
+  gap: var(--gap);
+  margin-bottom: 20px;
+}
+
+/* Individual mock boxes - placeholders for future content */
+.mock-box {
+  background: var(--navy-card);
+  border-radius: var(--radius-xl);
+  padding: 14px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  text-align: center;
+}
+
+/* Tablet and up - bigger boxes */
+@media (min-width: 768px) {
+  .mock-box {
+    padding: 16px;
+    min-height: 100px;
+  }
+}
+
+/* Image containers inside mock boxes */
+.mock-image {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,.08);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mock-image img {
+  width: 28px;
+  height: 28px;
+}
+
+/* Labels under the mock images */
+.mock-label {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+  opacity: 0.9;
+  line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+  .mock-label {
+    font-size: 14px;
+  }
+}
+
+/* Video section - spans full width at bottom of grid */
+.video-section {
+  grid-column: 1 / -1; /* spans both columns */
+  background: var(--navy-card);
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 80px;
+}
+
+@media (min-width: 768px) {
+  .video-section {
+    padding: 20px;
+    min-height: 120px;
+  }
+}
+
+/* Video placeholder area - dashed border shows where video goes */
+.video-placeholder {
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(135deg, #1a1a3a, #2a2a5a);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed rgba(255,255,255,0.3);
+}
+
+@media (min-width: 768px) {
+  .video-placeholder {
+    height: 80px;
+  }
+}
+
+.video-text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: var(--ink);
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  .video-text {
+    font-size: 16px;
+  }
+}
+
+/* ---------------- SLIDE-OUT NAV ---------------- */
+/* The drawer menu - slides in from the left when hamburger is clicked */
+.drawer{
+  position:fixed; 
+  inset:0 auto 0 0; 
+  width:280px; 
+  max-width:85vw;
+  background: linear-gradient(180deg, var(--blue), #1a47cc); /* blue gradient like your image */
+  color: white;
+  transform:translateX(-100%); /* hidden off-screen by default */
+  transition:transform .25s ease;
+  box-shadow: 8px 0 24px rgba(0,0,0,.45);
+  z-index:40; 
+  padding: 0; /* remove padding, we'll add it to sections */
+  display:flex; 
+  flex-direction:column;
+}
+.drawer.open{ transform:translateX(0); } /* slides in when open */
+
+/* Logo section at top of drawer */
+.drawer-header {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.drawer-logo {
+  height: 80px; /* made bigger - was 60px */
+  width: auto;
+}
+
+/* Main navigation list - the core menu items students use */
+.nav-list{ 
+  list-style:none; 
+  margin: 20px 0 0; 
+  padding: 0 20px;
+  flex: 1; /* takes up most of the space */
+}
+
+.nav-item {
+  margin-bottom: 8px; /* space between menu items */
+}
+
+.nav-item a{
+  display:flex; 
+  align-items:center; 
+  gap: 12px;
+  padding: 12px 16px; 
+  color: white; 
+  text-decoration:none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: background 0.2s ease; /* smooth hover effect */
+}
+
+.nav-item a:hover{ 
+  background: rgba(255,255,255,.15); /* lighter on hover */
+}
+
+.nav-item img{ 
+  width: 20px;
+  height: 20px;
+  /* filter: brightness(0) invert(1); */ /* removed so icons keep original colors */
+}
+
+/* Footer links at bottom - less important pages */
+.drawer-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-link {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 0;
+  text-align: center;
+}
+
+.footer-link:hover {
+  color: white;
+}
+
+/* Pull-tab arrow on the left edge -can grab this to open menu */
+.drawer-tab{
+  position:fixed; left:0; top:140px;   /* positioned near main content */
+  transform:translateX(-40%);          /* peeks out a bit so it's visible */
+  z-index:41; cursor:pointer;
+  width:34px; height:60px;
+  border-radius:0 12px 12px 0;
+  background:linear-gradient(180deg,#3a51f3,#1c2adf);
+  box-shadow:var(--shadow);
+  display:grid; place-items:center;
+  border: none;
+}
+.drawer-tab img{ width:18px;height:18px; filter:drop-shadow(0 1px 1px rgba(0,0,0,.4)); }
+
+/* Dark overlay behind drawer when open - clicking closes menu */
+.backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:39;
+}
+.backdrop.show{ opacity:1; pointer-events:auto; }
+
+/* ---------------- BOTTOM SECTIONS ---------------- */
+/* Two-column layout for featured clans and recent activity */
+.section-wrap{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:var(--gap);
+}
+
+/* Individual section cards */
+.section{
+  background:rgba(255,255,255,.03);
+  border-radius:var(--radius-xl);
+  padding:16px 18px;
+  box-shadow:var(--shadow);
+}
+
+.section-title{
+  font-family:"Montserrat",sans-serif;
+  font-size:20px; font-weight:800; margin:0 0 8px;
+}
+
+.list{ margin:0; padding-left:18px; }
+
+/* ---------------- FOOTER WITH SOCIAL ICONS ---------------- */
+/* Footer section at the bottom - this will be on all pages */
+.footer {
+  margin-top: 24px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+}
+
+/* Social media icons row */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap; /* wraps on very small screens */
+}
+
+/* Individual social media link - nice white color */
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,0.9); /* nice white background */
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+/* Hover effects for social links */
+.social-link:hover {
+  background: white; /* pure white on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+/* Social media icon images */
+.social-link img {
+  width: 18px;
+  height: 18px;
+  opacity: 0.8;
+}
+
+.social-link:hover img {
+  opacity: 1;
+}
+
+/* Footer text below social icons */
+.footer-text {
+  margin-top: 8px;
+}
+
+.footer-text p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink);
+  opacity: 0.7;
+  font-family: "Open Sans", sans-serif;
+}
+
+/* Tablet and desktop - slightly larger social icons */
+@media (min-width: 768px) {
+  .social-link {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.9); /* maintain white color on larger screens */
+  }
+  
+  .social-link:hover {
+    background: white; /* pure white on hover for larger screens */
+  }
+  
+  .social-link img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .footer-text p {
+    font-size: 14px;
+  }
+}
+
+/* ---------------- UTILITY CLASSES ---------------- */
+.round{ border-radius:50%; }
+.icon{ display:block; }
+.hidden{ display:none !important; }
+
+/* ---------------- MOBILE RESPONSIVENESS ---------------- */
+/* Small phones - everything gets more compact */
+@media (max-width: 520px){
+  .section-wrap{ grid-template-columns:1fr; } /* stack sections vertically */
+  .content-grid {
+    gap: 10px;
+  }
+  .mock-box {
+    min-height: 70px;
+    padding: 12px;
+  }
+  .mock-label {
+    font-size: 11px;
+  }
+  .hi {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+  /* Smaller logo on very small screens */
+  .brand__logo {
+    height: 160px; /*need to make logo bigger after viewing hifis- was 120px */
+  }
+  /* Tighter social icons spacing */
+  .social-icons {
+    gap: 12px;
+  }
+}
+
+/* Very small screens - ultra compact for older phones */
+@media (max-width: 360px) {
+  .app {
+    padding: 12px;
+  }
+  .header {
+    gap: 8px;
+  }
+  .stats-grid {
+    gap: 8px;
+  }
+  .stat-label {
+    font-size: 11px;
+  }
+  .stat-value {
+    font-size: 14px;
+  }
+  /* Even smaller logo for tiny screens */
+  .brand__logo {
+    height: 140px; /* still much bigger than original - was 100px */
+  }
+  /* More compact social icons */
+  .social-link {
+    width: 28px;
+    height: 28px;
+    background: rgba(255,255,255,0.9); /* maintain white on tiny screens */
+  }
+  .social-link:hover {
+    background: white;
+  }
+  .social-link img {
+    width: 16px;
+    height: 16px;
+  }
+}

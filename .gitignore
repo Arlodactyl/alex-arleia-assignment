@@ -1,0 +1,104 @@
+# -----------------------------
+# Clash Hub Project Git Ignore
+# -----------------------------
+# This file tells Git what not to upload to GitHub.
+# We originally were using a much bigger Node.js setup (Fly.io / Railway attempts),
+# so Ive kept most of the standard Node template here.
+# I added comments to explain what we’re actually using now,
+# and whats not applicable anymore.
+
+# -----------------------------------------
+# LOG FILES
+# We originally thought we might need this if we logged errors,
+# but in the final version we don’t generate log files.
+# Keeping it here in case we add debugging later.
+# -----------------------------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# -----------------------------------------
+# DIAGNOSTIC REPORTS
+# Not applicable anymore (these are for Node crash reports).
+# -----------------------------------------
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# -----------------------------------------
+# RUNTIME DATA
+# Not applicable anymore (we aren’t using processes that create PID files).
+# -----------------------------------------
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# -----------------------------------------
+# COVERAGE / TESTING
+# We originally thought about test coverage tools,
+# but not using any test framework for this project.
+# -----------------------------------------
+lib-cov
+coverage
+*.lcov
+.nyc_output
+.grunt
+
+# -----------------------------------------
+# FRONTEND BUILD TOOLS
+# Not applicable anymore (these are for Bower, JSPM, Snowpack etc).
+# -----------------------------------------
+bower_components
+jspm_packages/
+web_modules/
+
+# -----------------------------------------
+# NODE DEPENDENCIES
+# RELEVANT – node_modules folder is huge and can be re-installed,
+# so we never want it uploaded to GitHub.
+# -----------------------------------------
+node_modules/
+
+# -----------------------------------------
+# ENV FILES
+# VERY RELEVANT – this is where our Clash Royale API key would go if we ran locally.
+# We never want API keys uploaded by mistake.
+# -----------------------------------------
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# -----------------------------------------
+# DEPLOYMENT
+# RELEVANT – Vercel creates a .vercel folder when testing locally.
+# -----------------------------------------
+.vercel
+
+# -----------------------------------------
+# SYSTEM FILES
+# RELEVANT – these are junk files created by Windows/Mac, not useful for coding.
+# -----------------------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------------------
+# FRAMEWORK-SPECIFIC OUTPUTS
+# We originally thought about maybe using frameworks like Next.js/Nuxt,
+# but in the end we’re just using plain HTML/CSS/JS.
+# Not applicable anymore, but keeping the ignores in case we ever add a framework later.
+# -----------------------------------------
+.cache
+.parcel-cache
+.next
+out
+.nuxt
+dist
+.vuepress/dist
+.temp
+.docusaurus
+.serverless/

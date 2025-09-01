@@ -1,0 +1,13 @@
+{
+  "name": "clash-hub-api",
+  "version": "1.0.0",
+  "description": "Clash Hub app with serverless API proxy using RoyaleAPI and Vercel",
+  "main": "api/royale.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "author": "Arleia Hebberd and Alex Thompson",
+  "license": "ISC",
+  "dependencies": {},
+  "type": "module"
+}
