@@ -141,6 +141,30 @@ body{
   font-weight: 600;
 }
 
+/* ---------------- MATCHES PAGE: CURRENT TAG DISPLAY ---------------- */
+/* Shows which player tag is currently loaded */
+.current-tag {
+  background: var(--navy-card);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid var(--blue);
+}
+
+.current-tag strong {
+  color: var(--blue);
+  font-family: "Montserrat", sans-serif;
+}
+
+#tagText {
+  color: var(--gold);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+/* ---------------- MATCHES PAGE: PLAYER SEARCH ---------------- */
 /* MATCHES PAGE: Player search section - where users enter their tag */
 .player-search-section {
   margin-bottom: 20px;
@@ -324,12 +348,45 @@ body{
   border-left-color: var(--gold);
 }
 
+/* Match card content - three column layout */
+.match-card-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Left column - clan swords icon */
+.match-card-left {
+  flex-shrink: 0;
+}
+
+.clan-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clan-icon img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Center column - main match info */
+.match-card-center {
+  flex: 1;
+  min-width: 0; /* allows text to truncate if needed */
+}
+
 /* Match card header with result and time */
 .match-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .match-result {
@@ -356,9 +413,9 @@ body{
 }
 
 .match-score {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-  margin-left: 12px;
+  margin-left: 8px;
   color: var(--gold);
   font-family: "Montserrat", sans-serif;
 }
@@ -372,29 +429,48 @@ body{
 .match-details {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .game-mode {
   font-weight: 600;
   color: var(--blue);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .opponent-info {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .opponent-clan {
   color: var(--gold);
-  font-size: 12px;
-  margin-left: 8px;
+  font-size: 11px;
+  margin-left: 6px;
 }
 
 .arena-name {
-  font-size: 12px;
+  font-size: 11px;
   color: rgba(255,255,255,0.7);
-  margin-top: 4px;
+  margin-top: 2px;
+}
+
+/* Right column - result arrow */
+.match-card-right {
+  flex-shrink: 0;
+}
+
+.result-arrow {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-arrow img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 /* ---------------- MATCHES PAGE: GAME PATTERN ---------------- */
@@ -581,7 +657,7 @@ body{
   inset:0 auto 0 0; 
   width:280px; 
   max-width:85vw;
-  background: linear-gradient(180deg, var(--blue), #1a47cc); /* blue gradient like your image */
+  background: linear-gradient(180deg, var(--blue), #1a47cc); /* blue gradient like image */
   color: white;
   transform:translateX(-100%); /* hidden off-screen by default */
   transition:transform .25s ease;

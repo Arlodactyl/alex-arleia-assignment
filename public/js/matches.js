@@ -1,5 +1,4 @@
-
-  // matches.js - handles the recent matches page functionality
+// matches.js - handles the recent matches page functionality
 // loads battle data from clash royale api and displays match history
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -126,26 +125,37 @@ document.addEventListener('DOMContentLoaded', function() {
         const opponentInfo = getOpponentInfo(match);
 
         // pick the right-side icon based on result
-        const iconSrc = getResultIcon(result.status);  // down-arrow.png on loss, winarrow.png on win
+        const iconSrc = getResultIcon(result.status);  // up arrow for win, down arrow for loss
         
-        // build the html
+        // build the html with clan swords on left and result arrow on right
         card.innerHTML = `
-            <div class="match-card-header">
-                <div class="match-result ${result.status.toLowerCase()}">
-                    <span class="result-badge">${result.status}</span>
-                    <span class="match-score">${result.playerCrowns} - ${result.opponentCrowns}</span>
+            <div class="match-card-content">
+                <div class="match-card-left">
+                    <div class="clan-icon">
+                        <img src="./assets/icon_menu_battle.png" alt="Battle Icon" />
+                    </div>
                 </div>
-                <div class="match-time">${timeAgo}</div>
-            </div>
-            <div class="match-details">
-                <div class="game-mode">${match.gameMode?.name || 'unknown mode'}</div>
-                <div class="opponent-info">
-                    <strong>vs ${opponentInfo.name}</strong>
-                    ${opponentInfo.clan ? `<span class="opponent-clan">[${opponentInfo.clan}]</span>` : ''}
+                <div class="match-card-center">
+                    <div class="match-card-header">
+                        <div class="match-result ${result.status.toLowerCase()}">
+                            <span class="result-badge">${result.status}</span>
+                            <span class="match-score">${result.playerCrowns} - ${result.opponentCrowns}</span>
+                        </div>
+                        <div class="match-time">${timeAgo}</div>
+                    </div>
+                    <div class="match-details">
+                        <div class="game-mode">${match.gameMode?.name || 'unknown mode'}</div>
+                        <div class="opponent-info">
+                            <strong>vs ${opponentInfo.name}</strong>
+                            ${opponentInfo.clan ? `<span class="opponent-clan">[${opponentInfo.clan}]</span>` : ''}
+                        </div>
+                        ${match.arena?.name ? `<div class="arena-name">${match.arena.name}</div>` : ''}
+                    </div>
                 </div>
-                ${match.arena?.name ? `<div class="arena-name">${match.arena.name}</div>` : ''}
-                <div class="result-icon-right">
-                    <img src="${iconSrc}" alt="${result.status} icon" />
+                <div class="match-card-right">
+                    <div class="result-arrow">
+                        <img src="${iconSrc}" alt="${result.status} icon" />
+                    </div>
                 </div>
             </div>
         `;
@@ -274,15 +284,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // pick the arrow icon depending on result
+    // pick the arrow icon depending on result - UP for win, DOWN for loss
     function getResultIcon(status) {
         // put these files in public/assets:
-        //  - winarrow.png  (up/right arrow)
-        //  - down-arrow.png (down arrow)
+        //  - winarrow.png  (up arrow for wins)
+        //  - down-arrow.png (down arrow for losses)
         return status === 'WON'
-            ? './assets/winarrow.png'
+            ? './assets/winarrow.png'      // up arrow for wins
             : status === 'LOST'
-                ? './assets/down-arrow.png'
+                ? './assets/down-arrow.png'  // down arrow for losses
                 : './assets/arrow.png'; // fallback for DRAW/unknown
     }
 
