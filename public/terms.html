@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Terms of Service - Clash Hub</title>
+  <!-- Link to our separate CSS file -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- slide-out nav (hidden by default, opens from left) -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <!-- Logo section at top of drawer  -->
+    <div class="drawer-header">
+      <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
+    </div>
+    
+    <!-- Main navigation links with images in the assets folder -->
+    <ul class="nav-list">
+      <!-- main pages -->
+      <li class="nav-item">
+        <a href="./index.html">
+          <img src="./assets/crown.png" alt="Home" />
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./player.html">
+          <img src="./assets/user.png" alt="Player Profile" />
+          <span>Player Profile</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./matches.html">
+          <img src="./assets/trophy.png" alt="Recent Matches" />
+          <span>Recent Matches</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./clans.html">
+          <img src="./assets/magnifier.png" alt="Clan Search" />
+          <span>Clan Search</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./settings.html">
+          <img src="./assets/settings.png" alt="Settings" />
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Secondary links at bottom - less frequently used pages -->
+    <div class="drawer-footer">
+      <a href="./videos.html" class="footer-link">Video Archive</a>
+      <a href="./news.html" class="footer-link">News</a>
+      <a href="./terms.html" class="footer-link">Terms of Service</a>
+    </div>
+  </aside>
+
+  <!-- pull-tab arrow that peeks from left (closer to content now) -->
+  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
+    <span style="color: white; font-size: 14px;">→</span>
+  </button>
+
+  <!-- translucent overlay when drawer is open -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <!-- hamburger – clicking opens drawer (like the site you showed) -->
+      <button id="hamburger" class="hamburger" aria-label="Open menu">
+        <span class="bars"><span class="line"></span></span>
+      </button>
+
+      <!-- Logo and brand - no title text needed since logo includes it -->
+      <div class="brand">
+        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+      </div>
+
+      <button class="icon-btn" title="Settings">
+        <img src="./assets/settings.png" alt="Settings" />
+      </button>
+    </header>
+
+    <!-- Page title with icon -->
+    <section class="page-header">
+      <div class="page-header-content">
+        <div class="page-icon">
+          <img src="./assets/settings.png" alt="Legal Document" />
+        </div>
+        <h1 class="page-title">Terms of Service</h1>
+        <p class="page-subtitle">Last updated: March 2025</p>
+      </div>
+      
+      <!-- Feature image underneath title -->
+      <div class="page-feature-image">
+        <img src="./assets/termsofservice.jpg" alt="Terms of Service Illustration" />
+      </div>
+    </section>
+
+    <!-- Terms content -->
+    <section class="terms-content">
+      <div class="terms-intro">
+        <p>Welcome to <strong>Clash Hub</strong>. By using this website and related services you agree to the following Terms of Service. Please read them carefully.</p>
+      </div>
+
+      <div class="terms-section">
+        <h2>1. Who We Are</h2>
+        <p>Clash Hub is a student-built project for educational purposes. It is not affiliated with, endorsed by, or sponsored by Supercell. All Clash Royale content and assets are the property of Supercell and used under fair use for study and demonstration.</p>
+      </div>
+
+      <div class="terms-section">
+        <h2>2. Use of Our Service</h2>
+        <ul>
+          <li>You agree to use this website for lawful purposes only.</li>
+          <li>You may not attempt to misuse, hack, or interfere with the operation of the website.</li>
+          <li>We do not guarantee that the service will always be available, free from errors, or fit for any particular purpose.</li>
+        </ul>
+      </div>
+
+      <div class="terms-section">
+        <h2>3. Privacy and Data</h2>
+        <ul>
+          <li>We do not collect personal data beyond basic usage analytics.</li>
+          <li>Any player information displayed comes directly from the Clash Royale public API and is not stored permanently by us.</li>
+          <li>If you contact us, we will only use your details to respond to your query and will handle them in accordance with the <strong>Privacy Act 2020 (NZ)</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="terms-section">
+        <h2>4. Consumer Rights</h2>
+        <p>Nothing in these Terms affects your rights under the <strong>Consumer Guarantees Act 1993</strong> (NZ) or the <strong>Fair Trading Act 1986</strong> (NZ). If you are in New Zealand and use this service as a consumer, you have rights that cannot be excluded by these Terms.</p>
+      </div>
+
+      <div class="terms-section">
+        <h2>5. Intellectual Property</h2>
+        <ul>
+          <li>All original design, layout, and coding on this site belongs to the Clash Hub project team.</li>
+          <li>Clash Royale names, images, and logos are trademarks of Supercell.</li>
+        </ul>
+      </div>
+
+      <div class="terms-section">
+        <h2>6. Changes to Service or Terms</h2>
+        <p>We may update these Terms at any time. Any changes will be posted on this page with a new "last updated" date. Continued use of the website means you accept the updated Terms.</p>
+      </div>
+
+      <div class="terms-section">
+        <h2>7. Limitation of Liability</h2>
+        <p>To the maximum extent permitted by New Zealand law, Clash Hub is not liable for any loss, damage, or claim resulting from the use of this website. This site is provided "as is" for learning and demonstration purposes.</p>
+      </div>
+
+      <div class="terms-section">
+        <h2>8. Governing Law</h2>
+        <p>These Terms are governed by the laws of New Zealand. Any disputes will be handled through the New Zealand courts.</p>
+      </div>
+
+      <div class="terms-section">
+        <h2>9. Contact Us</h2>
+        <p>If you have questions or concerns about these Terms, please contact the Clash Hub project team at:</p>
+        <div class="contact-info">
+          <strong>Email:</strong> clashhub-project@example.com
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
+    <footer class="footer">
+      <div class="social-icons">
+        <!-- YouTube - this is where our real YouTube channel link would be if this was a real deployment -->
+        <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
+          <img src="./assets/youtube.png" alt="YouTube" />
+        </a>
+        <!-- Discord - this is where our real Discord server invite would be if this was a real deployment -->
+        <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
+          <img src="./assets/discord.png" alt="Discord" />
+        </a>
+        <!-- Instagram - this is where our real Instagram profile would be if this was a real deployment -->
+        <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
+          <img src="./assets/instagram.png" alt="Instagram" />
+        </a>
+        <!-- Facebook - this is where our real Facebook page would be if this was a real deployment -->
+        <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
+          <img src="./assets/facebook.png" alt="Facebook" />
+        </a>
+      </div>
+      <div class="footer-text">
+        <p>&copy; 2025 Clash Hub. Follow us for the latest updates!</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- tiny JS to handle drawer open/close (no framework) -->
+  <script>
+    const drawer = document.getElementById('drawer');
+    const tab = document.getElementById('drawerTab');
+    const burger = document.getElementById('hamburger');
+    const backdrop = document.getElementById('backdrop');
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    burger.addEventListener('click', openDrawer);
+    tab.addEventListener('click', openDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    window.addEventListener('keydown', (e)=>{ 
+      if(e.key === 'Escape') closeDrawer(); 
+    });
+  </script>
+
+  <style>
+    /* Additional styles for Terms of Service page */
+    .page-header {
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .page-header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .page-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(255,255,255,.08);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-feature-image {
+      margin: 20px auto 0;
+      width: 100%;
+      max-width: 600px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      position: relative;
+      display: block;
+    }
+
+    .page-feature-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(45, 109, 246, 0.1), rgba(245, 197, 66, 0.1));
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .page-feature-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 300px;
+      object-fit: cover;
+      object-position: center;
+      position: relative;
+      z-index: 0;
+    }
+
+    .page-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gold);
+      margin: 0;
+      font-style: italic;
+    }
+
+    .terms-content {
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .terms-intro {
+      background: rgba(45, 109, 246, 0.1);
+      border-left: 4px solid var(--blue);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+    }
+
+    .terms-intro p {
+      margin: 0;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .terms-section {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .terms-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .terms-section h2 {
+      font-family: "Montserrat", sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+      margin: 0 0 12px 0;
+    }
+
+    .terms-section p {
+      margin: 0 0 12px 0;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .terms-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .terms-section ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--ink);
+    }
+
+    .terms-section li {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    .terms-section li:last-child {
+      margin-bottom: 0;
+    }
+
+    .contact-info {
+      background: rgba(255,255,255,0.05);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      margin-top: 12px;
+      color: var(--blue);
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .terms-section strong {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .page-icon img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+    }
+
+    /* Mobile adjustments for feature image */
+    @media (max-width: 520px) {
+      .page-feature-image {
+        margin-top: 16px;
+        border-radius: var(--radius-md);
+      }
+
+      .page-feature-image img {
+        max-height: 200px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .page-feature-image img {
+        max-height: 160px;
+      }
+    }
+      .page-header {
+        padding: 20px;
+      }
+
+      .page-title {
+        font-size: 24px;
+      }
+
+      .terms-content {
+        padding: 20px;
+      }
+
+      .terms-section h2 {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .page-header {
+        padding: 16px;
+      }
+
+      .page-title {
+        font-size: 22px;
+      }
+
+      .terms-content {
+        padding: 16px;
+      }
+
+      .page-icon {
+        width: 56px;
+        height: 56px;
+      }
+
+      .page-icon img {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  </style>
+</body>
+</html>
