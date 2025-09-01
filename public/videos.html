@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Video Archive - Clash Hub</title>
+  <!-- Link to our separate CSS file -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- slide-out nav (hidden by default, opens from left) -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <!-- Logo section at top of drawer  -->
+    <div class="drawer-header">
+      <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
+    </div>
+    
+    <!-- Main navigation links with images in the assets folder -->
+    <ul class="nav-list">
+      <!-- main pages -->
+      <li class="nav-item">
+        <a href="./index.html">
+          <img src="./assets/crown.png" alt="Home" />
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./player.html">
+          <img src="./assets/user.png" alt="Player Profile" />
+          <span>Player Profile</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./matches.html">
+          <img src="./assets/trophy.png" alt="Recent Matches" />
+          <span>Recent Matches</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./clans.html">
+          <img src="./assets/magnifier.png" alt="Clan Search" />
+          <span>Clan Search</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./settings.html">
+          <img src="./assets/settings.png" alt="Settings" />
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Secondary links at bottom - less frequently used pages -->
+    <div class="drawer-footer">
+      <a href="./videos.html" class="footer-link">Video Archive</a>
+      <a href="./news.html" class="footer-link">News</a>
+      <a href="./terms.html" class="footer-link">Terms of Service</a>
+    </div>
+  </aside>
+
+  <!-- pull-tab arrow that peeks from left (closer to content now) -->
+  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
+    <span style="color: white; font-size: 14px;">→</span>
+  </button>
+
+  <!-- translucent overlay when drawer is open -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <!-- hamburger – clicking opens drawer (like the site you showed) -->
+      <button id="hamburger" class="hamburger" aria-label="Open menu">
+        <span class="bars"><span class="line"></span></span>
+      </button>
+
+      <!-- Logo and brand - no title text needed since logo includes it -->
+      <div class="brand">
+        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+      </div>
+
+      <button class="icon-btn" title="Settings">
+        <img src="./assets/settings.png" alt="Settings" />
+      </button>
+    </header>
+
+    <!-- page title -->
+    <div class="hi">Video Archive - Best Clash Royale Content!</div>
+
+    <!-- VIDEO ARCHIVE SECTION -->
+    <section class="video-archive">
+      <h2 class="archive-title">Latest Videos</h2>
+      
+      <!-- Video Grid Container -->
+      <div class="video-grid">
+        
+        <!-- Video Item 1 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">12:45</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Epic gameplay highlights and strategy breakdown</p>
+            <div class="video-meta">
+              <span class="video-date">2 days ago</span>
+              <span class="video-views">25.3K views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Item 2 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">8:22</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Best deck strategies for current meta</p>
+            <div class="video-meta">
+              <span class="video-date">1 week ago</span>
+              <span class="video-views">18.7K views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Item 3 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">15:30</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Tournament highlights and analysis</p>
+            <div class="video-meta">
+              <span class="video-date">1 week ago</span>
+              <span class="video-views">42.1K views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Item 4 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">9:18</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Card mastery guide and tips</p>
+            <div class="video-meta">
+              <span class="video-date">2 weeks ago</span>
+              <span class="video-views">31.5K views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Item 5 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">11:07</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Arena domination strategies</p>
+            <div class="video-meta">
+              <span class="video-date">2 weeks ago</span>
+              <span class="video-views">19.8K views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Item 6 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">13:42</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Legendary chest opening and reactions</p>
+            <div class="video-meta">
+              <span class="video-date">3 weeks ago</span>
+              <span class="video-views">67.2K views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Item 7 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">7:55</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Quick tips for climbing trophies</p>
+            <div class="video-meta">
+              <span class="video-date">3 weeks ago</span>
+              <span class="video-views">28.4K views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Item 8 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">16:20</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Clan wars preparation and tactics</p>
+            <div class="video-meta">
+              <span class="video-date">1 month ago</span>
+              <span class="video-views">35.9K views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Item 9 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">10:33</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Building the perfect defense deck</p>
+            <div class="video-meta">
+              <span class="video-date">1 month ago</span>
+              <span class="video-views">22.6K views</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Item 10 -->
+        <div class="video-item">
+          <div class="video-thumbnail">
+            <div class="video-placeholder">
+              <div class="play-button">▶</div>
+              <div class="video-duration">14:12</div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3 class="video-title">*Insert Video Title Here*</h3>
+            <p class="video-description">Season finale showdown and highlights</p>
+            <div class="video-meta">
+              <span class="video-date">1 month ago</span>
+              <span class="video-views">51.3K views</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Load More Button -->
+      <div class="load-more-section">
+        <button class="load-more-btn">Load More Videos</button>
+      </div>
+    </section>
+
+    <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
+    <footer class="footer">
+      <div class="social-icons">
+        <!-- YouTube - this is where our real YouTube channel link would be if this was a real deployment -->
+        <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
+          <img src="./assets/youtube.png" alt="YouTube" />
+        </a>
+        <!-- Discord - this is where our real Discord server invite would be if this was a real deployment -->
+        <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
+          <img src="./assets/discord.png" alt="Discord" />
+        </a>
+        <!-- Instagram - this is where our real Instagram profile would be if this was a real deployment -->
+        <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
+          <img src="./assets/instagram.png" alt="Instagram" />
+        </a>
+        <!-- Facebook - this is where our real Facebook page would be if this was a real deployment -->
+        <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
+          <img src="./assets/facebook.png" alt="Facebook" />
+        </a>
+      </div>
+      <div class="footer-text">
+        <p>&copy; 2025 Clash Hub. Follow us for the latest updates!</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- tiny JS to handle drawer open/close (no framework) -->
+  <script>
+    const drawer = document.getElementById('drawer');
+    const tab = document.getElementById('drawerTab');
+    const burger = document.getElementById('hamburger');
+    const backdrop = document.getElementById('backdrop');
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    burger.addEventListener('click', openDrawer);
+    tab.addEventListener('click', openDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    window.addEventListener('keydown', (e)=>{ 
+      if(e.key === 'Escape') closeDrawer(); 
+    });
+
+    // Load more functionality
+    const loadMoreBtn = document.querySelector('.load-more-btn');
+    loadMoreBtn.addEventListener('click', function() {
+      // Here you would typically load more videos via JavaScript/API
+      alert('Load more videos functionality would go here!');
+    });
+  </script>
+
+  <!-- Additional CSS for video page -->
+  <style>
+    /* VIDEO ARCHIVE PAGE STYLES */
+    .video-archive {
+      margin-bottom: 20px;
+    }
+
+    .archive-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 20px 0;
+      text-align: center;
+      color: var(--ink);
+    }
+
+    /* Video Grid Layout */
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    /* Tablet - 2 columns */
+    @media (min-width: 768px) {
+      .video-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+    }
+
+    /* Desktop - 3 columns */
+    @media (min-width: 1024px) {
+      .video-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Individual Video Card */
+    .video-item {
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .video-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    }
+
+    /* Video Thumbnail Container */
+    .video-thumbnail {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+    }
+
+    /* Video Placeholder with Play Button */
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a1a3a, #2a2a5a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 2px dashed rgba(255,255,255,0.3);
+    }
+
+    /* Play Button */
+    .play-button {
+      width: 60px;
+      height: 60px;
+      background: var(--blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      padding-left: 4px; /* slight offset for play triangle */
+    }
+
+    .play-button:hover {
+      background: #1c5ff0;
+      transform: scale(1.1);
+    }
+
+    /* Video Duration Badge */
+    .video-duration {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Video Information Section */
+    .video-info {
+      padding: 16px;
+    }
+
+    .video-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .video-description {
+      font-size: 14px;
+      color: rgba(255,255,255,0.8);
+      margin: 0 0 12px 0;
+      line-height: 1.4;
+    }
+
+    /* Video Metadata */
+    .video-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .video-date {
+      color: var(--gold);
+    }
+
+    .video-views {
+      color: var(--blue);
+    }
+
+    /* Load More Section */
+    .load-more-section {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .load-more-btn {
+      padding: 12px 32px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      font-family: "Montserrat", sans-serif;
+      transition: all 0.2s ease;
+      font-size: 14px;
+    }
+
+    .load-more-btn:hover {
+      background: #1c5ff0;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(45, 109, 246, 0.3);
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 520px) {
+      .archive-title {
+        font-size: 20px;
+      }
+      
+      .video-info {
+        padding: 12px;
+      }
+      
+      .video-title {
+        font-size: 14px;
+      }
+      
+      .video-description {
+        font-size: 13px;
+      }
+      
+      .play-button {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</body>
+</html>
