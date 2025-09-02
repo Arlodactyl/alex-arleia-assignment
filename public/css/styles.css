@@ -647,7 +647,7 @@ body{
   }
 }
 
-/* 💻 DESKTOP: scale the player up so it doesn't feel tiny */
+/*  DESKTOP: scale the player up so it doesn't feel tiny */
 @media (min-width: 1024px) {
   .video-container {
     max-width: 960px; /* upsize player on desktop */
@@ -877,6 +877,31 @@ body{
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* Button group for search and clear */
+.button-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* Clear button styling */
+.clear-btn {
+  padding: 12px 20px;
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+  border: 2px solid #ff6b6b;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.clear-btn:hover {
+  background: rgba(255, 107, 107, 0.25);
+  transform: translateY(-1px);
 }
 
 /* Location dropdown - matches input styling */
@@ -1143,6 +1168,10 @@ body{
   
   /* CLAN SEARCH: Mobile adjustments */
   .clan-search-container .search-input-container {
+    flex-direction: column;
+  }
+  
+  .button-group {
     flex-direction: column;
   }
   
