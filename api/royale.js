@@ -1,47 +1,68 @@
 // This file is a serverless function
-// Vercel runs it whenever we go to /api/royale
-// It lets us call the Clash Royale API safely without showing our key
+// It runs whenever /api/royale is called
+// It securely proxies Clash Royale API requests
 
 export default async function handler(req, res) {
   try {
-    const { test, path, tag, battlelog } = req.query;
+    const { test, path, tag, battlelog, name, locationId } = req.query;
 
     // Health check
     if (test === "true") {
-      return res.status(200).json({ status: "ok", message: "Server is running on Vercel!" });
+      return res.status(200).json({ status: "ok", message: "Server is running!" });
     }
 
     if (!path) {
       return res.status(400).json({ error: "Missing 'path' query param" });
     }
 
-    // Build proxy URL
+    // Build base URL
     const cleanPath = String(path).replace(/^\/+/, ""); // remove leading slashes
     let url = `https://proxy.royaleapi.dev/v1/${cleanPath}`;
 
-    // Add tag as /%23TAG if provided (no leading #)
-    if (tag) url += `/%23${encodeURIComponent(String(tag).replace(/^#/, ""))}`;
+    // Add player or clan tag to the path (e.g. /players/%239Q2YJ0U or /clans/%23ABC123)
+    if (tag) {
+      const encodedTag = encodeURIComponent(String(tag).replace(/^#/, ""));
+      url += `/%23${encodedTag}`;
+    }
 
     // Add /battlelog if requested
-    if (String(battlelog).toLowerCase() === "true") url += "/battlelog";
+    if (String(battlelog).toLowerCase() === "true") {
+      url += "/battlelog";
+    }
 
-    // Fetch from RoyaleAPI proxy using your token stored on Vercel
-    const r = await fetch(url, {
+    // Build query parameters for name and locationId (for clan search)
+    const queryParams = [];
+    if (name) queryParams.push(`name=${encodeURIComponent(name)}`);
+    if (locationId) queryParams.push(`locationId=${encodeURIComponent(locationId)}`);
+
+    // Append query string to the URL if needed
+    if (queryParams.length > 0) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+    console.log("Proxying request to:", url);
+
+    // Call RoyaleAPI through proxy with token from env
+    const apiResponse = await fetch(url, {
       headers: {
         Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
         Accept: "application/json",
       },
     });
 
-    const text = await r.text();
+    const text = await apiResponse.text();
 
-    // (Optional) CORS – safe even if you’re same-origin
+    // Optional: Allow CORS (safe even if same-origin)
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    try { return res.status(r.status).json(JSON.parse(text)); }
-    catch { return res.status(r.status).send(text); }
+    // Return JSON response (parsed if possible)
+    try {
+      return res.status(apiResponse.status).json(JSON.parse(text));
+    } catch {
+      return res.status(apiResponse.status).send(text);
+    }
   } catch (err) {
     console.error("API error:", err);
     return res.status(500).json({ error: "Internal Server Error" });
