@@ -1694,7 +1694,9 @@ img[src*="treasure.png"] {
   .stat-card {
     padding: 12px;
   }
-  /* =============================
+}
+
+/* =============================
    SETTINGS FUNCTIONALITY STYLES
    Light theme and large font support
    ============================= */
@@ -1727,5 +1729,4 @@ body.large-font .app {
 
 body.large-font .header {
   margin-bottom: 20px;
-}
 }
