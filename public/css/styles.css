@@ -1283,4 +1283,371 @@ body{
     height: 28px;
     font-size: 16px;
   }
+  /* ---------------- PLAYER PROFILE PAGE STYLES ---------------- */
+/* Player lookup container - simpler than clan search */
+.player-lookup-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Player profile section - main profile header */
+.player-profile-section {
+  background: var(--navy-card);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.player-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.player-name-section h2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 4px 0;
+  color: var(--ink);
+}
+
+.player-tag-display {
+  font-size: 14px;
+  color: var(--gold);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.player-level {
+  text-align: center;
+}
+
+.level-label {
+  display: block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 4px;
+}
+
+.level-value {
+  display: block;
+  font-family: "Montserrat", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+/* Player main stats - three key metrics */
+.player-main-stats {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+}
+
+.player-main-stats .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.player-main-stats .stat-value {
+  font-size: 20px;
+  color: var(--gold);
+}
+
+/* Detailed stats section */
+.player-stats-detailed {
+  background: var(--navy-card);
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.detailed-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  border-left: 4px solid var(--blue);
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stat-card-header img {
+  width: 20px;
+  height: 20px;
+}
+
+.stat-card-header span {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.stat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.stat-row span:first-child {
+  color: rgba(255,255,255,0.7);
+}
+
+.stat-row span:last-child {
+  color: var(--gold);
+  font-weight: 600;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Player clan section */
+.player-clan-section, .player-arena-section {
+  background: var(--navy-card);
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.clan-info-card, .arena-info-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  border-left: 4px solid var(--gold);
+}
+
+/* Clan info content */
+.clan-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.clan-info-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.clan-badge {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.clan-badge img {
+  width: 24px;
+  height: 24px;
+}
+
+.clan-details h4.clan-name {
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+  color: var(--ink);
+}
+
+.clan-details .clan-tag {
+  font-size: 12px;
+  color: var(--gold);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.clan-role {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.role-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
+
+.role-value {
+  font-size: 13px;
+  color: var(--blue);
+  font-weight: 600;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* No clan state */
+.no-clan, .no-arena {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+}
+
+.no-clan img, .no-arena img {
+  width: 20px;
+  height: 20px;
+  opacity: 0.5;
+}
+
+/* Arena info content */
+.arena-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.arena-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.arena-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.arena-icon img {
+  width: 24px;
+  height: 24px;
+}
+
+.arena-details h4.arena-name {
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+  color: var(--ink);
+}
+
+.arena-details .arena-id {
+  font-size: 12px;
+  color: var(--gold);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.trophy-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trophy-current, .trophy-best {
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+  font-family: "Montserrat", sans-serif;
+}
+
+.trophy-current span, .trophy-best span {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* Mobile responsive adjustments for player profile */
+@media (max-width: 520px) {
+  .player-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .player-main-stats {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .detailed-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .player-lookup-container .search-input-container {
+    flex-direction: column;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .clan-info-header, .arena-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .trophy-info {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .player-profile-section {
+    padding: 16px;
+  }
+  
+  .player-name-section h2 {
+    font-size: 20px;
+  }
+  
+  .level-value {
+    font-size: 24px;
+  }
+  
+  .player-main-stats .stat-value {
+    font-size: 18px;
+  }
+  
+  .stat-card {
+    padding: 12px;
+  }
+  
+  .clan-badge, .arena-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .clan-badge img, .arena-icon img {
+    width: 20px;
+    height: 20px;
+  }
+}
 }
