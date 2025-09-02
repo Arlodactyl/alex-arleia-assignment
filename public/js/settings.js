@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
             oscillator.connect(gainNode);
             gainNode.connect(audioContext.destination);
 
-            // set sound properties - UI beep
+            // set sound properties - pleasant UI beep
             oscillator.frequency.setValueAtTime(800, audioContext.currentTime); // 800Hz tone
             oscillator.type = 'sine'; // smooth sine wave
 
@@ -179,17 +179,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // UTILITY FUNCTION - check if sound is enabled (for other parts of the app)
     window.isClashHubSoundEnabled = function() {
-        return localStorage.getItem(SETTINGS_KEYS.sound) === 'true';
+        return localStorage.getItem('clash_hub_sound_enabled') === 'true';
     };
 
     // UTILITY FUNCTION - get current font size setting (for other parts of the app)
     window.isClashHubLargeFontEnabled = function() {
-        return localStorage.getItem(SETTINGS_KEYS.fontSize) === 'true';
+        return localStorage.getItem('clash_hub_large_font') === 'true';
     };
 
     // UTILITY FUNCTION - get current color theme (for other parts of the app)
     window.isClashHubLightThemeEnabled = function() {
-        return localStorage.getItem(SETTINGS_KEYS.invertColours) === 'true';
+        return localStorage.getItem('clash_hub_invert_colours') === 'true';
     };
 
     console.log('settings functionality initialized successfully');
