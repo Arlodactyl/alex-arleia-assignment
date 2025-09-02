@@ -1,24 +1,26 @@
 // clans.js - handles the clan search page functionality
 // searches for clans by tag/name and location from clash royale api
-// now includes: 
+// now includes:
 //   - results limited to 20 initially
-//   - "Show More" button to reveal additional clans
+//   - Show More button to reveal additional clans
 //   - optional flag emojis based on countryCode
+//   - refresh button to re-render current results
+//   - mobile autofocus and responsive tweaks
 
-// wait until entire DOM is loaded
+// wait until the whole page is loaded before running anything
 
-// ✅ INITIALIZATION
+//  SETUP SECTION
 
-// wait for page to load before running JS
-// wraps all code inside DOMContentLoaded
+// wraps all logic to ensure it runs after DOM is loaded
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('clan search page loaded');
 
-    // Grab all needed DOM elements
+    // grab all the DOM elements we need to work with
     const clanSearchInput = document.getElementById('clanSearchInput');
     const locationSelect = document.getElementById('locationSelect');
     const searchClansBtn = document.getElementById('searchClansBtn');
+    const refreshBtn = document.getElementById('refreshClansBtn'); // added this so user can refresh results
     const loadingIndicator = document.getElementById('loadingIndicator');
     const errorMessage = document.getElementById('errorMessage');
     const clansResultsSection = document.getElementById('clansResultsSection');
@@ -27,32 +29,42 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentSearchBar = document.getElementById('currentSearchBar');
     const searchText = document.getElementById('searchText');
 
-    // show more button setup
+    // add the show more button manually in JS
     let showMoreBtn = document.createElement('button');
     showMoreBtn.textContent = 'Show More';
     showMoreBtn.className = 'show-more-btn';
     showMoreBtn.classList.add('hidden');
     clansResultsSection.appendChild(showMoreBtn);
 
-    let allClans = []; // stores all clans fetched
-    let displayedCount = 0; // how many clans shown so far
+    // store state of all found clans
+    let allClans = [];
+    let displayedCount = 0;
 
-    // 🔍 EVENT LISTENERS
+    //  EVENTS
 
-    // button click starts search
+    // button to run search
     searchClansBtn.addEventListener('click', handleClanSearch);
 
-    // enter key triggers search
+    // support enter key for convenience
     clanSearchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') handleClanSearch();
     });
 
-    // show more button handler
+    // button for show more
     showMoreBtn.addEventListener('click', function() {
         renderNextClans();
     });
 
-    // 🚀 MAIN FUNCTION: Handles the search logic
+    // optional: button to re-render current batch
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', function() {
+            clansList.innerHTML = '';
+            displayedCount = 0;
+            renderNextClans();
+        });
+    }
+
+    // main search function - this triggers the API call
     async function handleClanSearch() {
         const searchQuery = clanSearchInput.value.trim();
         const locationId = locationSelect.value;
@@ -62,20 +74,22 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // detect if tag search (starts with # or 3+ letters)
+        // determine if it's a tag or name based on format
         const isTagSearch = searchQuery.startsWith('#') || searchQuery.match(/^[A-Z0-9]{3,}$/i);
         const locationText = locationSelect.options[locationSelect.selectedIndex].text;
 
+        // show what user is searching for
         if (searchText && currentSearchBar) {
             const searchDisplay = isTagSearch ? `Tag: ${searchQuery}` : `Name: "${searchQuery}"`;
             searchText.textContent = locationId ? `${searchDisplay} in ${locationText}` : searchDisplay;
             currentSearchBar.classList.remove('hidden');
         }
 
+        // show spinner and clear old stuff
         showLoading(true);
         hideError();
         hideAllClanSections();
-        clansList.innerHTML = ''; // clear previous results
+        clansList.innerHTML = '';
 
         try {
             let clans = isTagSearch
@@ -90,8 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
             allClans = clans;
             displayedCount = 0;
 
-            // show first 20
-            renderNextClans();
+            renderNextClans(); // load first 20
             showAllClanSections();
 
         } catch (error) {
@@ -102,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 🔁 Loads the next batch of 20 clans
+    // handles the 20-at-a-time rendering
     function renderNextClans() {
         const slice = allClans.slice(displayedCount, displayedCount + 20);
         slice.forEach((clan, index) => {
@@ -119,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 🔧 API CALL: Search by tag
+    // gets clan by tag only
     async function searchClanByTag(tag) {
         const cleanTag = encodeURIComponent(tag.replace(/^#/, ''));
         const response = await fetch(`/api/royale?path=clans&tag=${cleanTag}`);
@@ -127,10 +140,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!response.ok) throw new Error(text);
 
-        return [JSON.parse(text)];
+        return [JSON.parse(text)]; // return array for consistency
     }
 
-    // 🔧 API CALL: Search by name/location
+    // search by name (optionally with location)
     async function searchClansByName(name, locationId) {
         let url = `/api/royale?path=clans&name=${encodeURIComponent(name)}`;
         if (locationId) url += `&locationId=${locationId}`;
@@ -144,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return data.items || data;
     }
 
-    // 🧱 Create clan card
+    // make the individual clan card
     function createClanCard(clan) {
         const card = document.createElement('div');
         card.className = 'clan-card';
@@ -176,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
 
-    // 🌐 Get country flag emoji
+    // convert countryCode to flag emoji
     function getCountryFlag(location) {
         if (!location || !location.countryCode) return '🌍';
 
@@ -187,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
         );
     }
 
-    // 🧰 UI Helpers
+    // helper to show/hide spinner
     function showLoading(show) {
         loadingIndicator.classList.toggle('hidden', !show);
     }
@@ -208,5 +221,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function hideAllClanSections() {
         clansResultsSection.classList.add('hidden');
         popularClansSection.classList.add('hidden');
+    }
+
+    // mobile enhancement - autofocus input
+    if (window.innerWidth <= 480) {
+        clanSearchInput.setAttribute('autofocus', 'true');
     }
 });
