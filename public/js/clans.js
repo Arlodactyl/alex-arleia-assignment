@@ -1,10 +1,21 @@
 // clans.js - handles the clan search page functionality
 // searches for clans by tag/name and location from clash royale api
+// now includes: 
+//   - results limited to 20 initially
+//   - "Show More" button to reveal additional clans
+//   - optional flag emojis based on countryCode
+
+// wait until entire DOM is loaded
+
+// ✅ INITIALIZATION
+
+// wait for page to load before running JS
+// wraps all code inside DOMContentLoaded
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('clan search page loaded');
-    
-    // grab all the elements we need
+
+    // Grab all needed DOM elements
     const clanSearchInput = document.getElementById('clanSearchInput');
     const locationSelect = document.getElementById('locationSelect');
     const searchClansBtn = document.getElementById('searchClansBtn');
@@ -13,272 +24,170 @@ document.addEventListener('DOMContentLoaded', function() {
     const clansResultsSection = document.getElementById('clansResultsSection');
     const popularClansSection = document.getElementById('popularClansSection');
     const clansList = document.getElementById('clansList');
-    
-    // current search display elements
-    let currentSearchBar = document.getElementById('currentSearchBar');
-    let searchText = document.getElementById('searchText');
-    
-    // button click handler
+    const currentSearchBar = document.getElementById('currentSearchBar');
+    const searchText = document.getElementById('searchText');
+
+    // show more button setup
+    let showMoreBtn = document.createElement('button');
+    showMoreBtn.textContent = 'Show More';
+    showMoreBtn.className = 'show-more-btn';
+    showMoreBtn.classList.add('hidden');
+    clansResultsSection.appendChild(showMoreBtn);
+
+    let allClans = []; // stores all clans fetched
+    let displayedCount = 0; // how many clans shown so far
+
+    // 🔍 EVENT LISTENERS
+
+    // button click starts search
     searchClansBtn.addEventListener('click', handleClanSearch);
-    
-    // enter key support
+
+    // enter key triggers search
     clanSearchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            handleClanSearch();
-        }
+        if (e.key === 'Enter') handleClanSearch();
     });
 
-    // main function that coordinates everything
+    // show more button handler
+    showMoreBtn.addEventListener('click', function() {
+        renderNextClans();
+    });
+
+    // 🚀 MAIN FUNCTION: Handles the search logic
     async function handleClanSearch() {
         const searchQuery = clanSearchInput.value.trim();
         const locationId = locationSelect.value;
-        
+
         if (!searchQuery) {
-            showError('need a clan tag or name to search');
+            showError('Need a clan tag or name to search.');
             return;
         }
-        
-        // determine if its a tag or name search
+
+        // detect if tag search (starts with # or 3+ letters)
         const isTagSearch = searchQuery.startsWith('#') || searchQuery.match(/^[A-Z0-9]{3,}$/i);
         const locationText = locationSelect.options[locationSelect.selectedIndex].text;
-        
-        // show what we're searching for
+
         if (searchText && currentSearchBar) {
-            const searchDisplay = isTagSearch 
-                ? `Tag: ${searchQuery}` 
-                : `Name: "${searchQuery}"`;
-            const fullDisplay = locationId ? `${searchDisplay} in ${locationText}` : searchDisplay;
-            searchText.textContent = fullDisplay;
+            const searchDisplay = isTagSearch ? `Tag: ${searchQuery}` : `Name: "${searchQuery}"`;
+            searchText.textContent = locationId ? `${searchDisplay} in ${locationText}` : searchDisplay;
             currentSearchBar.classList.remove('hidden');
         }
-        
-        // show loading state
+
         showLoading(true);
         hideError();
         hideAllClanSections();
-        
+        clansList.innerHTML = ''; // clear previous results
+
         try {
-            console.log('searching clans:', searchQuery, 'location:', locationId);
-            
-            let clans;
-            if (isTagSearch) {
-                // single clan lookup by tag
-                clans = await searchClanByTag(searchQuery);
-            } else {
-                // multiple clan search by name/location
-                clans = await searchClansByName(searchQuery, locationId);
-            }
-            
-            console.log('found', clans ? clans.length || 1 : 0, 'clans');
-            
-            if (!clans || (Array.isArray(clans) && clans.length === 0)) {
-                showError('no clans found for this search');
+            let clans = isTagSearch
+                ? await searchClanByTag(searchQuery)
+                : await searchClansByName(searchQuery, locationId);
+
+            if (!clans || clans.length === 0) {
+                showError('No clans found for this search.');
                 return;
             }
-            
-            // display the results
-            displayClans(clans);
+
+            allClans = clans;
+            displayedCount = 0;
+
+            // show first 20
+            renderNextClans();
             showAllClanSections();
-            
+
         } catch (error) {
-            console.error('failed to search clans:', error);
-            showError('couldnt find clans - check your search terms');
+            console.error('Error searching clans:', error);
+            showError('Failed to find clans. Check your search terms.');
         } finally {
             showLoading(false);
         }
     }
 
-    // searches for a specific clan by tag
-    async function searchClanByTag(tag) {
-        const cleanTag = encodeURIComponent(String(tag).replace(/^#/, ""));
-        const apiUrl = `/api/royale?path=clans&tag=${cleanTag}`;
-        
-        console.log('calling clan api:', apiUrl);
-        
-        const response = await fetch(apiUrl);
-        const text = await response.text();
-        
-        if (!response.ok) {
-            console.error('clan api error:', response.status, text);
-            throw new Error(`clan lookup failed: ${response.status}`);
-        }
-        
-        const clan = JSON.parse(text);
-        return [clan]; // wrap single clan in array for consistency
-    }
-
-    // searches for clans by name and optionally location
-    async function searchClansByName(name, locationId) {
-        let apiUrl = `/api/royale?path=clans&name=${encodeURIComponent(name)}`;
-        if (locationId) {
-            apiUrl += `&locationId=${locationId}`;
-        }
-        
-        console.log('calling clan search api:', apiUrl);
-        
-        const response = await fetch(apiUrl);
-        const text = await response.text();
-        
-        if (!response.ok) {
-            console.error('clan search error:', response.status, text);
-            throw new Error(`clan search failed: ${response.status}`);
-        }
-        
-        const result = JSON.parse(text);
-        // api might return {items: [...]} or direct array
-        return result.items || result;
-    }
-
-    // displays clan results on the page
-    function displayClans(clans) {
-        clansList.innerHTML = '';
-        
-        const clansArray = Array.isArray(clans) ? clans : [clans];
-        console.log('rendering', clansArray.length, 'clan cards');
-        
-        clansArray.forEach((clan, index) => {
-            const clanCard = createClanCard(clan, index);
-            clansList.appendChild(clanCard);
+    // 🔁 Loads the next batch of 20 clans
+    function renderNextClans() {
+        const slice = allClans.slice(displayedCount, displayedCount + 20);
+        slice.forEach((clan, index) => {
+            const card = createClanCard(clan, displayedCount + index);
+            clansList.appendChild(card);
         });
+
+        displayedCount += slice.length;
+
+        if (displayedCount < allClans.length) {
+            showMoreBtn.classList.remove('hidden');
+        } else {
+            showMoreBtn.classList.add('hidden');
+        }
     }
 
-    // builds a single clan card element
-    function createClanCard(clan, index) {
+    // 🔧 API CALL: Search by tag
+    async function searchClanByTag(tag) {
+        const cleanTag = encodeURIComponent(tag.replace(/^#/, ''));
+        const response = await fetch(`/api/royale?path=clans&tag=${cleanTag}`);
+        const text = await response.text();
+
+        if (!response.ok) throw new Error(text);
+
+        return [JSON.parse(text)];
+    }
+
+    // 🔧 API CALL: Search by name/location
+    async function searchClansByName(name, locationId) {
+        let url = `/api/royale?path=clans&name=${encodeURIComponent(name)}`;
+        if (locationId) url += `&locationId=${locationId}`;
+
+        const response = await fetch(url);
+        const text = await response.text();
+
+        if (!response.ok) throw new Error(text);
+
+        const data = JSON.parse(text);
+        return data.items || data;
+    }
+
+    // 🧱 Create clan card
+    function createClanCard(clan) {
         const card = document.createElement('div');
         card.className = 'clan-card';
-        
-        // get clan info
-        const memberCount = clan.members || 0;
-        const requiredTrophies = clan.requiredTrophies || 0;
-        const clanScore = clan.clanScore || clan.trophies || 0;
-        const warTrophies = clan.clanWarTrophies || 0;
-        const location = clan.location?.name || 'Unknown';
-        const description = clan.description || 'No description available';
-        
-        // get clan type icon and text
-        const typeInfo = getClanTypeInfo(clan.type);
-        
-        // get country flag if location is available
-        const countryFlag = getCountryFlag(clan.location);
-        
-        // build the html
+
+        const flagEmoji = getCountryFlag(clan.location);
+
         card.innerHTML = `
             <div class="clan-card-content">
-                <div class="clan-card-left">
-                    <div class="clan-badge">
-                        <img src="./assets/magnifier.png" alt="Clan Badge" />
-                    </div>
-                </div>
                 <div class="clan-card-center">
                     <div class="clan-card-header">
                         <div class="clan-name-section">
                             <h4 class="clan-name">${clan.name}</h4>
                             <div class="clan-tag">${clan.tag}</div>
                         </div>
-                        <div class="clan-location">
-                            ${countryFlag} ${location}
-                        </div>
+                        <div class="clan-location">${flagEmoji} ${clan.location?.name || 'Unknown'}</div>
                     </div>
                     <div class="clan-stats-row">
-                        <div class="clan-stat">
-                            <span class="stat-label">Members:</span>
-                            <span class="stat-value">${memberCount}/50</span>
-                        </div>
-                        <div class="clan-stat">
-                            <span class="stat-label">Score:</span>
-                            <span class="stat-value">${clanScore.toLocaleString()}</span>
-                        </div>
-                        <div class="clan-stat">
-                            <span class="stat-label">War:</span>
-                            <span class="stat-value">${warTrophies}</span>
-                        </div>
-                    </div>
-                    <div class="clan-details">
-                        <div class="clan-type ${typeInfo.className}">
-                            ${typeInfo.icon} ${typeInfo.text}
-                        </div>
-                        <div class="required-trophies">
-                            Min: ${requiredTrophies} 🏆
-                        </div>
+                        <span><strong>Members:</strong> ${clan.members || 0}/50</span>
+                        <span><strong>Score:</strong> ${clan.clanScore?.toLocaleString() || 0}</span>
+                        <span><strong>War:</strong> ${clan.clanWarTrophies || 0}</span>
                     </div>
                     <div class="clan-description">
-                        ${description.length > 100 ? description.substring(0, 100) + '...' : description}
-                    </div>
-                </div>
-                <div class="clan-card-right">
-                    <div class="join-indicator ${typeInfo.joinable ? 'joinable' : 'not-joinable'}">
-                        ${typeInfo.joinable ? '✓' : '✗'}
+                        ${clan.description ? clan.description.slice(0, 100) + '...' : 'No description available'}
                     </div>
                 </div>
             </div>
         `;
-        
+
         return card;
     }
 
-    // determines clan type info and whether its joinable
-    function getClanTypeInfo(type) {
-        switch (type) {
-            case 'open':
-                return {
-                    text: 'Open',
-                    icon: '🌐',
-                    className: 'open',
-                    joinable: true
-                };
-            case 'inviteOnly':
-                return {
-                    text: 'Invite Only',
-                    icon: '🔒',
-                    className: 'invite-only',
-                    joinable: false
-                };
-            case 'closed':
-                return {
-                    text: 'Closed',
-                    icon: '🚫',
-                    className: 'closed',
-                    joinable: false
-                };
-            default:
-                return {
-                    text: 'Unknown',
-                    icon: '❓',
-                    className: 'unknown',
-                    joinable: false
-                };
-        }
-    }
-
-    // gets country flag emoji or icon for location
+    // 🌐 Get country flag emoji
     function getCountryFlag(location) {
         if (!location || !location.countryCode) return '🌍';
-        
-        // convert country code to flag emoji
-        const countryCode = location.countryCode.toLowerCase();
-        const flagMap = {
-            'us': '🇺🇸',
-            'gb': '🇬🇧', 
-            'uk': '🇬🇧',
-            'ca': '🇨🇦',
-            'au': '🇦🇺',
-            'nz': '🇳🇿',
-            'de': '🇩🇪',
-            'fr': '🇫🇷',
-            'it': '🇮🇹',
-            'es': '🇪🇸',
-            'br': '🇧🇷',
-            'mx': '🇲🇽',
-            'in': '🇮🇳',
-            'jp': '🇯🇵',
-            'kr': '🇰🇷',
-            'cn': '🇨🇳'
-        };
-        
-        return flagMap[countryCode] || '🌍';
+
+        const code = location.countryCode.toUpperCase();
+
+        return code.replace(/./g, char =>
+            String.fromCodePoint(127397 + char.charCodeAt())
+        );
     }
 
-    // ui helper functions - same pattern as matches page
+    // 🧰 UI Helpers
     function showLoading(show) {
         loadingIndicator.classList.toggle('hidden', !show);
     }
@@ -294,7 +203,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showAllClanSections() {
         clansResultsSection.classList.remove('hidden');
-        // popularClansSection could be shown later for featured clans
     }
 
     function hideAllClanSections() {
