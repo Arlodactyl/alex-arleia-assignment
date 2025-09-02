@@ -6,13 +6,13 @@
 //   - optional flag emojis based on countryCode
 //   - refresh button to re-render current results
 //   - mobile autofocus and responsive tweaks
+//   - re-added joinable tick/cross icons
 
 // wait until the whole page is loaded before running anything
 
-//  SETUP SECTION
+// SETUP SECTION
 
 // wraps all logic to ensure it runs after DOM is loaded
-
 document.addEventListener('DOMContentLoaded', function() {
     console.log('clan search page loaded');
 
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let allClans = [];
     let displayedCount = 0;
 
-    //  EVENTS
+    // EVENTS
 
     // button to run search
     searchClansBtn.addEventListener('click', handleClanSearch);
@@ -74,18 +74,15 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // determine if it's a tag or name based on format
         const isTagSearch = searchQuery.startsWith('#') || searchQuery.match(/^[A-Z0-9]{3,}$/i);
         const locationText = locationSelect.options[locationSelect.selectedIndex].text;
 
-        // show what user is searching for
         if (searchText && currentSearchBar) {
             const searchDisplay = isTagSearch ? `Tag: ${searchQuery}` : `Name: "${searchQuery}"`;
             searchText.textContent = locationId ? `${searchDisplay} in ${locationText}` : searchDisplay;
             currentSearchBar.classList.remove('hidden');
         }
 
-        // show spinner and clear old stuff
         showLoading(true);
         hideError();
         hideAllClanSections();
@@ -115,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // handles the 20-at-a-time rendering
     function renderNextClans() {
         const slice = allClans.slice(displayedCount, displayedCount + 20);
         slice.forEach((clan, index) => {
@@ -132,37 +128,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // gets clan by tag only
     async function searchClanByTag(tag) {
         const cleanTag = encodeURIComponent(tag.replace(/^#/, ''));
         const response = await fetch(`/api/royale?path=clans&tag=${cleanTag}`);
         const text = await response.text();
-
         if (!response.ok) throw new Error(text);
-
-        return [JSON.parse(text)]; // return array for consistency
+        return [JSON.parse(text)];
     }
 
-    // search by name (optionally with location)
     async function searchClansByName(name, locationId) {
         let url = `/api/royale?path=clans&name=${encodeURIComponent(name)}`;
         if (locationId) url += `&locationId=${locationId}`;
-
         const response = await fetch(url);
         const text = await response.text();
-
         if (!response.ok) throw new Error(text);
-
         const data = JSON.parse(text);
         return data.items || data;
     }
 
-    // make the individual clan card
     function createClanCard(clan) {
         const card = document.createElement('div');
         card.className = 'clan-card';
 
         const flagEmoji = getCountryFlag(clan.location);
+        const joinable = clan.type === 'open';
 
         card.innerHTML = `
             <div class="clan-card-content">
@@ -182,6 +171,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="clan-description">
                         ${clan.description ? clan.description.slice(0, 100) + '...' : 'No description available'}
                     </div>
+                    <div class="clan-joinable-status">
+                        <strong>Joinable:</strong> ${joinable ? '✓' : '✗'}
+                    </div>
                 </div>
             </div>
         `;
@@ -189,18 +181,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
 
-    // convert countryCode to flag emoji
     function getCountryFlag(location) {
         if (!location || !location.countryCode) return '🌍';
-
         const code = location.countryCode.toUpperCase();
-
-        return code.replace(/./g, char =>
-            String.fromCodePoint(127397 + char.charCodeAt())
-        );
+        return code.replace(/./g, char => String.fromCodePoint(127397 + char.charCodeAt()));
     }
 
-    // helper to show/hide spinner
     function showLoading(show) {
         loadingIndicator.classList.toggle('hidden', !show);
     }

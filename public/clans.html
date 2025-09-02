@@ -4,44 +4,121 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Clan Search - Clash Hub</title>
-  <!-- Link to our separate CSS file -->
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
 <body>
-  <!-- ... (no changes to drawer, nav, etc.) ... -->
-
-  <!-- clan search section -->
-  <div class="player-search-section">
-    <div class="hi">Find Your Perfect Clan</div>
-    <div class="clan-search-container">
-      <div class="search-input-container">
-        <input type="text" id="clanSearchInput" placeholder="Enter clan tag (e.g., #2PP) or name" class="player-tag-input" />
-        <select id="locationSelect" class="location-select">
-          <option value="">All Locations</option>
-          <option value="57000001">United States</option>
-          <option value="57000002">United Kingdom</option>
-          <option value="57000003">Canada</option>
-          <!-- ... other options unchanged ... -->
-        </select>
-      </div>
-      <button id="searchClansBtn" class="load-matches-btn">Search Clans</button>
+  <!-- drawer for navigation -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
     </div>
-    <div id="loadingIndicator" class="loading-message hidden">🔍 Searching for clans...</div>
-    <div id="errorMessage" class="error-message hidden"></div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="./index.html"><img src="./assets/crown.png" alt="Home" /><span>Home</span></a></li>
+      <li class="nav-item"><a href="./player.html"><img src="./assets/user.png" alt="Player Profile" /><span>Player Profile</span></a></li>
+      <li class="nav-item"><a href="./matches.html"><img src="./assets/trophy.png" alt="Recent Matches" /><span>Recent Matches</span></a></li>
+      <li class="nav-item"><a href="./clans.html"><img src="./assets/magnifier.png" alt="Clan Search" /><span>Clan Search</span></a></li>
+      <li class="nav-item"><a href="./settings.html"><img src="./assets/settings.png" alt="Settings" /><span>Settings</span></a></li>
+    </ul>
+    <div class="drawer-footer">
+      <a href="./videos.html" class="footer-link">Video Archive</a>
+      <a href="./news.html" class="footer-link">News</a>
+      <a href="./terms.html" class="footer-link">Terms of Service</a>
+    </div>
+  </aside>
+
+  <!-- hamburger to open drawer -->
+  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
+    <span style="color: white;">☰</span>
+  </button>
+  <div id="backdrop" class="backdrop"></div>
+
+  <div class="app">
+    <!-- header with logo and settings -->
+    <header class="header">
+      <button id="hamburger" class="hamburger" aria-label="Open menu">
+        <span class="bars"><span class="line"></span></span>
+      </button>
+      <div class="brand">
+        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+      </div>
+      <button class="icon-btn" title="Settings">
+        <img src="./assets/settings.png" alt="Settings" />
+      </button>
+    </header>
+
+    <!-- clan search -->
+    <div class="player-search-section">
+      <div class="hi">Find Your Perfect Clan</div>
+      <div class="clan-search-container">
+        <div class="search-input-container">
+          <input type="text" id="clanSearchInput" placeholder="Enter clan tag (e.g., #2PP) or name" class="player-tag-input" />
+          <select id="locationSelect" class="location-select">
+            <option value="">All Locations</option>
+            <option value="57000001">United States</option>
+            <option value="57000002">United Kingdom</option>
+            <option value="57000003">Canada</option>
+            <option value="57000004">Australia</option>
+            <option value="57000005">New Zealand</option>
+          </select>
+        </div>
+        <button id="searchClansBtn" class="load-matches-btn">Search Clans</button>
+        <button id="refreshClansBtn" class="load-matches-btn">Refresh</button>
+      </div>
+      <div id="loadingIndicator" class="loading-message hidden">🔍 Searching for clans...</div>
+      <div id="errorMessage" class="error-message hidden"></div>
+    </div>
+
+    <!-- current search display -->
+    <div class="current-tag hidden" id="currentSearchBar">
+      <strong>Search:</strong> <span id="searchText">—</span>
+    </div>
+
+    <!-- results list -->
+    <section class="clans-results-section hidden" id="clansResultsSection">
+      <h3 class="matches-title">Clan Search Results</h3>
+      <div id="clansList" class="clans-list"></div>
+      <!-- show more inserted dynamically in JS -->
+    </section>
+
+    <!-- footer social -->
+    <footer class="footer">
+      <div class="social-icons">
+        <a href="https://youtube.com" target="_blank" class="social-link"><img src="./assets/youtube.png" alt="YouTube" /></a>
+        <a href="https://discord.com" target="_blank" class="social-link"><img src="./assets/discord.png" alt="Discord" /></a>
+        <a href="https://instagram.com" target="_blank" class="social-link"><img src="./assets/instagram.png" alt="Instagram" /></a>
+        <a href="https://facebook.com" target="_blank" class="social-link"><img src="./assets/facebook.png" alt="Facebook" /></a>
+      </div>
+      <p class="footer-text">&copy; 2025 Clash Hub. Built with ❤️ for Clash Royale fans.</p>
+    </footer>
   </div>
 
-  <div class="current-tag hidden" id="currentSearchBar">
-    <strong>Search:</strong> <span id="searchText">—</span>
-  </div>
+  <!-- drawer open/close logic -->
+  <script>
+    const drawer = document.getElementById('drawer');
+    const tab = document.getElementById('drawerTab');
+    const burger = document.getElementById('hamburger');
+    const backdrop = document.getElementById('backdrop');
 
-  <!-- clan search results -->
-  <section class="clans-results-section hidden" id="clansResultsSection">
-    <h3 class="matches-title">Clan Search Results</h3>
-    <div id="clansList" class="clans-list"></div>
-    <button id="showMoreBtn" class="load-matches-btn hidden">Show More</button>
-  </section>
+    function openDrawer() {
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
 
-  <!-- ... (footer remains the same) ... -->
+    burger.addEventListener('click', openDrawer);
+    tab.addEventListener('click', openDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+  </script>
+
+  <!-- load our clan script -->
   <script src="./js/clans.js"></script>
 </body>
 </html>
