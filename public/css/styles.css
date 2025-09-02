@@ -1694,4 +1694,38 @@ img[src*="treasure.png"] {
   .stat-card {
     padding: 12px;
   }
+  /* =============================
+   SETTINGS FUNCTIONALITY STYLES
+   Light theme and large font support
+   ============================= */
+
+/* Light theme styles - when invert colors is ON */
+body.light-theme {
+  --navy: #f5f5f5;
+  --navy-card: #ffffff;
+  --ink: #2a2a2a;
+  --gold: #d4a017; /* Darker gold for better contrast on light backgrounds */
+  --blue: #1c5ff0; /* Slightly darker blue for accessibility */
+  --paper: #8a8a8a; /* Darker for light theme */
+}
+
+/* Large font styles - when font size is ON */
+body.large-font {
+  font-size: 120%; /* Makes all text 20% bigger */
+}
+
+/* Scale logos proportionally with large font */
+body.large-font .brand__logo,
+body.large-font .drawer-logo {
+  transform: scale(1.2);
+}
+
+/* Adjust some spacing for large font mode */
+body.large-font .app {
+  padding: 20px;
+}
+
+body.large-font .header {
+  margin-bottom: 20px;
+}
 }
