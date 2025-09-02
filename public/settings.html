@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings - Clash Hub</title>
+  <!-- Link to our separate CSS file -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- slide-out nav (hidden by default, opens from left) -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <!-- Logo section at top of drawer  -->
+    <div class="drawer-header">
+      <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
+    </div>
+    
+    <!-- Main navigation links with images in the assets folder -->
+    <ul class="nav-list">
+      <!-- main pages -->
+      <li class="nav-item">
+        <a href="./index.html">
+          <img src="./assets/crown.png" alt="Home" />
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./player.html">
+          <img src="./assets/user.png" alt="Player Profile" />
+          <span>Player Profile</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./matches.html">
+          <img src="./assets/trophy.png" alt="Recent Matches" />
+          <span>Recent Matches</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./clans.html">
+          <img src="./assets/magnifier.png" alt="Clan Search" />
+          <span>Clan Search</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./settings.html">
+          <img src="./assets/settings.png" alt="Settings" />
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Secondary links at bottom - less frequently used pages -->
+    <div class="drawer-footer">
+      <a href="./videos.html" class="footer-link">Video Archive</a>
+      <a href="./news.html" class="footer-link">News</a>
+      <a href="./terms.html" class="footer-link">Terms of Service</a>
+    </div>
+  </aside>
+
+  <!-- pull-tab arrow that peeks from left (closer to content now) -->
+  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
+    <span style="color: white; font-size: 14px;">→</span>
+  </button>
+
+  <!-- translucent overlay when drawer is open -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <!-- hamburger – clicking opens drawer (like the site you showed) -->
+      <button id="hamburger" class="hamburger" aria-label="Open menu">
+        <span class="bars"><span class="line"></span></span>
+      </button>
+
+      <!-- Logo and brand - no title text needed since logo includes it -->
+      <div class="brand">
+        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+      </div>
+
+      <button class="icon-btn" title="Settings">
+        <img src="./assets/settings.png" alt="Settings" />
+      </button>
+    </header>
+
+    <!-- MAIN SETTINGS SECTION - matches the mockup design -->
+    <section class="settings-main">
+      <!-- Settings header with title -->
+      <div class="settings-header">
+        <h1 class="settings-title">SETTINGS</h1>
+      </div>
+
+      <!-- Settings container - the white/light rounded box from mockup -->
+      <div class="settings-container">
+        
+        <!-- INVERT COLOURS SETTING -->
+        <!-- This would change the app from dark theme to light theme -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Invert Colours</span>
+          </div>
+          <div class="setting-control">
+            <!-- Toggle switch that starts ON like in mockup -->
+            <label class="toggle-switch">
+              <input type="checkbox" id="invertColours" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- FONT SIZE SETTING -->  
+        <!-- This would switch between normal and larger text throughout the app -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Font Size (Big/Small)</span>
+          </div>
+          <div class="setting-control">
+            <!-- Toggle switch that starts ON like in mockup -->
+            <label class="toggle-switch">
+              <input type="checkbox" id="fontSize" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- SOUND SETTING -->
+        <!-- This would enable/disable UI sounds and audio feedback -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Sound (On/Off)</span>
+          </div>
+          <div class="setting-control">
+            <!-- Toggle switch that starts ON like in mockup -->
+            <label class="toggle-switch">
+              <input type="checkbox" id="soundToggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LINKS / SOCIAL MEDIA / CONTACT US SECTION -->
+    <!-- This matches the bottom section in your mockup -->
+    <section class="settings-links">
+      <h2 class="links-title">Links / Social media / Contact us</h2>
+      
+      <!-- Contact and support links -->
+      <div class="links-container">
+        
+        <!-- CONTACT EMAIL -->
+        <div class="link-item">
+          <div class="link-icon">
+            <img src="./assets/email.png" alt="Email" />
+          </div>
+          <div class="link-info">
+            <span class="link-label">Contact Support</span>
+            <span class="link-value">clashhub@example.com</span>
+          </div>
+        </div>
+
+        <!-- DISCORD SERVER -->
+        <div class="link-item">
+          <div class="link-icon">
+            <img src="./assets/discord.png" alt="Discord" />
+          </div>
+          <div class="link-info">
+            <span class="link-label">Join Our Discord</span>
+            <span class="link-value">discord.gg/clashhub</span>
+          </div>
+        </div>
+
+        <!-- YOUTUBE CHANNEL -->
+        <div class="link-item">
+          <div class="link-icon">
+            <img src="./assets/youtube.png" alt="YouTube" />
+          </div>
+          <div class="link-info">
+            <span class="link-label">YouTube Channel</span>
+            <span class="link-value">youtube.com/clashhub</span>
+          </div>
+        </div>
+
+        <!-- WEBSITE/GITHUB -->
+        <div class="link-item">
+          <div class="link-icon">
+            <img src="./assets/crown.png" alt="Website" />
+          </div>
+          <div class="link-info">
+            <span class="link-label">Project Repository</span>
+            <span class="link-value">github.com/clashhub</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- APP INFO SECTION - shows version and credits -->
+    <section class="settings-info">
+      <div class="info-container">
+        <div class="app-version">
+          <span class="version-label">Clash Hub v1.0</span>
+          <span class="version-subtitle">Built for UX Principles II</span>
+        </div>
+        <div class="app-credits">
+          <span class="credits-text">Created by Arleia & Alex</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
+    <footer class="footer">
+      <div class="social-icons">
+        <!-- YouTube - this is where our real YouTube channel link would be if this was a real deployment -->
+        <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
+          <img src="./assets/youtube.png" alt="YouTube" />
+        </a>
+        <!-- Discord - this is where our real Discord server invite would be if this was a real deployment -->
+        <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
+          <img src="./assets/discord.png" alt="Discord" />
+        </a>
+        <!-- Instagram - this is where our real Instagram profile would be if this was a real deployment -->
+        <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
+          <img src="./assets/instagram.png" alt="Instagram" />
+        </a>
+        <!-- Facebook - this is where our real Facebook page would be if this was a real deployment -->
+        <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
+          <img src="./assets/facebook.png" alt="Facebook" />
+        </a>
+      </div>
+      <div class="footer-text">
+        <p>&copy; 2025 Clash Hub. Follow us for the latest updates!</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- tiny JS to handle drawer open/close (no framework) -->
+  <script>
+    const drawer = document.getElementById('drawer');
+    const tab = document.getElementById('drawerTab');
+    const burger = document.getElementById('hamburger');
+    const backdrop = document.getElementById('backdrop');
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    burger.addEventListener('click', openDrawer);
+    tab.addEventListener('click', openDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    window.addEventListener('keydown', (e)=>{ 
+      if(e.key === 'Escape') closeDrawer(); 
+    });
+  </script>
+
+  <!-- Settings page functionality -->
+  <script src="./js/settings.js"></script>
+
+  <style>
+    /* =============================
+       SETTINGS PAGE SPECIFIC STYLES
+       Matches the mockup design exactly
+       ============================= */
+
+    /* MAIN SETTINGS SECTION */
+    .settings-main {
+      margin-bottom: 24px;
+    }
+
+    /* Settings header with title */
+    .settings-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .settings-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--ink);
+      letter-spacing: 1px;
+    }
+
+    /* Main settings container - the light rounded box from mockup */
+    .settings-container {
+      background: rgba(255, 255, 255, 0.95); /* Light background like mockup */
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    /* Individual setting row */
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .setting-item:first-child {
+      padding-top: 0;
+    }
+
+    /* Setting label text */
+    .setting-label {
+      font-family: "Montserrat", sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #2a2a2a; /* Dark text on light background */
+    }
+
+    /* TOGGLE SWITCH STYLING - matches the green switches from mockup */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 32px;
+      cursor: pointer;
+    }
+
+    /* Hide the default checkbox */
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The toggle slider background */
+    .toggle-slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 32px;
+      transition: all 0.3s ease;
+    }
+
+    /* The toggle slider circle */
+    .toggle-slider:before {
+      content: "";
+      position: absolute;
+      height: 26px;
+      width: 26px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* When toggle is ON - green background like mockup */
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: #4CAF50; /* Green like in your mockup */
+    }
+
+    /* Move the slider circle when ON */
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(28px);
+    }
+
+    /* LINKS SECTION - matches bottom of mockup */
+    .settings-links {
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .links-title {
+      font-family: "Montserrat", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 16px 0;
+      color: var(--ink);
+      text-align: center;
+    }
+
+    .links-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Individual link item */
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      transition: background 0.2s ease;
+    }
+
+    .link-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Link icon container */
+    .link-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .link-icon img {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Link information */
+    .link-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .link-label {
+      font-family: "Montserrat", sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .link-value {
+      font-size: 12px;
+      color: var(--gold);
+      font-family: "Montserrat", sans-serif;
+    }
+
+    /* MOBILE RESPONSIVENESS */
+    @media (max-width: 520px) {
+      .settings-title {
+        font-size: 24px;
+      }
+      
+      .settings-container {
+        padding: 20px;
+      }
+      
+      .setting-label {
+        font-size: 15px;
+      }
+      
+      .toggle-switch {
+        width: 54px;
+        height: 28px;
+      }
+      
+      .toggle-slider:before {
+        height: 22px;
+        width: 22px;
+        left: 3px;
+        bottom: 3px;
+      }
+      
+      .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(26px);
+      }
+      
+      .links-container {
+        gap: 10px;
+      }
+      
+      .link-item {
+        padding: 10px;
+      }
+      
+      .link-icon {
+        width: 28px;
+        height: 28px;
+      }
+      
+      .link-icon img {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .settings-container {
+        padding: 16px;
+      }
+      
+      .setting-item {
+        padding: 14px 0;
+      }
+      
+      .setting-label {
+        font-size: 14px;
+      }
+      
+      .settings-title {
+        font-size: 22px;
+      }
+    }
+  </style>
+</body>
+</html>
