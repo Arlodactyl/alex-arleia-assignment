@@ -595,6 +595,7 @@ body{
   }
 }
 
+/* ---------------- VIDEO SECTION ---------------- */
 /* Video section - spans full width at bottom of grid */
 .video-section {
   grid-column: 1 / -1; /* spans both columns */
@@ -611,6 +612,34 @@ body{
   min-height: 80px;
 }
 
+/* Fluid, responsive 16:9 player
+   - Uses aspect-ratio where supported, with a padding-bottom fallback */
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 720px;            /* 👈 reasonable size on phones/tablets */
+  aspect-ratio: 16 / 9;        /* modern browsers */
+  height: auto;
+}
+
+/* Fallback for older browsers without aspect-ratio */
+.video-container::before {
+  content: "";
+  display: block;
+  padding-bottom: 56.25%;      /* 16:9 ratio */
+}
+.video-container > * {
+  position: absolute;
+  inset: 0;
+}
+
+/* Make iframe fill the container */
+.video-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 @media (min-width: 768px) {
   .video-section {
     padding: 20px;
@@ -618,35 +647,10 @@ body{
   }
 }
 
-/* Video placeholder area - dashed border shows where video goes */
-.video-placeholder {
-  width: 100%;
-  height: 60px;
-  background: linear-gradient(135deg, #1a1a3a, #2a2a5a);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px dashed rgba(255,255,255,0.3);
-}
-
-@media (min-width: 768px) {
-  .video-placeholder {
-    height: 80px;
-  }
-}
-
-.video-text {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 600;
-  color: var(--ink);
-  opacity: 0.7;
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  .video-text {
-    font-size: 16px;
+/* 💻 DESKTOP: scale the player up so it doesn't feel tiny */
+@media (min-width: 1024px) {
+  .video-container {
+    max-width: 960px; /* upsize player on desktop */
   }
 }
 
@@ -867,6 +871,226 @@ body{
   }
 }
 
+/* ---------------- CLAN SEARCH PAGE STYLES ---------------- */
+/* Clan search container - extends existing search patterns */
+.clan-search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Location dropdown - matches input styling */
+.location-select {
+  padding: 12px 16px;
+  background: var(--navy-card);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  min-width: 180px;
+}
+
+.location-select:focus {
+  border-color: var(--blue);
+  outline: none;
+}
+
+.location-select option {
+  background: var(--navy-card);
+  color: var(--ink);
+  padding: 8px;
+}
+
+/* Clan results section */
+.clans-results-section, .popular-clans-section {
+  background: var(--navy-card);
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.clans-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Individual clan card - follows match card pattern */
+.clan-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  border-left: 4px solid var(--gold);
+  transition: background 0.2s ease;
+}
+
+.clan-card:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* Clan card content - three column layout like match cards */
+.clan-card-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Left column - clan badge */
+.clan-card-left {
+  flex-shrink: 0;
+}
+
+.clan-badge {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clan-badge img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Center column - main clan info */
+.clan-card-center {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Clan card header with name and location */
+.clan-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.clan-name-section h4.clan-name {
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+  color: var(--ink);
+}
+
+.clan-tag {
+  font-size: 12px;
+  color: var(--gold);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.clan-location {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  text-align: right;
+}
+
+/* Clan stats row - shows members, score, war trophies */
+.clan-stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.clan-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.clan-stat .stat-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.clan-stat .stat-value {
+  font-size: 13px;
+  color: var(--gold);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+
+/* Clan details - type and requirements */
+.clan-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.clan-type {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.clan-type.open {
+  background: rgba(76, 205, 196, 0.2);
+  color: #4ecdc4;
+}
+
+.clan-type.invite-only {
+  background: rgba(245, 197, 66, 0.2);
+  color: var(--gold);
+}
+
+.clan-type.closed {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+.required-trophies {
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Clan description */
+.clan-description {
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.3;
+  font-style: italic;
+}
+
+/* Right column - join indicator */
+.clan-card-right {
+  flex-shrink: 0;
+}
+
+.join-indicator {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.join-indicator.joinable {
+  background: rgba(76, 205, 196, 0.2);
+  color: #4ecdc4;
+}
+
+.join-indicator.not-joinable {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
 /* ---------------- UTILITY CLASSES ---------------- */
 .round{ border-radius:50%; }
 .icon{ display:block; }
@@ -915,6 +1139,38 @@ body{
   
   .match-score {
     font-size: 16px;
+  }
+  
+  /* CLAN SEARCH: Mobile adjustments */
+  .clan-search-container .search-input-container {
+    flex-direction: column;
+  }
+  
+  .location-select {
+    min-width: auto;
+  }
+  
+  .clan-card-header {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .clan-location {
+    text-align: left;
+  }
+  
+  .clan-stats-row {
+    gap: 12px;
+  }
+  
+  .clan-stat {
+    min-width: 50px;
+  }
+  
+  .clan-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 }
 
@@ -969,31 +1225,33 @@ body{
     font-size: 14px;
     padding: 10px 14px;
   }
-  .result-arrow {
-  width: 24px;
-  height: 24px;
-  margin-left: 8px;
-  vertical-align: middle;
-}
-.video-section {
-  width: 100%;
-  margin: auto;
-  padding: 1rem;
-}
-
-.video-container {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* keeps 16:9 ratio */
-  height: 0;
-  overflow: hidden;
-}
-
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
+  
+  /* CLAN SEARCH: Tiny screen adjustments */
+  .clan-card {
+    padding: 12px;
+  }
+  
+  .clan-card-content {
+    gap: 8px;
+  }
+  
+  .clan-badge {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .clan-badge img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .clan-name-section h4.clan-name {
+    font-size: 14px;
+  }
+  
+  .join-indicator {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
 }

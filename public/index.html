@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -153,11 +153,15 @@
       <!-- Video section spans both columns on the bottom -->
       <div class="video-section">
         <div class="video-container">
+          <!--  we had an issue here so autoplay muted so it starts automatically on load.
+               Browsers allow autoplay only when muted.
+           
+               so manual play/unmute is permitted in some browsers. -->
           <iframe 
-            src="https://www.youtube.com/embed/3jQE-v5IZdU?rel=0&autoplay=0&mute=1"
+            src="https://www.youtube.com/embed/3jQE-v5IZdU?rel=0&autoplay=1&mute=1&playsinline=1&modestbranding=1"
             title="YouTube video player" 
             frameborder="0" 
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
             allowfullscreen>
           </iframe>
         </div>
