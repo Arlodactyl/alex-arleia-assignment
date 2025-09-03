@@ -1,20 +1,21 @@
 <!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Settings - Clash Hub</title>
+  <title>Clash Hub</title>
   <!-- Link to our separate CSS file -->
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
 <body>
-  <!-- slide-out nav hidden by default opens from left -->
+  <!-- slide-out nav (hidden by default, opens from left) -->
   <aside id="drawer" class="drawer" aria-hidden="true">
-    <!-- Logo section at top of drawer -->
+    <!-- Logo section at top of drawer  -->
     <div class="drawer-header">
       <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
     </div>
-    
+
     <!-- Main navigation links with images in the assets folder -->
     <ul class="nav-list">
       <!-- main pages -->
@@ -50,7 +51,7 @@
       </li>
     </ul>
 
-    <!-- Secondary links at bottom less frequently used pages -->
+    <!-- Secondary links at bottom - less frequently used pages -->
     <div class="drawer-footer">
       <a href="./videos.html" class="footer-link">Video Archive</a>
       <a href="./news.html" class="footer-link">News</a>
@@ -58,7 +59,7 @@
     </div>
   </aside>
 
-  <!-- pull-tab arrow that peeks from left closer to content now -->
+  <!-- pull-tab arrow that peeks from left (closer to content now) -->
   <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
     <span style="color: white; font-size: 14px;">→</span>
   </button>
@@ -70,12 +71,12 @@
 
     <!-- HEADER -->
     <header class="header">
-      <!-- hamburger clicking opens drawer like the site you showed -->
+      <!-- hamburger – clicking opens drawer (like the site you showed) -->
       <button id="hamburger" class="hamburger" aria-label="Open menu">
         <span class="bars"><span class="line"></span></span>
       </button>
 
-      <!-- Logo and brand no title text needed since logo includes it -->
+      <!-- Logo and brand - no title text needed since logo includes it -->
       <div class="brand">
         <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
       </div>
@@ -85,80 +86,128 @@
       </button>
     </header>
 
-    <!-- greeting like other pages -->
-    <div class="hi">App Settings</div>
+    <!-- greeting -->
+    <div class="hi">Welcome back, A2!</div>
 
-    <!-- SETTINGS SECTION matches other Clash Hub pages -->
+    <!-- PLAYER STATS SECTION -->
     <section class="player-stats">
-      <h3>SETTINGS</h3>
-      
-      <!-- Settings container uses consistent Clash Hub dark styling -->
-      <div class="settings-container">
-        
-        <!-- INVERT COLOURS SETTING -->
-        <!-- This would change the app from dark theme to light theme -->
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Invert Colours</span>
+      <h3>PLAYER STATS</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <img src="./assets/star.png" alt="Streak" />
           </div>
-          <div class="setting-control">
-            <!-- Toggle switch that starts ON like in mockup -->
-            <label class="toggle-switch">
-              <input type="checkbox" id="invertColours" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
+          <div class="stat-label">Daily streak:</div>
+          <div class="stat-value">5</div>
         </div>
-
-        <!-- FONT SIZE SETTING -->
-        <!-- This would switch between normal and larger text throughout the app -->
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Font Size (Big/Small)</span>
+        <div class="stat-item">
+          <div class="stat-icon">
+            <img src="./assets/treasure.png" alt="Donations" />
           </div>
-          <div class="setting-control">
-            <!-- Toggle switch that starts ON like in mockup -->
-            <label class="toggle-switch">
-              <input type="checkbox" id="fontSize" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
+          <div class="stat-label">Donations:</div>
+          <div class="stat-value">53371</div>
         </div>
-
-        <!-- SOUND SETTING -->
-        <!-- This would enable or disable UI sounds and audio feedback -->
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Sound (On/Off)</span>
+        <div class="stat-item">
+          <div class="stat-icon">
+            <img src="./assets/trophy.png" alt="Games" />
           </div>
-          <div class="setting-control">
-            <!-- Toggle switch that starts ON like in mockup -->
-            <label class="toggle-switch">
-              <input type="checkbox" id="soundToggle" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
+          <div class="stat-label">Games played:</div>
+          <div class="stat-value">9200</div>
         </div>
-
       </div>
     </section>
 
-    <!-- FOOTER WITH SOCIAL ICONS this will be on all pages -->
+    <!-- CONTENT GRID: 4 squares + 1 video section -->
+    <section class="content-grid">
+      <!-- Top left mock box -->
+      <div class="mock-box">
+        <div class="mock-image">
+          <img src="./assets/crown.png" alt="Crown" />
+        </div>
+        <div class="mock-label">*Insert news or text here*</div>
+      </div>
+
+      <!-- Top right mock box -->
+      <div class="mock-box">
+        <div class="mock-image">
+          <img src="./assets/email.png" alt="Email" />
+        </div>
+        <div class="mock-label">*Insert news or text here*</div>
+      </div>
+
+      <!-- Bottom left mock box -->
+      <div class="mock-box">
+        <div class="mock-image">
+          <img src="./assets/treasure-chest.png" alt="Treasure Chest" />
+        </div>
+        <div class="mock-label">*Insert news or text here*</div>
+      </div>
+
+      <!-- Bottom right mock box -->
+      <div class="mock-box">
+        <div class="mock-image">
+          <img src="./assets/user.png" alt="User" />
+        </div>
+        <div class="mock-label">*Insert news or text here*</div>
+      </div>
+
+      <!-- Video section spans both columns on the bottom -->
+      <div class="video-section">
+        <div class="video-container">
+          <!--  we had an issue here so autoplay muted so it starts automatically on load.
+               Browsers allow autoplay only when muted.
+           
+               so manual play/unmute is permitted in some browsers. -->
+          <iframe 
+            src="https://www.youtube.com/embed/3jQE-v5IZdU?rel=0&autoplay=0&mute=1"
+            src="https://www.youtube.com/embed/3jQE-v5IZdU?rel=0&autoplay=1&mute=1&playsinline=1&modestbranding=1"
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- two content sections -->
+    <div class="section-wrap">
+      <section class="section">
+        <h2 class="section-title">Featured Clans</h2>
+        <!-- JavaScript will inject featured clans here later -->
+        <ul class="list" id="featuredClans">
+          <li>Clan Name 1</li>
+          <li>Clan Name 2</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Recent Activity</h2>
+        <!-- JavaScript will inject recent activity here later -->
+        <ul class="list" id="recentActivity">
+          <li>1v1 vs PlayerXYZ (Win +30)</li>
+          <li>2v2 with ClanMate (Loss −12)</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
     <footer class="footer">
       <div class="social-icons">
-        <!-- YouTube this is where our real YouTube channel link would be if this was a real deployment -->
+        <!-- YouTube - this is where our real YouTube channel link would be if this was a real deployment -->
         <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
           <img src="./assets/youtube.png" alt="YouTube" />
         </a>
-        <!-- Discord this is where our real Discord server invite would be if this was a real deployment -->
+        <!-- Discord - this is where our real Discord server invite would be if this was a real deployment -->
         <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
           <img src="./assets/discord.png" alt="Discord" />
         </a>
-        <!-- Instagram this is where our real Instagram profile would be if this was a real deployment -->
+        <!-- Instagram - this is where our real Instagram profile would be if this was a real deployment -->
         <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
           <img src="./assets/instagram.png" alt="Instagram" />
         </a>
-        <!-- Facebook this is where our real Facebook page would be if this was a real deployment -->
+        <!-- Facebook - this is where our real Facebook page would be if this was a real deployment -->
         <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
           <img src="./assets/facebook.png" alt="Facebook" />
         </a>
@@ -170,7 +219,7 @@
 
   </div>
 
-  <!-- tiny JS to handle drawer open close no framework -->
+  <!-- tiny JS to handle drawer open/close (no framework) -->
   <script>
     const drawer = document.getElementById('drawer');
     const tab = document.getElementById('drawerTab');
@@ -182,7 +231,7 @@
       backdrop.classList.add('show');
       drawer.setAttribute('aria-hidden', 'false');
     }
-    
+
     function closeDrawer() {
       drawer.classList.remove('open');
       backdrop.classList.remove('show');
@@ -197,130 +246,6 @@
       if(e.key === 'Escape') closeDrawer(); 
     });
   </script>
-
-  <!-- Settings page functionality -->
-  <script src="./js/settings.js"></script>
-
-  <style>
-    /* Settings page specific styles that match other Clash Hub pages */
-    
-    /* Settings container uses the same styling as player-stats sections */
-    .settings-container {
-      /* No additional background needed - inherits from player-stats */
-    }
-
-    /* Individual setting row */
-    .setting-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .setting-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .setting-item:first-child {
-      padding-top: 0;
-    }
-
-    /* Setting label text uses Clash Hub colors */
-    .setting-label {
-      font-family: "Montserrat", sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--ink); /* Light text on dark background like other pages */
-    }
-
-    /* TOGGLE SWITCH STYLING matches the switches from mockup */
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 32px;
-      cursor: pointer;
-    }
-
-    /* Hide the default checkbox */
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    /* The toggle slider background */
-    .toggle-slider {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      border-radius: 32px;
-      transition: all 0.3s ease;
-    }
-
-    /* The toggle slider circle */
-    .toggle-slider:before {
-      content: "";
-      position: absolute;
-      height: 26px;
-      width: 26px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-
-    /* When toggle is ON uses Clash Hub gold instead of green */
-    .toggle-switch input:checked + .toggle-slider {
-      background-color: var(--gold); /* Clash Hub gold like other pages */
-    }
-
-    /* Move the slider circle when ON */
-    .toggle-switch input:checked + .toggle-slider:before {
-      transform: translateX(28px);
-    }
-
-    /* MOBILE RESPONSIVENESS */
-    @media (max-width: 520px) {
-      .setting-label {
-        font-size: 15px;
-      }
-      
-      .toggle-switch {
-        width: 54px;
-        height: 28px;
-      }
-      
-      .toggle-slider:before {
-        height: 22px;
-        width: 22px;
-        left: 3px;
-        bottom: 3px;
-      }
-      
-      .toggle-switch input:checked + .toggle-slider:before {
-        transform: translateX(26px);
-      }
-    }
-
-    @media (max-width: 360px) {
-      .setting-item {
-        padding: 14px 0;
-      }
-      
-      .setting-label {
-        font-size: 14px;
-      }
-    }
-  </style>
-  <!-- settings functionality for all pages -->
-<script src="./js/settings.js"></script>
 </body>
+</html>
 </html>
