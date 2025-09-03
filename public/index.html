@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -71,9 +70,9 @@
 
     <!-- HEADER -->
     <header class="header">
-      <!-- hamburger – clicking opens drawer (like the site you showed) -->
-      <button id="hamburger" class="hamburger" aria-label="Open menu">
-        <span class="bars"><span class="line"></span></span>
+      <!-- hamburger – clicking opens drawer (simplified to just hamburger icon) -->
+      <button id="hamburger" class="hamburger-simple" aria-label="Open menu">
+        <span class="hamburger-icon">☰</span>
       </button>
 
       <!-- Logo and brand - no title text needed since logo includes it -->
@@ -90,11 +89,15 @@
       </a>
     </header>
 
-    <!-- greeting -->
+    <!-- greeting with pull-to-refresh indicator for mobile -->
+    <div class="pull-indicator" id="pullIndicator">
+      <div class="pull-spinner"></div>
+      <span>Pull to refresh</span>
+    </div>
     <div class="hi">Welcome back, A2!</div>
 
-    <!-- PLAYER STATS SECTION -->
-    <section class="player-stats">
+    <!-- PLAYER STATS SECTION with smooth scroll animation -->
+    <section class="player-stats animate-on-scroll">
       <h3>PLAYER STATS</h3>
       <div class="stats-grid">
         <div class="stat-item">
@@ -121,10 +124,10 @@
       </div>
     </section>
 
-    <!-- CONTENT GRID: 4 squares + 1 video section -->
-    <section class="content-grid">
+    <!-- CONTENT GRID: 4 squares + 1 video section with touch gestures -->
+    <section class="content-grid swipeable-container">
       <!-- Top left mock box -->
-      <div class="mock-box">
+      <div class="mock-box touch-card">
         <div class="mock-image">
           <img src="./assets/crown.png" alt="Crown" />
         </div>
@@ -132,7 +135,7 @@
       </div>
 
       <!-- Top right mock box -->
-      <div class="mock-box">
+      <div class="mock-box touch-card">
         <div class="mock-image">
           <img src="./assets/email.png" alt="Email" />
         </div>
@@ -140,7 +143,7 @@
       </div>
 
       <!-- Bottom left mock box -->
-      <div class="mock-box">
+      <div class="mock-box touch-card">
         <div class="mock-image">
           <img src="./assets/treasure-chest.png" alt="Treasure Chest" />
         </div>
@@ -148,7 +151,7 @@
       </div>
 
       <!-- Bottom right mock box -->
-      <div class="mock-box">
+      <div class="mock-box touch-card">
         <div class="mock-image">
           <img src="./assets/user.png" alt="User" />
         </div>
@@ -156,18 +159,12 @@
       </div>
 
       <!-- Video section spans both columns on the bottom -->
-      <div class="video-section">
+      <div class="video-section animate-on-scroll">
         <div class="video-container">
-          <!--  we had an issue here so autoplay muted so it starts automatically on load.
-               Browsers allow autoplay only when muted.
-           
-               so manual play/unmute is permitted in some browsers. -->
           <iframe 
-            src="https://www.youtube.com/embed/3jQE-v5IZdU?rel=0&autoplay=0&mute=1"
             src="https://www.youtube.com/embed/3jQE-v5IZdU?rel=0&autoplay=1&mute=1&playsinline=1&modestbranding=1"
             title="YouTube video player" 
             frameborder="0" 
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
             allowfullscreen>
           </iframe>
@@ -175,25 +172,55 @@
       </div>
     </section>
 
-    <!-- two content sections -->
+    <!-- Live feed sections with auto-updating API data -->
     <div class="section-wrap">
-      <section class="section">
-        <h2 class="section-title">Featured Clans</h2>
-        <!-- JavaScript will inject featured clans here later -->
-        <ul class="list" id="featuredClans">
-          <li>Clan Name 1</li>
-          <li>Clan Name 2</li>
+      <section class="section live-feed">
+        <h2 class="section-title">
+          Featured Clans
+          <span class="live-indicator">● LIVE</span>
+        </h2>
+        <!-- JavaScript will inject featured clans here with live updates -->
+        <div class="feed-loading" id="clansLoading">
+          <div class="pulse-loader"></div>
+          <span>Loading clans...</span>
+        </div>
+        <ul class="list animated-list" id="featuredClans">
+          <!-- Clans will be inserted here -->
         </ul>
+        <div class="feed-refresh-timer">Updates in: <span id="clansTimer">30</span>s</div>
       </section>
 
-      <section class="section">
-        <h2 class="section-title">Recent Activity</h2>
-        <!-- JavaScript will inject recent activity here later -->
-        <ul class="list" id="recentActivity">
-          <li>1v1 vs PlayerXYZ (Win +30)</li>
-          <li>2v2 with ClanMate (Loss −12)</li>
+      <section class="section live-feed">
+        <h2 class="section-title">
+          Recent Activity
+          <span class="live-indicator">● LIVE</span>
+        </h2>
+        <!-- JavaScript will inject recent activity here with live updates -->
+        <div class="feed-loading" id="activityLoading">
+          <div class="pulse-loader"></div>
+          <span>Loading activity...</span>
+        </div>
+        <ul class="list animated-list" id="recentActivity">
+          <!-- Activity will be inserted here -->
         </ul>
+        <div class="feed-refresh-timer">Updates in: <span id="activityTimer">30</span>s</div>
       </section>
+    </div>
+
+    <!-- Mobile floating action button for quick access -->
+    <button class="fab-menu" id="fabMenu" aria-label="Quick Actions">
+      <span class="fab-icon">+</span>
+    </button>
+    <div class="fab-options" id="fabOptions">
+      <a href="./player.html" class="fab-option" title="Player Search">
+        <img src="./assets/user.png" alt="Player" />
+      </a>
+      <a href="./matches.html" class="fab-option" title="Recent Matches">
+        <img src="./assets/trophy.png" alt="Matches" />
+      </a>
+      <a href="./clans.html" class="fab-option" title="Clan Search">
+        <img src="./assets/magnifier.png" alt="Clans" />
+      </a>
     </div>
 
     <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
@@ -223,8 +250,9 @@
 
   </div>
 
-  <!-- tiny JS to handle drawer open/close (no framework) -->
+  <!-- Enhanced mobile features and live feed JavaScript -->
   <script>
+    // ============ DRAWER FUNCTIONALITY ============
     const drawer = document.getElementById('drawer');
     const tab = document.getElementById('drawerTab');
     const burger = document.getElementById('hamburger');
@@ -249,7 +277,579 @@
     window.addEventListener('keydown', (e)=>{ 
       if(e.key === 'Escape') closeDrawer(); 
     });
+
+    // ============ LIVE FEED FUNCTIONALITY ============
+    let clansUpdateInterval;
+    let activityUpdateInterval;
+    let clansCountdown = 30;
+    let activityCountdown = 30;
+    
+    // Sample player tags for activity feed (you can add more)
+    const samplePlayerTags = ['#9Q2YJ0U', '#2PP', '#8L9L9GL'];
+    let currentPlayerIndex = 0;
+
+    // Function to fetch top clans
+    async function fetchTopClans() {
+      const clansLoading = document.getElementById('clansLoading');
+      const clansList = document.getElementById('featuredClans');
+      
+      try {
+        clansLoading.style.display = 'flex';
+        
+        // Fetch top clans (using location ID for United States as example)
+        const response = await fetch('/api/royale?path=locations/57000001/rankings/clans');
+        const data = await response.json();
+        
+        if (data.items && data.items.length > 0) {
+          // Take top 5 clans and display with animation
+          const topClans = data.items.slice(0, 5);
+          clansList.innerHTML = '';
+          
+          topClans.forEach((clan, index) => {
+            setTimeout(() => {
+              const li = document.createElement('li');
+              li.className = 'feed-item fade-in';
+              li.innerHTML = `
+                <span class="rank">#${clan.rank}</span>
+                <span class="clan-name">${clan.name}</span>
+                <span class="trophies">${clan.clanScore.toLocaleString()} 🏆</span>
+              `;
+              clansList.appendChild(li);
+              
+              // Trigger animation
+              setTimeout(() => li.classList.add('visible'), 10);
+            }, index * 100);
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch clans:', error);
+        clansList.innerHTML = '<li class="error-item">Unable to load clans</li>';
+      } finally {
+        clansLoading.style.display = 'none';
+      }
+    }
+
+    // Function to fetch recent player activity
+    async function fetchRecentActivity() {
+      const activityLoading = document.getElementById('activityLoading');
+      const activityList = document.getElementById('recentActivity');
+      
+      try {
+        activityLoading.style.display = 'flex';
+        
+        // Rotate through player tags
+        const playerTag = samplePlayerTags[currentPlayerIndex];
+        currentPlayerIndex = (currentPlayerIndex + 1) % samplePlayerTags.length;
+        
+        // Fetch recent battles for a player
+        const response = await fetch(`/api/royale?path=players&tag=${encodeURIComponent(playerTag.replace('#', ''))}&battlelog=true`);
+        const battles = await response.json();
+        
+        if (battles && battles.length > 0) {
+          activityList.innerHTML = '';
+          
+          // Display last 5 battles
+          battles.slice(0, 5).forEach((battle, index) => {
+            setTimeout(() => {
+              const result = getMatchResult(battle);
+              const li = document.createElement('li');
+              li.className = 'feed-item fade-in';
+              li.innerHTML = `
+                <span class="activity-type ${result.status.toLowerCase()}">${result.status}</span>
+                <span class="activity-mode">${battle.gameMode?.name || 'Battle'}</span>
+                <span class="activity-score">${result.trophyChange}</span>
+              `;
+              activityList.appendChild(li);
+              
+              // Trigger animation
+              setTimeout(() => li.classList.add('visible'), 10);
+            }, index * 100);
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch activity:', error);
+        activityList.innerHTML = '<li class="error-item">Unable to load activity</li>';
+      } finally {
+        activityLoading.style.display = 'none';
+      }
+    }
+
+    // Helper function to analyze match results
+    function getMatchResult(match) {
+      const playerCrowns = (match.team || []).reduce((sum, p) => sum + (p.crowns || 0), 0);
+      const opponentCrowns = (match.opponent || []).reduce((sum, p) => sum + (p.crowns || 0), 0);
+      const trophyChange = match.team?.[0]?.trophyChange || 0;
+      
+      let status;
+      if (playerCrowns > opponentCrowns) {
+        status = 'WIN';
+      } else if (playerCrowns < opponentCrowns) {
+        status = 'LOSS';
+      } else {
+        status = 'DRAW';
+      }
+      
+      return {
+        status,
+        trophyChange: trophyChange > 0 ? `+${trophyChange}` : `${trophyChange}`
+      };
+    }
+
+    // Timer countdown functions
+    function updateTimers() {
+      clansCountdown--;
+      activityCountdown--;
+      
+      document.getElementById('clansTimer').textContent = clansCountdown;
+      document.getElementById('activityTimer').textContent = activityCountdown;
+      
+      if (clansCountdown <= 0) {
+        clansCountdown = 30;
+        fetchTopClans();
+      }
+      
+      if (activityCountdown <= 0) {
+        activityCountdown = 30;
+        fetchRecentActivity();
+      }
+    }
+
+    // Initialize live feeds
+    function initializeLiveFeeds() {
+      // Initial load
+      fetchTopClans();
+      fetchRecentActivity();
+      
+      // Set up auto-refresh every second for countdown
+      setInterval(updateTimers, 1000);
+    }
+
+    // ============ MOBILE ENHANCEMENTS ============
+    
+    // Smooth scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, observerOptions);
+
+    // Observe elements for scroll animations
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      scrollObserver.observe(el);
+    });
+
+    // Touch feedback for cards
+    document.querySelectorAll('.touch-card').forEach(card => {
+      card.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+      });
+      
+      card.addEventListener('touchend', function() {
+        this.style.transform = 'scale(1)';
+      });
+    });
+
+    // Pull-to-refresh functionality (mobile)
+    let startY = 0;
+    let isPulling = false;
+    const pullIndicator = document.getElementById('pullIndicator');
+
+    document.addEventListener('touchstart', (e) => {
+      if (window.scrollY === 0) {
+        startY = e.touches[0].pageY;
+        isPulling = true;
+      }
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isPulling) return;
+      
+      const currentY = e.touches[0].pageY;
+      const pullDistance = currentY - startY;
+      
+      if (pullDistance > 0 && pullDistance < 150) {
+        pullIndicator.style.transform = `translateY(${pullDistance}px)`;
+        pullIndicator.style.opacity = pullDistance / 100;
+        
+        if (pullDistance > 80) {
+          pullIndicator.classList.add('ready');
+        } else {
+          pullIndicator.classList.remove('ready');
+        }
+      }
+    });
+
+    document.addEventListener('touchend', () => {
+      if (isPulling && pullIndicator.classList.contains('ready')) {
+        // Refresh data
+        location.reload();
+      }
+      
+      isPulling = false;
+      pullIndicator.style.transform = 'translateY(0)';
+      pullIndicator.style.opacity = '0';
+      pullIndicator.classList.remove('ready');
+    });
+
+    // Floating Action Button
+    const fabMenu = document.getElementById('fabMenu');
+    const fabOptions = document.getElementById('fabOptions');
+    let fabOpen = false;
+
+    fabMenu.addEventListener('click', () => {
+      fabOpen = !fabOpen;
+      if (fabOpen) {
+        fabMenu.classList.add('open');
+        fabOptions.classList.add('open');
+      } else {
+        fabMenu.classList.remove('open');
+        fabOptions.classList.remove('open');
+      }
+    });
+
+    // Close FAB when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!fabMenu.contains(e.target) && !fabOptions.contains(e.target) && fabOpen) {
+        fabOpen = false;
+        fabMenu.classList.remove('open');
+        fabOptions.classList.remove('open');
+      }
+    });
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', initializeLiveFeeds);
   </script>
+
+  <!-- Additional styles for new features -->
+  <style>
+    /* Simplified hamburger button */
+    .hamburger-simple {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.08);
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger-simple:hover {
+      background: rgba(255,255,255,.12);
+      transform: scale(1.05);
+    }
+
+    .hamburger-icon {
+      color: white;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    /* Live feed styles */
+    .live-feed {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .live-indicator {
+      color: #4ecdc4;
+      font-size: 12px;
+      animation: pulse 2s infinite;
+      margin-left: 8px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .feed-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+      color: var(--gold);
+    }
+
+    .pulse-loader {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: pulse-scale 1.5s infinite;
+    }
+
+    @keyframes pulse-scale {
+      0%, 100% { transform: scale(0.8); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .animated-list {
+      padding: 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .feed-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin: 5px 0;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.3s ease;
+    }
+
+    .feed-item.fade-in {
+      animation: slideIn 0.3s forwards;
+    }
+
+    .feed-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .rank {
+      font-weight: bold;
+      color: var(--gold);
+      min-width: 30px;
+    }
+
+    .clan-name {
+      flex: 1;
+      margin: 0 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .trophies {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .activity-type {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .activity-type.win {
+      background: rgba(76, 205, 196, 0.2);
+      color: #4ecdc4;
+    }
+
+    .activity-type.loss {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+    }
+
+    .activity-type.draw {
+      background: rgba(245, 197, 66, 0.2);
+      color: var(--gold);
+    }
+
+    .activity-mode {
+      flex: 1;
+      margin: 0 10px;
+    }
+
+    .activity-score {
+      font-weight: bold;
+      color: var(--gold);
+    }
+
+    .feed-refresh-timer {
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .error-item {
+      text-align: center;
+      color: #ff6b6b;
+      padding: 20px;
+    }
+
+    /* Pull to refresh indicator */
+    .pull-indicator {
+      position: fixed;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--navy-card);
+      padding: 10px 20px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .pull-indicator.ready {
+      background: var(--blue);
+    }
+
+    .pull-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gold);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Smooth scroll animations */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .animate-on-scroll.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Touch card feedback */
+    .touch-card {
+      transition: transform 0.2s ease;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Floating Action Button */
+    .fab-menu {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      transition: all 0.3s ease;
+    }
+
+    .fab-menu.open {
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    .fab-icon {
+      font-size: 28px;
+      font-weight: 300;
+    }
+
+    .fab-options {
+      position: fixed;
+      bottom: 150px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 29;
+    }
+
+    .fab-options.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .fab-option {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--navy-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transform: scale(0);
+      transition: transform 0.2s ease;
+    }
+
+    .fab-options.open .fab-option {
+      transform: scale(1);
+    }
+
+    .fab-options.open .fab-option:nth-child(1) {
+      transition-delay: 0.05s;
+    }
+
+    .fab-options.open .fab-option:nth-child(2) {
+      transition-delay: 0.1s;
+    }
+
+    .fab-options.open .fab-option:nth-child(3) {
+      transition-delay: 0.15s;
+    }
+
+    .fab-option img {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Show FAB only on mobile */
+    @media (max-width: 768px) {
+      .fab-menu {
+        display: flex;
+      }
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 520px) {
+      .feed-item {
+        font-size: 13px;
+        padding: 8px;
+      }
+
+      .activity-type {
+        font-size: 10px;
+        padding: 2px 6px;
+      }
+    }
+  </style>
 </body>
-</html>
 </html>
