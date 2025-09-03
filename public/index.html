@@ -78,12 +78,16 @@
 
       <!-- Logo and brand - no title text needed since logo includes it -->
       <div class="brand">
-        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+        <!-- make logo link to Home (index) -->
+        <a href="./index.html" class="brand__link" aria-label="Go to Home">
+          <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+        </a>
       </div>
 
-      <button class="icon-btn" title="Settings">
+      <!-- make settings icon go to settings page -->
+      <a href="./settings.html" class="icon-btn" title="Settings" aria-label="Go to Settings">
         <img src="./assets/settings.png" alt="Settings" />
-      </button>
+      </a>
     </header>
 
     <!-- greeting -->
