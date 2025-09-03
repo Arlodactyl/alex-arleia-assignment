@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
 <body>
-  <!-- slide-out nav (hidden by default, opens from left) -->
+  <!-- slide-out nav hidden by default opens from left -->
   <aside id="drawer" class="drawer" aria-hidden="true">
-    <!-- Logo section at top of drawer  -->
+    <!-- Logo section at top of drawer -->
     <div class="drawer-header">
       <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
     </div>
@@ -50,7 +50,7 @@
       </li>
     </ul>
 
-    <!-- Secondary links at bottom - less frequently used pages -->
+    <!-- Secondary links at bottom less frequently used pages -->
     <div class="drawer-footer">
       <a href="./videos.html" class="footer-link">Video Archive</a>
       <a href="./news.html" class="footer-link">News</a>
@@ -58,7 +58,7 @@
     </div>
   </aside>
 
-  <!-- pull-tab arrow that peeks from left (closer to content now) -->
+  <!-- pull-tab arrow that peeks from left closer to content now -->
   <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
     <span style="color: white; font-size: 14px;">→</span>
   </button>
@@ -70,12 +70,12 @@
 
     <!-- HEADER -->
     <header class="header">
-      <!-- hamburger – clicking opens drawer (like the site you showed) -->
+      <!-- hamburger clicking opens drawer like the site you showed -->
       <button id="hamburger" class="hamburger" aria-label="Open menu">
         <span class="bars"><span class="line"></span></span>
       </button>
 
-      <!-- Logo and brand - no title text needed since logo includes it -->
+      <!-- Logo and brand no title text needed since logo includes it -->
       <div class="brand">
         <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
       </div>
@@ -85,14 +85,14 @@
       </button>
     </header>
 
-    <!-- MAIN SETTINGS SECTION - matches the mockup design -->
-    <section class="settings-main">
-      <!-- Settings header with title -->
-      <div class="settings-header">
-        <h1 class="settings-title">SETTINGS</h1>
-      </div>
+    <!-- greeting like other pages -->
+    <div class="hi">App Settings</div>
 
-      <!-- Settings container - the white/light rounded box from mockup -->
+    <!-- SETTINGS SECTION matches other Clash Hub pages -->
+    <section class="player-stats">
+      <h3>SETTINGS</h3>
+      
+      <!-- Settings container uses consistent Clash Hub dark styling -->
       <div class="settings-container">
         
         <!-- INVERT COLOURS SETTING -->
@@ -110,7 +110,7 @@
           </div>
         </div>
 
-        <!-- FONT SIZE SETTING -->  
+        <!-- FONT SIZE SETTING -->
         <!-- This would switch between normal and larger text throughout the app -->
         <div class="setting-item">
           <div class="setting-info">
@@ -126,7 +126,7 @@
         </div>
 
         <!-- SOUND SETTING -->
-        <!-- This would enable/disable UI sounds and audio feedback -->
+        <!-- This would enable or disable UI sounds and audio feedback -->
         <div class="setting-item">
           <div class="setting-info">
             <span class="setting-label">Sound (On/Off)</span>
@@ -143,90 +143,22 @@
       </div>
     </section>
 
-    <!-- LINKS / SOCIAL MEDIA / CONTACT US SECTION -->
-    <!-- This matches the bottom section in your mockup -->
-    <section class="settings-links">
-      <h2 class="links-title">Links / Social media / Contact us</h2>
-      
-      <!-- Contact and support links -->
-      <div class="links-container">
-        
-        <!-- CONTACT EMAIL -->
-        <div class="link-item">
-          <div class="link-icon">
-            <img src="./assets/email.png" alt="Email" />
-          </div>
-          <div class="link-info">
-            <span class="link-label">Contact Support</span>
-            <span class="link-value">clashhub@example.com</span>
-          </div>
-        </div>
-
-        <!-- DISCORD SERVER -->
-        <div class="link-item">
-          <div class="link-icon">
-            <img src="./assets/discord.png" alt="Discord" />
-          </div>
-          <div class="link-info">
-            <span class="link-label">Join Our Discord</span>
-            <span class="link-value">discord.gg/clashhub</span>
-          </div>
-        </div>
-
-        <!-- YOUTUBE CHANNEL -->
-        <div class="link-item">
-          <div class="link-icon">
-            <img src="./assets/youtube.png" alt="YouTube" />
-          </div>
-          <div class="link-info">
-            <span class="link-label">YouTube Channel</span>
-            <span class="link-value">youtube.com/clashhub</span>
-          </div>
-        </div>
-
-        <!-- WEBSITE/GITHUB -->
-        <div class="link-item">
-          <div class="link-icon">
-            <img src="./assets/crown.png" alt="Website" />
-          </div>
-          <div class="link-info">
-            <span class="link-label">Project Repository</span>
-            <span class="link-value">github.com/clashhub</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- APP INFO SECTION - shows version and credits -->
-    <section class="settings-info">
-      <div class="info-container">
-        <div class="app-version">
-          <span class="version-label">Clash Hub v1.0</span>
-          <span class="version-subtitle">Built for UX Principles II</span>
-        </div>
-        <div class="app-credits">
-          <span class="credits-text">Created by Arleia & Alex</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
+    <!-- FOOTER WITH SOCIAL ICONS this will be on all pages -->
     <footer class="footer">
       <div class="social-icons">
-        <!-- YouTube - this is where our real YouTube channel link would be if this was a real deployment -->
+        <!-- YouTube this is where our real YouTube channel link would be if this was a real deployment -->
         <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
           <img src="./assets/youtube.png" alt="YouTube" />
         </a>
-        <!-- Discord - this is where our real Discord server invite would be if this was a real deployment -->
+        <!-- Discord this is where our real Discord server invite would be if this was a real deployment -->
         <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
           <img src="./assets/discord.png" alt="Discord" />
         </a>
-        <!-- Instagram - this is where our real Instagram profile would be if this was a real deployment -->
+        <!-- Instagram this is where our real Instagram profile would be if this was a real deployment -->
         <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
           <img src="./assets/instagram.png" alt="Instagram" />
         </a>
-        <!-- Facebook - this is where our real Facebook page would be if this was a real deployment -->
+        <!-- Facebook this is where our real Facebook page would be if this was a real deployment -->
         <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
           <img src="./assets/facebook.png" alt="Facebook" />
         </a>
@@ -238,7 +170,7 @@
 
   </div>
 
-  <!-- tiny JS to handle drawer open/close (no framework) -->
+  <!-- tiny JS to handle drawer open close no framework -->
   <script>
     const drawer = document.getElementById('drawer');
     const tab = document.getElementById('drawerTab');
@@ -270,38 +202,11 @@
   <script src="./js/settings.js"></script>
 
   <style>
-    /* =============================
-       SETTINGS PAGE SPECIFIC STYLES
-       Matches the mockup design exactly
-       ============================= */
-
-    /* MAIN SETTINGS SECTION */
-    .settings-main {
-      margin-bottom: 24px;
-    }
-
-    /* Settings header with title */
-    .settings-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .settings-title {
-      font-family: "Montserrat", sans-serif;
-      font-size: 28px;
-      font-weight: 800;
-      margin: 0;
-      color: var(--ink);
-      letter-spacing: 1px;
-    }
-
-    /* Main settings container - the light rounded box from mockup */
+    /* Settings page specific styles that match other Clash Hub pages */
+    
+    /* Settings container uses the same styling as player-stats sections */
     .settings-container {
-      background: rgba(255, 255, 255, 0.95); /* Light background like mockup */
-      border-radius: var(--radius-xl);
-      padding: 24px;
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
+      /* No additional background needed - inherits from player-stats */
     }
 
     /* Individual setting row */
@@ -310,7 +215,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 16px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .setting-item:last-child {
@@ -322,15 +227,15 @@
       padding-top: 0;
     }
 
-    /* Setting label text */
+    /* Setting label text uses Clash Hub colors */
     .setting-label {
       font-family: "Montserrat", sans-serif;
       font-size: 16px;
       font-weight: 600;
-      color: #2a2a2a; /* Dark text on light background */
+      color: var(--ink); /* Light text on dark background like other pages */
     }
 
-    /* TOGGLE SWITCH STYLING - matches the green switches from mockup */
+    /* TOGGLE SWITCH STYLING matches the switches from mockup */
     .toggle-switch {
       position: relative;
       display: inline-block;
@@ -372,103 +277,54 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
-    /* When toggle is ON - green background like mockup */
+    /* When toggle is ON uses Clash Hub gold instead of green */
     .toggle-switch input:checked + .toggle-slider {
-      background-color: #4CAF50; /* Green like in your mockup */
+      background-color: var(--gold); /* Clash Hub gold like other pages */
     }
 
-    /* Move the slider circle when ON */
-    .toggle-switch input:checked + .toggle-slider:before {
-      transform: translateX(28px);
+    /* FONT SIZE SLIDER STYLING */
+    .font-size-slider {
+      width: 120px;
+      height: 6px;
+      background: #ccc;
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
-    /* LINKS SECTION - matches bottom of mockup */
-    .settings-links {
-      background: var(--navy-card);
-      border-radius: var(--radius-xl);
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow);
+    .font-size-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
-    .links-title {
+    .font-size-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .font-size-display {
       font-family: "Montserrat", sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      margin: 0 0 16px 0;
-      color: var(--ink);
-      text-align: center;
-    }
-
-    .links-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    /* Individual link item */
-    .link-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius-md);
-      transition: background 0.2s ease;
-    }
-
-    .link-item:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    /* Link icon container */
-    .link-icon {
-      width: 32px;
-      height: 32px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .link-icon img {
-      width: 18px;
-      height: 18px;
-    }
-
-    /* Link information */
-    .link-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      flex: 1;
-    }
-
-    .link-label {
-      font-family: "Montserrat", sans-serif;
-      font-size: 14px;
       font-weight: 600;
-      color: var(--ink);
-    }
-
-    .link-value {
-      font-size: 12px;
       color: var(--gold);
-      font-family: "Montserrat", sans-serif;
+      font-size: 12px;
+      margin-left: 8px;
     }
 
     /* MOBILE RESPONSIVENESS */
     @media (max-width: 520px) {
-      .settings-title {
-        font-size: 24px;
-      }
-      
-      .settings-container {
-        padding: 20px;
-      }
-      
       .setting-label {
         font-size: 15px;
       }
@@ -488,31 +344,9 @@
       .toggle-switch input:checked + .toggle-slider:before {
         transform: translateX(26px);
       }
-      
-      .links-container {
-        gap: 10px;
-      }
-      
-      .link-item {
-        padding: 10px;
-      }
-      
-      .link-icon {
-        width: 28px;
-        height: 28px;
-      }
-      
-      .link-icon img {
-        width: 16px;
-        height: 16px;
-      }
     }
 
     @media (max-width: 360px) {
-      .settings-container {
-        padding: 16px;
-      }
-      
       .setting-item {
         padding: 14px 0;
       }
@@ -520,13 +354,7 @@
       .setting-label {
         font-size: 14px;
       }
-      
-      .settings-title {
-        font-size: 22px;
-      }
     }
   </style>
-  <!-- settings functionality for all pages -->
-<script src="./js/settings.js"></script>
 </body>
 </html>

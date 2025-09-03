@@ -184,7 +184,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // UTILITY FUNCTION - get current font size setting (for other parts of the app)
     window.isClashHubLargeFontEnabled = function() {
-        return localStorage.getItem('clash_hub_large_font') === 'true';
+        const fontSize = localStorage.getItem('clash_hub_large_font');
+        return parseInt(fontSize) || 100;
     };
 
     // UTILITY FUNCTION - get current color theme (for other parts of the app)
