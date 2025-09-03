@@ -154,10 +154,10 @@
         <div class="mock-subtitle">Cycle clean, punish overcommits, win trades.</div>
         <a
           class="mini-btn"
-          href="https://royaleapi.com/guides"
+          href="https://clashroyale.fandom.com/wiki/Elixir"
           target="_blank"
           rel="noopener"
-          aria-label="Read strategy guides on RoyaleAPI (opens in a new tab)"
+          aria-label="Read Elixir tips on Fandom (opens in a new tab)"
         >
           Read tips →
         </a>
@@ -186,8 +186,8 @@
       <!-- Bottom right mock box -->
       <div class="mock-box touch-card">
         <div class="mock-image" aria-hidden="true">
-          <!-- updated to match highlight image (file name contains a space) -->
-          <img src="./assets/match%20highlight.png" alt="" />
+          <!-- updated to match highlight image -->
+          <img src="./assets/match highlight.png" alt="" />
         </div>
         <div class="mock-label">Pro Match Highlights</div>
         <div class="mock-subtitle">Quick plays to copy on ladder.</div>
@@ -269,19 +269,19 @@
     <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
     <footer class="footer">
       <div class="social-icons">
-        <!-- YouTube - this is where our real YouTube channel link would be if this was a real deployment -->
+        <!-- YouTube - this is where a real YouTube channel link would be if this was a real deployment -->
         <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
           <img src="./assets/youtube.png" alt="YouTube" />
         </a>
-        <!-- Discord - this is where our real Discord server invite would be if this was a real deployment -->
+        <!-- Discord -->
         <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
           <img src="./assets/discord.png" alt="Discord" />
         </a>
-        <!-- Instagram - this is where our real Instagram profile would be if this was a real deployment -->
+        <!-- Instagram -->
         <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
           <img src="./assets/instagram.png" alt="Instagram" />
         </a>
-        <!-- Facebook - this is where our real Facebook page would be if this was a real deployment -->
+        <!-- Facebook -->
         <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
           <img src="./assets/facebook.png" alt="Facebook" />
         </a>
@@ -596,7 +596,7 @@
 
       // run quickly but smoothly (about 1.2s each)
       animateCount(donationsEl, donationsTarget, 1200);
-      // slight stagger for a nice effect
+      // slight stagger
       setTimeout(() => animateCount(gamesEl, gamesTarget, 1200), 150);
     }
 
@@ -838,9 +838,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
-    .pull-indicator.ready {
-      background: var(--blue);
-    }
+    .pull-indicator.ready { background: var(--blue); }
 
     .pull-spinner {
       width: 20px;
@@ -851,9 +849,7 @@
       animation: spin 1s linear infinite;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Smooth scroll animations */
     .animate-on-scroll {
@@ -888,9 +884,7 @@
       display: block;
     }
 
-    .card-link:hover .mock-label {
-      color: var(--gold);
-    }
+    .card-link:hover .mock-label { color: var(--gold); }
 
     /* Card badges */
     .card-badge {
@@ -910,9 +904,9 @@
       animation: badge-pulse 2s infinite;
     }
 
-    .card-badge.new { display: none; }   
-    .card-badge.watch { display: none; } /* not used, but guarded */
-    .card-badge.guide { display: none; } /* not used, but guarded */
+    .card-badge.new { display: none; }
+    .card-badge.watch { display: none; }
+    .card-badge.guide { display: none; }
     .card-badge.event {
       background: linear-gradient(135deg, var(--gold), #d4a017);
     }
