@@ -112,14 +112,14 @@
             <img src="./assets/treasure.png" alt="Donations" />
           </div>
           <div class="stat-label">Donations:</div>
-          <div class="stat-value">53371</div>
+          <div class="stat-value" id="donationsValue">53371</div>
         </div>
         <div class="stat-item">
           <div class="stat-icon">
             <img src="./assets/trophy.png" alt="Games" />
           </div>
           <div class="stat-label">Games played:</div>
-          <div class="stat-value">9200</div>
+          <div class="stat-value" id="gamesValue">9200</div>
         </div>
       </div>
     </section>
@@ -128,34 +128,78 @@
     <section class="content-grid swipeable-container">
       <!-- Top left mock box -->
       <div class="mock-box touch-card">
-        <div class="mock-image">
-          <img src="./assets/crown.png" alt="Crown" />
+        <div class="mock-image" aria-hidden="true">
+          <img src="./assets/crown.png" alt="" />
         </div>
-        <div class="mock-label">*Insert news or text here*</div>
+        <div class="mock-label">Top Decks This Week</div>
+        <div class="mock-subtitle">Meta picks from high-ladder & tournaments.</div>
+        <a
+          class="mini-btn"
+          href="https://royaleapi.com/decks/popular"
+          target="_blank"
+          rel="noopener"
+          aria-label="See more top decks on RoyaleAPI (opens in a new tab)"
+        >
+          See more →
+        </a>
       </div>
 
       <!-- Top right mock box -->
       <div class="mock-box touch-card">
-        <div class="mock-image">
-          <img src="./assets/email.png" alt="Email" />
+        <div class="mock-image" aria-hidden="true">
+          <!-- updated to elixir.png -->
+          <img src="./assets/elixir.png" alt="" />
         </div>
-        <div class="mock-label">*Insert news or text here*</div>
+        <div class="mock-label">Smart Elixir Tips</div>
+        <div class="mock-subtitle">Cycle clean, punish overcommits, win trades.</div>
+        <a
+          class="mini-btn"
+          href="https://royaleapi.com/guides"
+          target="_blank"
+          rel="noopener"
+          aria-label="Read strategy guides on RoyaleAPI (opens in a new tab)"
+        >
+          Read tips →
+        </a>
       </div>
 
       <!-- Bottom left mock box -->
       <div class="mock-box touch-card">
-        <div class="mock-image">
-          <img src="./assets/treasure-chest.png" alt="Treasure Chest" />
+        <!-- keep EVENT badge only -->
+        <span class="card-badge event" aria-hidden="true">EVENT</span>
+        <div class="mock-image" aria-hidden="true">
+          <img src="./assets/treasure-chest.png" alt="" />
         </div>
-        <div class="mock-label">*Insert news or text here*</div>
+        <div class="mock-label">Challenges & Rewards</div>
+        <div class="mock-subtitle">What’s live now? Track events & freebies.</div>
+        <a
+          class="mini-btn"
+          href="https://clashroyale.com/blog/"
+          target="_blank"
+          rel="noopener"
+          aria-label="Open official Clash Royale news blog (opens in a new tab)"
+        >
+          View events →
+        </a>
       </div>
 
       <!-- Bottom right mock box -->
       <div class="mock-box touch-card">
-        <div class="mock-image">
-          <img src="./assets/user.png" alt="User" />
+        <div class="mock-image" aria-hidden="true">
+          <!-- updated to match highlight image (file name contains a space) -->
+          <img src="./assets/match%20highlight.png" alt="" />
         </div>
-        <div class="mock-label">*Insert news or text here*</div>
+        <div class="mock-label">Pro Match Highlights</div>
+        <div class="mock-subtitle">Quick plays to copy on ladder.</div>
+        <a
+          class="mini-btn"
+          href="https://www.youtube.com/@ClashRoyale/videos"
+          target="_blank"
+          rel="noopener"
+          aria-label="Watch Clash Royale highlights on YouTube (opens in a new tab)"
+        >
+          Watch now →
+        </a>
       </div>
 
       <!-- Video section spans both columns on the bottom -->
@@ -270,6 +314,7 @@
     }
 
     burger.addEventListener('click', openDrawer);
+    // tab button is hidden in CSS; keeping listener is harmless
     tab.addEventListener('click', openDrawer);
     backdrop.addEventListener('click', closeDrawer);
 
@@ -424,6 +469,9 @@
       
       // Set up auto-refresh every second for countdown
       setInterval(updateTimers, 1000);
+
+      // Start stat number animations after initial layout is ready
+      startStatAnimations();
     }
 
     // ============ MOBILE ENHANCEMENTS ============
@@ -518,6 +566,40 @@
       });
     });
 
+    // ============ FAST/SMOOTH STAT ANIMATIONS ============
+    function animateCount(el, target, duration) {
+      const start = 0;
+      const startTime = performance.now();
+      const formatter = new Intl.NumberFormat();
+
+      function tick(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutCubic for smooth stop
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(start + (target - start) * eased);
+        el.textContent = formatter.format(current);
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          el.textContent = formatter.format(target);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function startStatAnimations() {
+      const donationsEl = document.getElementById('donationsValue');
+      const gamesEl = document.getElementById('gamesValue');
+      const donationsTarget = 53371;
+      const gamesTarget = 9200;
+
+      // run quickly but smoothly (about 1.2s each)
+      animateCount(donationsEl, donationsTarget, 1200);
+      // slight stagger for a nice effect
+      setTimeout(() => animateCount(gamesEl, gamesTarget, 1200), 150);
+    }
+
     // Initialize when page loads
     document.addEventListener('DOMContentLoaded', initializeLiveFeeds);
   </script>
@@ -548,6 +630,9 @@
       font-size: 24px;
       line-height: 1;
     }
+
+    /* hide the side drawer pull-tab arrow */
+    .drawer-tab { display: none !important; }
 
     /* Section header with refresh button */
     .section-header {
@@ -825,10 +910,9 @@
       animation: badge-pulse 2s infinite;
     }
 
-    .card-badge.new {
-      background: linear-gradient(135deg, var(--blue), #1c5ff0);
-    }
-
+    .card-badge.new { display: none; }   /* removed as requested */
+    .card-badge.watch { display: none; } /* not used, but guarded */
+    .card-badge.guide { display: none; } /* not used, but guarded */
     .card-badge.event {
       background: linear-gradient(135deg, var(--gold), #d4a017);
     }
@@ -853,6 +937,7 @@
       position: relative;
       border: 1px solid rgba(255,255,255,0.05);
       transition: all 0.3s ease;
+      gap: 6px;
     }
 
     .mock-box:hover {
@@ -873,9 +958,9 @@
 
     .mock-subtitle {
       font-size: 11px;
-      color: rgba(255,255,255,0.6);
-      margin-top: 2px;
-      font-style: italic;
+      color: rgba(255,255,255,0.75);
+      margin-top: 0;
+      line-height: 1.35;
     }
 
     .mock-image {
@@ -883,7 +968,7 @@
       height: 48px;
       background: rgba(255,255,255,.08);
       border-radius: 12px;
-      margin-bottom: 8px;
+      margin-bottom: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -894,6 +979,27 @@
       background: rgba(255,255,255,.12);
       transform: scale(1.1);
     }
+
+    /* Tiny CTA button that matches the theme */
+    .mini-btn {
+      display: inline-block;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.06);
+      color: var(--gold);
+      transition: all 0.2s ease;
+    }
+
+    .mini-btn:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-1px);
+    }
+
+    .mini-btn:active { transform: translateY(0); }
 
     /* Scroll to top button */
     .scroll-to-top {
@@ -919,44 +1025,17 @@
       z-index: 20;
     }
 
-    .scroll-to-top.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .scroll-to-top:hover {
-      background: #1c5ff0;
-      transform: translateY(-2px);
-    }
-
-    .scroll-to-top:active {
-      transform: translateY(0);
-    }
+    .scroll-to-top.visible { opacity: 1; visibility: visible; }
+    .scroll-to-top:hover { background: #1c5ff0; transform: translateY(-2px); }
+    .scroll-to-top:active { transform: translateY(0); }
 
     /* Mobile optimizations */
     @media (max-width: 520px) {
-      .feed-item {
-        font-size: 13px;
-        padding: 8px;
-      }
-
-      .activity-type {
-        font-size: 10px;
-        padding: 2px 6px;
-      }
-
-      .refresh-btn {
-        width: 28px;
-        height: 28px;
-        font-size: 16px;
-      }
-
+      .feed-item { font-size: 13px; padding: 8px; }
+      .activity-type { font-size: 10px; padding: 2px 6px; }
+      .refresh-btn { width: 28px; height: 28px; font-size: 16px; }
       .scroll-to-top {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
-        bottom: 20px;
-        right: 15px;
+        width: 36px; height: 36px; font-size: 18px; bottom: 20px; right: 15px;
       }
     }
   </style>

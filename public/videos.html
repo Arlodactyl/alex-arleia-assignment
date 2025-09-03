@@ -77,10 +77,14 @@
 
       <!-- Logo and brand - no title text needed since logo includes it -->
       <div class="brand">
-        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+        <!-- make logo clickable to Home -->
+        <a href="./index.html" class="brand__link" aria-label="Go to Home">
+          <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+        </a>
       </div>
 
-      <button class="icon-btn" title="Settings">
+      <!-- keep button element; navigate to settings on click -->
+      <button class="icon-btn" title="Settings" aria-label="Go to Settings" onclick="window.location.href='./settings.html'">
         <img src="./assets/settings.png" alt="Settings" />
       </button>
     </header>
