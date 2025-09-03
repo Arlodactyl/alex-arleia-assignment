@@ -70,7 +70,7 @@
 
     <!-- HEADER -->
     <header class="header">
-      <!-- hamburger – clicking opens drawer (simplified to just hamburger icon) -->
+      <!-- hamburger – just the icon, no lines -->
       <button id="hamburger" class="hamburger-simple" aria-label="Open menu">
         <span class="hamburger-icon">☰</span>
       </button>
@@ -175,10 +175,15 @@
     <!-- Live feed sections with auto-updating API data -->
     <div class="section-wrap">
       <section class="section live-feed">
-        <h2 class="section-title">
-          Featured Clans
-          <span class="live-indicator">● LIVE</span>
-        </h2>
+        <div class="section-header">
+          <h2 class="section-title">
+            Featured Clans
+            <span class="live-indicator">● LIVE</span>
+          </h2>
+          <button class="refresh-btn" onclick="fetchTopClans()" title="Refresh Now">
+            ↻
+          </button>
+        </div>
         <!-- JavaScript will inject featured clans here with live updates -->
         <div class="feed-loading" id="clansLoading">
           <div class="pulse-loader"></div>
@@ -191,10 +196,15 @@
       </section>
 
       <section class="section live-feed">
-        <h2 class="section-title">
-          Recent Activity
-          <span class="live-indicator">● LIVE</span>
-        </h2>
+        <div class="section-header">
+          <h2 class="section-title">
+            Recent Activity
+            <span class="live-indicator">● LIVE</span>
+          </h2>
+          <button class="refresh-btn" onclick="fetchRecentActivity()" title="Refresh Now">
+            ↻
+          </button>
+        </div>
         <!-- JavaScript will inject recent activity here with live updates -->
         <div class="feed-loading" id="activityLoading">
           <div class="pulse-loader"></div>
@@ -207,21 +217,10 @@
       </section>
     </div>
 
-    <!-- Mobile floating action button for quick access -->
-    <button class="fab-menu" id="fabMenu" aria-label="Quick Actions">
-      <span class="fab-icon">+</span>
+    <!-- Scroll to top button -->
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+      ↑
     </button>
-    <div class="fab-options" id="fabOptions">
-      <a href="./player.html" class="fab-option" title="Player Search">
-        <img src="./assets/user.png" alt="Player" />
-      </a>
-      <a href="./matches.html" class="fab-option" title="Recent Matches">
-        <img src="./assets/trophy.png" alt="Matches" />
-      </a>
-      <a href="./clans.html" class="fab-option" title="Clan Search">
-        <img src="./assets/magnifier.png" alt="Clans" />
-      </a>
-    </div>
 
     <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
     <footer class="footer">
@@ -284,14 +283,16 @@
     let clansCountdown = 30;
     let activityCountdown = 30;
     
-    // Sample player tags for activity feed (you can add more)
-    const samplePlayerTags = ['#9Q2YJ0U', '#2PP', '#8L9L9GL'];
-    let currentPlayerIndex = 0;
+    // Your player tag for activity feed
+    const playerTag = '#R92JYJV8L';
 
     // Function to fetch top clans
     async function fetchTopClans() {
       const clansLoading = document.getElementById('clansLoading');
       const clansList = document.getElementById('featuredClans');
+      
+      // Reset timer when manually refreshed
+      clansCountdown = 30;
       
       try {
         clansLoading.style.display = 'flex';
@@ -334,15 +335,15 @@
       const activityLoading = document.getElementById('activityLoading');
       const activityList = document.getElementById('recentActivity');
       
+      // Reset timer when manually refreshed
+      activityCountdown = 30;
+      
       try {
         activityLoading.style.display = 'flex';
         
-        // Rotate through player tags
-        const playerTag = samplePlayerTags[currentPlayerIndex];
-        currentPlayerIndex = (currentPlayerIndex + 1) % samplePlayerTags.length;
-        
-        // Fetch recent battles for a player
-        const response = await fetch(`/api/royale?path=players&tag=${encodeURIComponent(playerTag.replace('#', ''))}&battlelog=true`);
+        // Fetch recent battles for the specified player
+        const cleanTag = playerTag.replace('#', '');
+        const response = await fetch(`/api/royale?path=players&tag=${encodeURIComponent(cleanTag)}&battlelog=true`);
         const battles = await response.json();
         
         if (battles && battles.length > 0) {
@@ -352,11 +353,12 @@
           battles.slice(0, 5).forEach((battle, index) => {
             setTimeout(() => {
               const result = getMatchResult(battle);
+              const opponent = battle.opponent?.[0]?.name || 'Unknown';
               const li = document.createElement('li');
               li.className = 'feed-item fade-in';
               li.innerHTML = `
                 <span class="activity-type ${result.status.toLowerCase()}">${result.status}</span>
-                <span class="activity-mode">${battle.gameMode?.name || 'Battle'}</span>
+                <span class="activity-opponent">vs ${opponent}</span>
                 <span class="activity-score">${result.trophyChange}</span>
               `;
               activityList.appendChild(li);
@@ -391,7 +393,7 @@
       
       return {
         status,
-        trophyChange: trophyChange > 0 ? `+${trophyChange}` : `${trophyChange}`
+        trophyChange: trophyChange > 0 ? `+${trophyChange} 🏆` : `${trophyChange} 🏆`
       };
     }
 
@@ -498,29 +500,22 @@
       pullIndicator.classList.remove('ready');
     });
 
-    // Floating Action Button
-    const fabMenu = document.getElementById('fabMenu');
-    const fabOptions = document.getElementById('fabOptions');
-    let fabOpen = false;
+    // Scroll to top button functionality
+    const scrollToTopBtn = document.getElementById('scrollToTop');
 
-    fabMenu.addEventListener('click', () => {
-      fabOpen = !fabOpen;
-      if (fabOpen) {
-        fabMenu.classList.add('open');
-        fabOptions.classList.add('open');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollToTopBtn.classList.add('visible');
       } else {
-        fabMenu.classList.remove('open');
-        fabOptions.classList.remove('open');
+        scrollToTopBtn.classList.remove('visible');
       }
     });
 
-    // Close FAB when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!fabMenu.contains(e.target) && !fabOptions.contains(e.target) && fabOpen) {
-        fabOpen = false;
-        fabMenu.classList.remove('open');
-        fabOptions.classList.remove('open');
-      }
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     });
 
     // Initialize when page loads
@@ -554,10 +549,48 @@
       line-height: 1;
     }
 
+    /* Section header with refresh button */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .refresh-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--gold);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .refresh-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(360deg);
+    }
+
+    .refresh-btn:active {
+      transform: scale(0.9) rotate(360deg);
+    }
+
     /* Live feed styles */
     .live-feed {
       position: relative;
       overflow: hidden;
+    }
+
+    .section-title {
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
     }
 
     .live-indicator {
@@ -653,6 +686,8 @@
       border-radius: 4px;
       font-size: 11px;
       font-weight: bold;
+      min-width: 45px;
+      text-align: center;
     }
 
     .activity-type.win {
@@ -670,14 +705,19 @@
       color: var(--gold);
     }
 
-    .activity-mode {
+    .activity-opponent {
       flex: 1;
       margin: 0 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .activity-score {
       font-weight: bold;
       color: var(--gold);
+      min-width: 50px;
+      text-align: right;
     }
 
     .feed-refresh-timer {
@@ -749,93 +789,42 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Floating Action Button */
-    .fab-menu {
+    /* Scroll to top button */
+    .scroll-to-top {
       position: fixed;
-      bottom: 80px;
+      bottom: 30px;
       right: 20px;
-      width: 56px;
-      height: 56px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: var(--blue);
       color: white;
       border: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
       cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 30;
-      transition: all 0.3s ease;
-    }
-
-    .fab-menu.open {
-      background: var(--gold);
-      transform: rotate(45deg);
-    }
-
-    .fab-icon {
-      font-size: 28px;
-      font-weight: 300;
-    }
-
-    .fab-options {
-      position: fixed;
-      bottom: 150px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
       opacity: 0;
-      pointer-events: none;
+      visibility: hidden;
       transition: all 0.3s ease;
-      z-index: 29;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 20;
     }
 
-    .fab-options.open {
+    .scroll-to-top.visible {
       opacity: 1;
-      pointer-events: auto;
+      visibility: visible;
     }
 
-    .fab-option {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--navy-card);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      transform: scale(0);
-      transition: transform 0.2s ease;
+    .scroll-to-top:hover {
+      background: #1c5ff0;
+      transform: translateY(-2px);
     }
 
-    .fab-options.open .fab-option {
-      transform: scale(1);
-    }
-
-    .fab-options.open .fab-option:nth-child(1) {
-      transition-delay: 0.05s;
-    }
-
-    .fab-options.open .fab-option:nth-child(2) {
-      transition-delay: 0.1s;
-    }
-
-    .fab-options.open .fab-option:nth-child(3) {
-      transition-delay: 0.15s;
-    }
-
-    .fab-option img {
-      width: 24px;
-      height: 24px;
-    }
-
-    /* Show FAB only on mobile */
-    @media (max-width: 768px) {
-      .fab-menu {
-        display: flex;
-      }
+    .scroll-to-top:active {
+      transform: translateY(0);
     }
 
     /* Mobile optimizations */
@@ -848,6 +837,20 @@
       .activity-type {
         font-size: 10px;
         padding: 2px 6px;
+      }
+
+      .refresh-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+      }
+
+      .scroll-to-top {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        bottom: 20px;
+        right: 15px;
       }
     }
   </style>
