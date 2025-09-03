@@ -12,7 +12,9 @@
   <aside id="drawer" class="drawer" aria-hidden="true">
     <!-- Logo section at top of drawer -->
     <div class="drawer-header">
-      <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
+      <a href="./index.html">
+        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
+      </a>
     </div>
     
     <!-- Main navigation links with images in the assets folder -->
@@ -75,14 +77,16 @@
         <span class="bars"><span class="line"></span></span>
       </button>
 
-      <!-- Logo and brand no title text needed since logo includes it -->
+      <!-- Logo and brand - make it clickable to go home -->
       <div class="brand">
-        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+        <a href="./index.html">
+          <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
+        </a>
       </div>
 
-      <button class="icon-btn" title="Settings">
+      <a href="./settings.html" class="icon-btn" title="Settings">
         <img src="./assets/settings.png" alt="Settings" />
-      </button>
+      </a>
     </header>
 
     <!-- greeting like other pages -->
@@ -105,7 +109,20 @@
         </div>
       </div>
 
-      <!-- FONT SIZE SETTING - Collapsible with slider -->
+      <!-- SOUND SETTING -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-title">Sound Effects</div>
+          <div class="setting-description">Enable or disable UI sound feedback</div>
+        </div>
+        <div class="setting-control">
+          <button type="button" id="soundToggle" class="toggle-switch active">
+            <span class="toggle-handle"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- FONT SIZE SETTING - Collapsible with slider - MOVED TO BOTTOM -->
       <div class="setting-item collapsible-setting">
         <div class="setting-main" id="fontSizeMain">
           <div class="setting-info">
@@ -129,19 +146,6 @@
             </div>
             <span class="slider-label right">Larger</span>
           </div>
-        </div>
-      </div>
-
-      <!-- SOUND SETTING -->
-      <div class="setting-item">
-        <div class="setting-info">
-          <div class="setting-title">Sound Effects</div>
-          <div class="setting-description">Enable or disable UI sound feedback</div>
-        </div>
-        <div class="setting-control">
-          <button type="button" id="soundToggle" class="toggle-switch active">
-            <span class="toggle-handle"></span>
-          </button>
         </div>
       </div>
 
@@ -226,6 +230,19 @@
   <script src="./js/settings.js"></script>
 
   <style>
+    /* Make brand logo clickable */
+    .brand a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Make drawer logo clickable */
+    .drawer-header a {
+      display: flex;
+      justify-content: center;
+    }
+
     /* Collapsible Settings Styles */
     .collapsible-setting {
       flex-direction: column;

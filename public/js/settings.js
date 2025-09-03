@@ -1,13 +1,15 @@
-// settings.js - makes the settings toggles actually work
-// handles invert colors, font size, and sound settings with localStorage persistence
+// settings.js - makes the settings toggles and slider actually work
+// handles invert colors, font size slider, and sound settings with localStorage persistence
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('settings page loaded - initializing functional toggles');
+    console.log('settings page loaded - initializing functional controls');
     
-    // get all the toggle elements
+    // get toggle elements (only exist on settings page)
     const invertColoursToggle = document.getElementById('invertColours');
-    const fontSizeToggle = document.getElementById('fontSize');
+    const fontSizeSlider = document.getElementById('fontSize');
     const soundToggle = document.getElementById('soundToggle');
+    const currentFontSize = document.getElementById('currentFontSize');
+    const resetButton = document.getElementById('resetSettings');
 
     // settings keys for localStorage
     const SETTINGS_KEYS = {
@@ -16,128 +18,174 @@ document.addEventListener('DOMContentLoaded', function() {
         sound: 'clash_hub_sound_enabled'
     };
 
-    // initialize settings from localStorage or defaults
-    initializeSettings();
+    // initialize settings controls
+    initializeSettingsControls();
 
-    // add event listeners to toggles
-    if (invertColoursToggle) {
-        invertColoursToggle.addEventListener('change', handleInvertColours);
-    }
-    if (fontSizeToggle) {
-        fontSizeToggle.addEventListener('change', handleFontSize);
-    }
-    if (soundToggle) {
-        soundToggle.addEventListener('change', handleSound);
-    }
-
-    // INITIALIZE SETTINGS - load saved preferences or set defaults
-    function initializeSettings() {
-        console.log('loading saved settings from localStorage');
-
-        // load invert colours setting
+    // INITIALIZE SETTINGS CONTROLS - only runs on settings page
+    function initializeSettingsControls() {
+        // load invert colours setting and set toggle
         const savedInvertColours = localStorage.getItem(SETTINGS_KEYS.invertColours);
-        if (savedInvertColours !== null) {
+        if (savedInvertColours !== null && invertColoursToggle) {
             const isInverted = savedInvertColours === 'true';
-            if (invertColoursToggle) {
-                invertColoursToggle.checked = isInverted;
+            if (isInverted) {
+                invertColoursToggle.classList.add('active');
+            } else {
+                invertColoursToggle.classList.remove('active');
             }
             applyInvertColours(isInverted);
         }
 
-        // load font size setting
+        // load font size setting and set slider
         const savedFontSize = localStorage.getItem(SETTINGS_KEYS.fontSize);
-        if (savedFontSize !== null) {
-            const isLargeFont = savedFontSize === 'true';
-            if (fontSizeToggle) {
-                fontSizeToggle.checked = isLargeFont;
-            }
-            applyFontSize(isLargeFont);
+        if (savedFontSize !== null && fontSizeSlider) {
+            const fontSize = parseInt(savedFontSize) || 100;
+            fontSizeSlider.value = fontSize;
+            updateFontSizeDisplay(fontSize);
+            applyFontSize(fontSize);
+        } else if (fontSizeSlider) {
+            // default to 100%
+            fontSizeSlider.value = 100;
+            updateFontSizeDisplay(100);
         }
 
-        // load sound setting
+        // load sound setting and set toggle
         const savedSound = localStorage.getItem(SETTINGS_KEYS.sound);
-        if (savedSound !== null) {
+        if (savedSound !== null && soundToggle) {
             const isSoundEnabled = savedSound === 'true';
-            if (soundToggle) {
-                soundToggle.checked = isSoundEnabled;
+            if (isSoundEnabled) {
+                soundToggle.classList.add('active');
+            } else {
+                soundToggle.classList.remove('active');
             }
-            // sound setting is stored but doesn't need immediate application
-        } else {
-            // default sound to enabled if no preference saved
-            if (soundToggle) {
-                soundToggle.checked = true;
-            }
+        } else if (soundToggle) {
+            // default sound to enabled
+            soundToggle.classList.add('active');
             localStorage.setItem(SETTINGS_KEYS.sound, 'true');
+        }
+
+        // add event listeners to controls
+        if (invertColoursToggle) {
+            invertColoursToggle.addEventListener('click', handleInvertColours);
+        }
+        if (fontSizeSlider) {
+            fontSizeSlider.addEventListener('input', handleFontSize);
+        }
+        if (soundToggle) {
+            soundToggle.addEventListener('click', handleSound);
+        }
+        if (resetButton) {
+            resetButton.addEventListener('click', handleResetSettings);
         }
     }
 
     // INVERT COLOURS HANDLER - switches between dark and light theme
-    function handleInvertColours(event) {
-        const isInverted = event.target.checked;
-        console.log('invert colours toggled:', isInverted);
+    function handleInvertColours() {
+        const isInverted = invertColoursToggle.classList.contains('active');
+        const newState = !isInverted;
+        
+        console.log('invert colours toggled:', newState);
+        
+        // update toggle appearance
+        if (newState) {
+            invertColoursToggle.classList.add('active');
+        } else {
+            invertColoursToggle.classList.remove('active');
+        }
         
         // save to localStorage
-        localStorage.setItem(SETTINGS_KEYS.invertColours, isInverted.toString());
+        localStorage.setItem(SETTINGS_KEYS.invertColours, newState.toString());
         
         // apply the theme change
-        applyInvertColours(isInverted);
+        applyInvertColours(newState);
         
         // play sound effect if enabled
         playSettingsSound();
+    }
+
+    // FONT SIZE HANDLER - handles slider input for font scaling
+    function handleFontSize(event) {
+        const fontSize = parseInt(event.target.value);
+        console.log('font size changed to:', fontSize + '%');
+        
+        // save to localStorage
+        localStorage.setItem(SETTINGS_KEYS.fontSize, fontSize.toString());
+        
+        // update display
+        updateFontSizeDisplay(fontSize);
+        
+        // apply the font size change
+        applyFontSize(fontSize);
+        
+        // play sound effect if enabled
+        playSettingsSound();
+    }
+
+    // SOUND HANDLER - enables/disables UI sounds
+    function handleSound() {
+        const isSoundEnabled = soundToggle.classList.contains('active');
+        const newState = !isSoundEnabled;
+        
+        console.log('sound toggled:', newState ? 'enabled' : 'disabled');
+        
+        // update toggle appearance
+        if (newState) {
+            soundToggle.classList.add('active');
+        } else {
+            soundToggle.classList.remove('active');
+        }
+        
+        // save to localStorage
+        localStorage.setItem(SETTINGS_KEYS.sound, newState.toString());
+        
+        // play sound effect to confirm (even if disabling sound)
+        playSettingsSound(true);
+    }
+
+    // RESET SETTINGS HANDLER - resets all settings to defaults
+    function handleResetSettings() {
+        console.log('resetting all settings to defaults');
+        
+        // confirm with user
+        if (!confirm('Reset all settings to default? This will reload the page.')) {
+            return;
+        }
+        
+        // clear all settings from localStorage
+        localStorage.removeItem(SETTINGS_KEYS.invertColours);
+        localStorage.removeItem(SETTINGS_KEYS.fontSize);
+        localStorage.removeItem(SETTINGS_KEYS.sound);
+        
+        // play confirmation sound
+        playSettingsSound(true);
+        
+        // reload page to apply defaults
+        setTimeout(() => {
+            location.reload();
+        }, 300);
+    }
+
+    // UPDATE FONT SIZE DISPLAY - updates the percentage shown next to slider
+    function updateFontSizeDisplay(fontSize) {
+        if (currentFontSize) {
+            currentFontSize.textContent = fontSize + '%';
+        }
     }
 
     // APPLY INVERT COLOURS - actually changes the theme
     function applyInvertColours(isInverted) {
         if (isInverted) {
-            // add light theme class to body
             document.body.classList.add('light-theme');
             console.log('applied light theme');
         } else {
-            // remove light theme class (back to dark theme)
             document.body.classList.remove('light-theme');
             console.log('applied dark theme');
         }
     }
 
-    // FONT SIZE HANDLER - toggles between normal and large text
-    function handleFontSize(event) {
-        const isLargeFont = event.target.checked;
-        console.log('font size toggled:', isLargeFont ? 'large' : 'normal');
-        
-        // save to localStorage
-        localStorage.setItem(SETTINGS_KEYS.fontSize, isLargeFont.toString());
-        
-        // apply the font size change
-        applyFontSize(isLargeFont);
-        
-        // play sound effect if enabled
-        playSettingsSound();
-    }
-
-    // APPLY FONT SIZE - actually changes the font sizes
-    function applyFontSize(isLargeFont) {
-        if (isLargeFont) {
-            // add large font class to body
-            document.body.classList.add('large-font');
-            console.log('applied large font');
-        } else {
-            // remove large font class (back to normal)
-            document.body.classList.remove('large-font');
-            console.log('applied normal font');
-        }
-    }
-
-    // SOUND HANDLER - enables/disables UI sounds
-    function handleSound(event) {
-        const isSoundEnabled = event.target.checked;
-        console.log('sound toggled:', isSoundEnabled ? 'enabled' : 'disabled');
-        
-        // save to localStorage
-        localStorage.setItem(SETTINGS_KEYS.sound, isSoundEnabled.toString());
-        
-        // play sound effect to confirm (even if disabling sound)
-        // this gives immediate feedback that the toggle worked
-        playSettingsSound(true); // force play this one time
+    // APPLY FONT SIZE - actually changes the font sizes using percentage scaling
+    function applyFontSize(fontSize) {
+        document.body.style.fontSize = fontSize + '%';
+        console.log('applied font size:', fontSize + '%');
     }
 
     // PLAY SETTINGS SOUND - plays a UI sound effect when settings change
@@ -174,6 +222,24 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             // fallback - if Web Audio API fails, just log it
             console.log('settings sound played (audio not available)');
+        }
+    }
+
+    // APPLY SETTINGS ON ALL PAGES - this runs on every page load
+    applyAllSettings();
+
+    function applyAllSettings() {
+        // apply saved font size
+        const savedFontSize = localStorage.getItem(SETTINGS_KEYS.fontSize);
+        if (savedFontSize !== null) {
+            const fontSize = parseInt(savedFontSize) || 100;
+            document.body.style.fontSize = fontSize + '%';
+        }
+
+        // apply saved theme
+        const savedInvertColours = localStorage.getItem(SETTINGS_KEYS.invertColours);
+        if (savedInvertColours === 'true') {
+            document.body.classList.add('light-theme');
         }
     }
 
