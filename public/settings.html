@@ -89,58 +89,64 @@
     <div class="hi">App Settings</div>
 
     <!-- SETTINGS SECTION matches other Clash Hub pages -->
-    <section class="player-stats">
-      <h3>SETTINGS</h3>
+    <section class="settings-section">
+      <h3>PREFERENCES</h3>
       
-      <!-- Settings container uses consistent Clash Hub dark styling -->
-      <div class="settings-container">
-        
-        <!-- INVERT COLOURS SETTING -->
-        <!-- This would change the app from dark theme to light theme -->
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Invert Colours</span>
-          </div>
-          <div class="setting-control">
-            <!-- Toggle switch that starts ON like in mockup -->
-            <label class="toggle-switch">
-              <input type="checkbox" id="invertColours" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
+      <!-- INVERT COLOURS SETTING -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-title">Light Theme</div>
+          <div class="setting-description">Switch between dark and light color themes</div>
         </div>
-
-        <!-- FONT SIZE SETTING -->
-        <!-- This would switch between normal and larger text throughout the app -->
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Font Size (Big/Small)</span>
-          </div>
-          <div class="setting-control">
-            <!-- Toggle switch that starts ON like in mockup -->
-            <label class="toggle-switch">
-              <input type="checkbox" id="fontSize" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
+        <div class="setting-control">
+          <button type="button" id="invertColours" class="toggle-switch">
+            <span class="toggle-handle"></span>
+          </button>
         </div>
-
-        <!-- SOUND SETTING -->
-        <!-- This would enable or disable UI sounds and audio feedback -->
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Sound (On/Off)</span>
-          </div>
-          <div class="setting-control">
-            <!-- Toggle switch that starts ON like in mockup -->
-            <label class="toggle-switch">
-              <input type="checkbox" id="soundToggle" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
-
       </div>
+
+      <!-- FONT SIZE SETTING - Collapsible with slider -->
+      <div class="setting-item collapsible-setting">
+        <div class="setting-main" id="fontSizeMain">
+          <div class="setting-info">
+            <div class="setting-title">Font Size</div>
+            <div class="setting-description">Adjust text size throughout the app</div>
+          </div>
+          <div class="setting-control">
+            <span class="current-font-size" id="currentFontSize">100%</span>
+            <button type="button" class="expand-button" id="expandFontSize">
+              <span class="expand-arrow">▼</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Collapsible slider panel -->
+        <div class="setting-panel" id="fontSizePanel">
+          <div class="slider-container">
+            <span class="slider-label left">Smaller</span>
+            <div class="slider-wrapper">
+              <input type="range" id="fontSize" class="font-size-slider" min="100" max="200" step="10" value="100">
+            </div>
+            <span class="slider-label right">Larger</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOUND SETTING -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-title">Sound Effects</div>
+          <div class="setting-description">Enable or disable UI sound feedback</div>
+        </div>
+        <div class="setting-control">
+          <button type="button" id="soundToggle" class="toggle-switch active">
+            <span class="toggle-handle"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Reset button -->
+      <button id="resetSettings" class="reset-settings-btn">Reset All Settings</button>
     </section>
 
     <!-- FOOTER WITH SOCIAL ICONS this will be on all pages -->
@@ -196,98 +202,128 @@
     window.addEventListener('keydown', (e)=>{ 
       if(e.key === 'Escape') closeDrawer(); 
     });
+
+    // Collapsible font size functionality
+    const fontSizeMain = document.getElementById('fontSizeMain');
+    const fontSizePanel = document.getElementById('fontSizePanel');
+    const expandButton = document.getElementById('expandFontSize');
+    const expandArrow = expandButton.querySelector('.expand-arrow');
+
+    fontSizeMain.addEventListener('click', function() {
+      const isOpen = fontSizePanel.classList.contains('open');
+      
+      if (isOpen) {
+        fontSizePanel.classList.remove('open');
+        expandArrow.style.transform = 'rotate(0deg)';
+      } else {
+        fontSizePanel.classList.add('open');
+        expandArrow.style.transform = 'rotate(180deg)';
+      }
+    });
   </script>
 
   <!-- Settings page functionality -->
   <script src="./js/settings.js"></script>
 
   <style>
-    /* Settings page specific styles that match other Clash Hub pages */
-    
-    /* Settings container uses the same styling as player-stats sections */
-    .settings-container {
-      /* No additional background needed - inherits from player-stats */
+    /* Collapsible Settings Styles */
+    .collapsible-setting {
+      flex-direction: column;
     }
 
-    /* Individual setting row */
-    .setting-item {
+    .setting-main {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .setting-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .setting-item:first-child {
-      padding-top: 0;
-    }
-
-    /* Setting label text uses Clash Hub colors */
-    .setting-label {
-      font-family: "Montserrat", sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--ink); /* Light text on dark background like other pages */
-    }
-
-    /* TOGGLE SWITCH STYLING matches the switches from mockup */
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 32px;
       cursor: pointer;
+      user-select: none;
     }
 
-    /* Hide the default checkbox */
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
+    .setting-main:hover {
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius-md);
+      margin: -8px;
+      padding: 8px;
     }
 
-    /* The toggle slider background */
-    .toggle-slider {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      border-radius: 32px;
-      transition: all 0.3s ease;
+    .current-font-size {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 600;
+      color: var(--gold);
+      font-size: 14px;
+      margin-right: 12px;
     }
 
-    /* The toggle slider circle */
-    .toggle-slider:before {
-      content: "";
-      position: absolute;
-      height: 26px;
-      width: 26px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    .expand-button {
+      background: none;
+      border: none;
+      color: var(--ink);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
     }
 
-    /* When toggle is ON uses Clash Hub gold instead of green */
-    .toggle-switch input:checked + .toggle-slider {
-      background-color: var(--gold); /* Clash Hub gold like other pages */
+    .expand-button:hover {
+      background: rgba(255,255,255,0.1);
     }
 
-    /* FONT SIZE SLIDER STYLING */
+    .expand-arrow {
+      font-size: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    /* Collapsible panel */
+    .setting-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      margin-top: 0;
+    }
+
+    .setting-panel.open {
+      max-height: 100px;
+      margin-top: 16px;
+    }
+
+    /* Slider container */
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .slider-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .slider-label.left {
+      text-align: left;
+    }
+
+    .slider-label.right {
+      text-align: right;
+    }
+
+    .slider-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    /* Font size slider - gold themed */
     .font-size-slider {
-      width: 120px;
+      width: 100%;
       height: 6px;
-      background: #ccc;
-      border-radius: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.2);
       outline: none;
       cursor: pointer;
       -webkit-appearance: none;
@@ -302,7 +338,12 @@
       border-radius: 50%;
       background: var(--gold);
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .font-size-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
     }
 
     .font-size-slider::-moz-range-thumb {
@@ -312,47 +353,28 @@
       background: var(--gold);
       cursor: pointer;
       border: none;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
     }
 
-    .font-size-display {
-      font-family: "Montserrat", sans-serif;
-      font-weight: 600;
-      color: var(--gold);
-      font-size: 12px;
-      margin-left: 8px;
+    .font-size-slider::-moz-range-thumb:hover {
+      transform: scale(1.1);
     }
 
-    /* MOBILE RESPONSIVENESS */
+    /* Mobile adjustments */
     @media (max-width: 520px) {
-      .setting-label {
-        font-size: 15px;
+      .slider-container {
+        padding: 12px;
+        gap: 12px;
       }
-      
-      .toggle-switch {
-        width: 54px;
-        height: 28px;
-      }
-      
-      .toggle-slider:before {
-        height: 22px;
-        width: 22px;
-        left: 3px;
-        bottom: 3px;
-      }
-      
-      .toggle-switch input:checked + .toggle-slider:before {
-        transform: translateX(26px);
-      }
-    }
 
-    @media (max-width: 360px) {
-      .setting-item {
-        padding: 14px 0;
+      .slider-label {
+        font-size: 11px;
+        min-width: 40px;
       }
-      
-      .setting-label {
-        font-size: 14px;
+
+      .current-font-size {
+        font-size: 13px;
       }
     }
   </style>

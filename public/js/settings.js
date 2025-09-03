@@ -1,197 +1,197 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Settings - Clash Hub</title>
-  <!-- Link to our separate CSS file -->
-  <link rel="stylesheet" href="./css/styles.css" />
-</head>
-<body>
-  <!-- slide-out nav hidden by default opens from left -->
-  <aside id="drawer" class="drawer" aria-hidden="true">
-    <!-- Logo section at top of drawer -->
-    <div class="drawer-header">
-      <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="drawer-logo" />
-    </div>
+// settings.js - makes the settings toggles actually work
+// handles invert colors, font size, and sound settings with localStorage persistence
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('settings page loaded - initializing functional toggles');
     
-    <!-- Main navigation links with images in the assets folder -->
-    <ul class="nav-list">
-      <!-- main pages -->
-      <li class="nav-item">
-        <a href="./index.html">
-          <img src="./assets/crown.png" alt="Home" />
-          <span>Home</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="./player.html">
-          <img src="./assets/user.png" alt="Player Profile" />
-          <span>Player Profile</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="./matches.html">
-          <img src="./assets/trophy.png" alt="Recent Matches" />
-          <span>Recent Matches</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="./clans.html">
-          <img src="./assets/magnifier.png" alt="Clan Search" />
-          <span>Clan Search</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="./settings.html">
-          <img src="./assets/settings.png" alt="Settings" />
-          <span>Settings</span>
-        </a>
-      </li>
-    </ul>
+    // get all the toggle elements
+    const invertColoursToggle = document.getElementById('invertColours');
+    const fontSizeToggle = document.getElementById('fontSize');
+    const soundToggle = document.getElementById('soundToggle');
 
-    <!-- Secondary links at bottom less frequently used pages -->
-    <div class="drawer-footer">
-      <a href="./videos.html" class="footer-link">Video Archive</a>
-      <a href="./news.html" class="footer-link">News</a>
-      <a href="./terms.html" class="footer-link">Terms of Service</a>
-    </div>
-  </aside>
+    // settings keys for localStorage
+    const SETTINGS_KEYS = {
+        invertColours: 'clash_hub_invert_colours',
+        fontSize: 'clash_hub_large_font',
+        sound: 'clash_hub_sound_enabled'
+    };
 
-  <!-- pull-tab arrow that peeks from left closer to content now -->
-  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
-    <span style="color: white; font-size: 14px;">→</span>
-  </button>
+    // initialize settings from localStorage or defaults
+    initializeSettings();
 
-  <!-- translucent overlay when drawer is open -->
-  <div id="backdrop" class="backdrop"></div>
-
-  <div class="app">
-
-    <!-- HEADER -->
-    <header class="header">
-      <!-- hamburger clicking opens drawer like the site you showed -->
-      <button id="hamburger" class="hamburger" aria-label="Open menu">
-        <span class="bars"><span class="line"></span></span>
-      </button>
-
-      <!-- Logo and brand no title text needed since logo includes it -->
-      <div class="brand">
-        <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
-      </div>
-
-      <button class="icon-btn" title="Settings">
-        <img src="./assets/settings.png" alt="Settings" />
-      </button>
-    </header>
-
-    <!-- greeting like other pages -->
-    <div class="hi">App Settings</div>
-
-    <!-- SETTINGS SECTION matches other Clash Hub pages -->
-    <section class="settings-section">
-      <h3>PREFERENCES</h3>
-      
-      <!-- INVERT COLOURS SETTING -->
-      <div class="setting-item">
-        <div class="setting-info">
-          <div class="setting-title">Light Theme</div>
-          <div class="setting-description">Switch between dark and light color themes</div>
-        </div>
-        <div class="setting-control">
-          <button type="button" id="invertColours" class="toggle-switch">
-            <span class="toggle-handle"></span>
-          </button>
-        </div>
-      </div>
-
-      <!-- FONT SIZE SETTING - Now with slider -->
-      <div class="setting-item">
-        <div class="setting-info">
-          <div class="setting-title">Font Size</div>
-          <div class="setting-description">Adjust text size from 100% to 200%</div>
-        </div>
-        <div class="setting-control">
-          <div class="font-size-control">
-            <input type="range" id="fontSize" class="font-size-slider" min="100" max="200" step="10" value="100">
-            <span id="fontSizeDisplay" class="font-size-display">100%</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- SOUND SETTING -->
-      <div class="setting-item">
-        <div class="setting-info">
-          <div class="setting-title">Sound Effects</div>
-          <div class="setting-description">Enable or disable UI sound feedback</div>
-        </div>
-        <div class="setting-control">
-          <button type="button" id="soundToggle" class="toggle-switch active">
-            <span class="toggle-handle"></span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Reset button -->
-      <button id="resetSettings" class="reset-settings-btn">Reset All Settings</button>
-    </section>
-
-    <!-- FOOTER WITH SOCIAL ICONS this will be on all pages -->
-    <footer class="footer">
-      <div class="social-icons">
-        <!-- YouTube this is where our real YouTube channel link would be if this was a real deployment -->
-        <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
-          <img src="./assets/youtube.png" alt="YouTube" />
-        </a>
-        <!-- Discord this is where our real Discord server invite would be if this was a real deployment -->
-        <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
-          <img src="./assets/discord.png" alt="Discord" />
-        </a>
-        <!-- Instagram this is where our real Instagram profile would be if this was a real deployment -->
-        <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
-          <img src="./assets/instagram.png" alt="Instagram" />
-        </a>
-        <!-- Facebook this is where our real Facebook page would be if this was a real deployment -->
-        <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
-          <img src="./assets/facebook.png" alt="Facebook" />
-        </a>
-      </div>
-      <div class="footer-text">
-        <p>&copy; 2025 Clash Hub. Follow us for the latest updates!</p>
-      </div>
-    </footer>
-
-  </div>
-
-  <!-- tiny JS to handle drawer open close no framework -->
-  <script>
-    const drawer = document.getElementById('drawer');
-    const tab = document.getElementById('drawerTab');
-    const burger = document.getElementById('hamburger');
-    const backdrop = document.getElementById('backdrop');
-
-    function openDrawer() {
-      drawer.classList.add('open');
-      backdrop.classList.add('show');
-      drawer.setAttribute('aria-hidden', 'false');
+    // add event listeners to toggles
+    if (invertColoursToggle) {
+        invertColoursToggle.addEventListener('change', handleInvertColours);
     }
-    
-    function closeDrawer() {
-      drawer.classList.remove('open');
-      backdrop.classList.remove('show');
-      drawer.setAttribute('aria-hidden', 'true');
+    if (fontSizeToggle) {
+        fontSizeToggle.addEventListener('change', handleFontSize);
+    }
+    if (soundToggle) {
+        soundToggle.addEventListener('change', handleSound);
     }
 
-    burger.addEventListener('click', openDrawer);
-    tab.addEventListener('click', openDrawer);
-    backdrop.addEventListener('click', closeDrawer);
+    // INITIALIZE SETTINGS - load saved preferences or set defaults
+    function initializeSettings() {
+        console.log('loading saved settings from localStorage');
 
-    window.addEventListener('keydown', (e)=>{ 
-      if(e.key === 'Escape') closeDrawer(); 
-    });
-  </script>
+        // load invert colours setting
+        const savedInvertColours = localStorage.getItem(SETTINGS_KEYS.invertColours);
+        if (savedInvertColours !== null) {
+            const isInverted = savedInvertColours === 'true';
+            if (invertColoursToggle) {
+                invertColoursToggle.checked = isInverted;
+            }
+            applyInvertColours(isInverted);
+        }
 
-  <!-- Settings page functionality -->
-  <script src="./js/settings.js"></script>
-</body>
-</html>
+        // load font size setting
+        const savedFontSize = localStorage.getItem(SETTINGS_KEYS.fontSize);
+        if (savedFontSize !== null) {
+            const isLargeFont = savedFontSize === 'true';
+            if (fontSizeToggle) {
+                fontSizeToggle.checked = isLargeFont;
+            }
+            applyFontSize(isLargeFont);
+        }
+
+        // load sound setting
+        const savedSound = localStorage.getItem(SETTINGS_KEYS.sound);
+        if (savedSound !== null) {
+            const isSoundEnabled = savedSound === 'true';
+            if (soundToggle) {
+                soundToggle.checked = isSoundEnabled;
+            }
+            // sound setting is stored but doesn't need immediate application
+        } else {
+            // default sound to enabled if no preference saved
+            if (soundToggle) {
+                soundToggle.checked = true;
+            }
+            localStorage.setItem(SETTINGS_KEYS.sound, 'true');
+        }
+    }
+
+    // INVERT COLOURS HANDLER - switches between dark and light theme
+    function handleInvertColours(event) {
+        const isInverted = event.target.checked;
+        console.log('invert colours toggled:', isInverted);
+        
+        // save to localStorage
+        localStorage.setItem(SETTINGS_KEYS.invertColours, isInverted.toString());
+        
+        // apply the theme change
+        applyInvertColours(isInverted);
+        
+        // play sound effect if enabled
+        playSettingsSound();
+    }
+
+    // APPLY INVERT COLOURS - actually changes the theme
+    function applyInvertColours(isInverted) {
+        if (isInverted) {
+            // add light theme class to body
+            document.body.classList.add('light-theme');
+            console.log('applied light theme');
+        } else {
+            // remove light theme class (back to dark theme)
+            document.body.classList.remove('light-theme');
+            console.log('applied dark theme');
+        }
+    }
+
+    // FONT SIZE HANDLER - toggles between normal and large text
+    function handleFontSize(event) {
+        const isLargeFont = event.target.checked;
+        console.log('font size toggled:', isLargeFont ? 'large' : 'normal');
+        
+        // save to localStorage
+        localStorage.setItem(SETTINGS_KEYS.fontSize, isLargeFont.toString());
+        
+        // apply the font size change
+        applyFontSize(isLargeFont);
+        
+        // play sound effect if enabled
+        playSettingsSound();
+    }
+
+    // APPLY FONT SIZE - actually changes the font sizes
+    function applyFontSize(isLargeFont) {
+        if (isLargeFont) {
+            // add large font class to body
+            document.body.classList.add('large-font');
+            console.log('applied large font');
+        } else {
+            // remove large font class (back to normal)
+            document.body.classList.remove('large-font');
+            console.log('applied normal font');
+        }
+    }
+
+    // SOUND HANDLER - enables/disables UI sounds
+    function handleSound(event) {
+        const isSoundEnabled = event.target.checked;
+        console.log('sound toggled:', isSoundEnabled ? 'enabled' : 'disabled');
+        
+        // save to localStorage
+        localStorage.setItem(SETTINGS_KEYS.sound, isSoundEnabled.toString());
+        
+        // play sound effect to confirm (even if disabling sound)
+        // this gives immediate feedback that the toggle worked
+        playSettingsSound(true); // force play this one time
+    }
+
+    // PLAY SETTINGS SOUND - plays a UI sound effect when settings change
+    function playSettingsSound(forcePlay = false) {
+        // check if sound is enabled (unless we're forcing it)
+        const isSoundEnabled = localStorage.getItem(SETTINGS_KEYS.sound) === 'true';
+        
+        if (!isSoundEnabled && !forcePlay) {
+            return; // sound disabled, don't play
+        }
+
+        try {
+            // create a short beep sound using Web Audio API
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            // connect audio nodes
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            // set sound properties - pleasant UI beep
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime); // 800Hz tone
+            oscillator.type = 'sine'; // smooth sine wave
+
+            // volume envelope - quick fade out
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime); // low volume
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+
+            // play sound for 100ms
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+
+        } catch (error) {
+            // fallback - if Web Audio API fails, just log it
+            console.log('settings sound played (audio not available)');
+        }
+    }
+
+    // UTILITY FUNCTION - check if sound is enabled (for other parts of the app)
+    window.isClashHubSoundEnabled = function() {
+        return localStorage.getItem('clash_hub_sound_enabled') === 'true';
+    };
+
+    // UTILITY FUNCTION - get current font size setting (for other parts of the app)
+    window.isClashHubLargeFontEnabled = function() {
+        const fontSize = localStorage.getItem('clash_hub_large_font');
+        return parseInt(fontSize) || 100;
+    };
+
+    // UTILITY FUNCTION - get current color theme (for other parts of the app)
+    window.isClashHubLightThemeEnabled = function() {
+        return localStorage.getItem('clash_hub_invert_colours') === 'true';
+    };
+
+    console.log('settings functionality initialized successfully');
+});
