@@ -97,7 +97,73 @@
       <div class="clan-search-container">
         <div class="search-input-container">
           <input type="text" id="clanSearchInput" placeholder="Enter clan tag (e.g., #2PP) or name" class="player-tag-input" maxlength="50" />
-          <select id="locationSelect" class="location-select">
+          
+          <!-- Custom Location Dropdown -->
+          <div class="custom-location-dropdown">
+            <button type="button" class="location-display" id="locationDisplay">
+              <span class="location-text">🌍 All Locations</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            
+            <!-- Dropdown panel -->
+            <div class="location-dropdown-panel" id="locationDropdownPanel">
+              <div class="dropdown-header">
+                <span class="dropdown-title">Select Location</span>
+                <button class="dropdown-close" id="dropdownCloseBtn" aria-label="Close dropdown">✕</button>
+              </div>
+              <div class="dropdown-options">
+                <div class="location-option" data-value="">🌍 All Locations</div>
+                <div class="location-option" data-value="57000001">🇺🇸 United States</div>
+                <div class="location-option" data-value="57000002">🇬🇧 United Kingdom</div>
+                <div class="location-option" data-value="57000003">🇨🇦 Canada</div>
+                <div class="location-option" data-value="57000004">🇦🇺 Australia</div>
+                <div class="location-option" data-value="57000011">🇳🇿 New Zealand</div>
+                <div class="location-option" data-value="57000005">🇩🇪 Germany</div>
+                <div class="location-option" data-value="57000006">🇫🇷 France</div>
+                <div class="location-option" data-value="57000007">🇮🇹 Italy</div>
+                <div class="location-option" data-value="57000008">🇪🇸 Spain</div>
+                <div class="location-option" data-value="57000009">🇧🇷 Brazil</div>
+                <div class="location-option" data-value="57000010">🇲🇽 Mexico</div>
+                <div class="location-option" data-value="57000012">🇯🇵 Japan</div>
+                <div class="location-option" data-value="57000013">🇰🇷 South Korea</div>
+                <div class="location-option" data-value="57000014">🇨🇳 China</div>
+                <div class="location-option" data-value="57000015">🇮🇳 India</div>
+                <div class="location-option" data-value="57000016">🇷🇺 Russia</div>
+                <div class="location-option" data-value="57000017">🇳🇱 Netherlands</div>
+                <div class="location-option" data-value="57000018">🇸🇪 Sweden</div>
+                <div class="location-option" data-value="57000019">🇳🇴 Norway</div>
+                <div class="location-option" data-value="57000020">🇩🇰 Denmark</div>
+                <div class="location-option" data-value="57000021">🇫🇮 Finland</div>
+                <div class="location-option" data-value="57000022">🇵🇱 Poland</div>
+                <div class="location-option" data-value="57000023">🇨🇭 Switzerland</div>
+                <div class="location-option" data-value="57000024">🇦🇹 Austria</div>
+                <div class="location-option" data-value="57000025">🇧🇪 Belgium</div>
+                <div class="location-option" data-value="57000026">🇵🇹 Portugal</div>
+                <div class="location-option" data-value="57000027">🇬🇷 Greece</div>
+                <div class="location-option" data-value="57000028">🇹🇷 Turkey</div>
+                <div class="location-option" data-value="57000029">🇦🇷 Argentina</div>
+                <div class="location-option" data-value="57000030">🇨🇱 Chile</div>
+                <div class="location-option" data-value="57000031">🇵🇪 Peru</div>
+                <div class="location-option" data-value="57000032">🇨🇴 Colombia</div>
+                <div class="location-option" data-value="57000033">🇻🇪 Venezuela</div>
+                <div class="location-option" data-value="57000034">🇺🇾 Uruguay</div>
+                <div class="location-option" data-value="57000035">🇿🇦 South Africa</div>
+                <div class="location-option" data-value="57000036">🇪🇬 Egypt</div>
+                <div class="location-option" data-value="57000037">🇸🇦 Saudi Arabia</div>
+                <div class="location-option" data-value="57000038">🇦🇪 UAE</div>
+                <div class="location-option" data-value="57000039">🇮🇱 Israel</div>
+                <div class="location-option" data-value="57000040">🇹🇭 Thailand</div>
+                <div class="location-option" data-value="57000041">🇻🇳 Vietnam</div>
+                <div class="location-option" data-value="57000042">🇸🇬 Singapore</div>
+                <div class="location-option" data-value="57000043">🇲🇾 Malaysia</div>
+                <div class="location-option" data-value="57000044">🇮🇩 Indonesia</div>
+                <div class="location-option" data-value="57000045">🇵🇭 Philippines</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hidden select for API compatibility -->
+          <select id="locationSelect" class="hidden-select">
             <option value="">🌍 All Locations</option>
             <option value="57000001">🇺🇸 United States</option>
             <option value="57000002">🇬🇧 United Kingdom</option>
@@ -180,14 +246,6 @@
       </div>
     </section>
 
-    <!-- popular clans section - could show trending/featured clans -->
-    <section class="popular-clans-section hidden" id="popularClansSection">
-      <h3 class="pattern-title">FEATURED CLANS</h3>
-      <div id="popularClansList" class="clans-list">
-        <!-- featured clan cards appear here -->
-      </div>
-    </section>
-
     <!-- Scroll to top button - appears after content loads -->
     <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
       ↑
@@ -239,8 +297,110 @@
     backdrop.addEventListener('click', closeDrawer);
 
     window.addEventListener('keydown', (e)=>{ 
-      if(e.key === 'Escape') closeDrawer(); 
+      if(e.key === 'Escape') {
+        closeDrawer();
+        closeLocationDropdown(); // Also close location dropdown
+      }
     });
+
+    // ============ CUSTOM LOCATION DROPDOWN ============
+    const locationDisplay = document.getElementById('locationDisplay');
+    const locationDropdownPanel = document.getElementById('locationDropdownPanel');
+    const dropdownCloseBtn = document.getElementById('dropdownCloseBtn');
+    const locationOptions = document.querySelectorAll('.location-option');
+    const hiddenLocationSelect = document.getElementById('locationSelect');
+    const locationText = document.querySelector('.location-text');
+    const dropdownArrow = document.querySelector('.dropdown-arrow');
+
+    let isLocationDropdownOpen = false;
+
+    // Open dropdown
+    function openLocationDropdown() {
+      isLocationDropdownOpen = true;
+      locationDisplay.classList.add('active');
+      locationDropdownPanel.classList.add('open');
+      dropdownArrow.style.transform = 'rotate(180deg)';
+      
+      // Prevent background scrolling on mobile
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close dropdown
+    function closeLocationDropdown() {
+      isLocationDropdownOpen = false;
+      locationDisplay.classList.remove('active');
+      locationDropdownPanel.classList.remove('open');
+      dropdownArrow.style.transform = 'rotate(0deg)';
+      
+      // Restore background scrolling
+      document.body.style.overflow = 'auto';
+    }
+
+    // Select location option
+    function selectLocationOption(option) {
+      const value = option.dataset.value;
+      const text = option.textContent;
+      
+      // Update display
+      locationText.textContent = text;
+      
+      // Update hidden select for API compatibility
+      hiddenLocationSelect.value = value;
+      
+      // Update selected state
+      locationOptions.forEach(opt => opt.classList.remove('selected'));
+      option.classList.add('selected');
+      
+      // Close dropdown
+      closeLocationDropdown();
+      
+      // Trigger change event for existing functionality
+      const changeEvent = new Event('change');
+      hiddenLocationSelect.dispatchEvent(changeEvent);
+      
+      // Show feedback
+      if (value) {
+        const countryName = text.split(' ').slice(1).join(' '); // Remove flag emoji
+        showInfo(`Location filter: ${countryName} - this will narrow your search results`);
+      } else {
+        clearAllMessages();
+      }
+    }
+
+    // Event listeners for custom dropdown
+    locationDisplay.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (isLocationDropdownOpen) {
+        closeLocationDropdown();
+      } else {
+        openLocationDropdown();
+      }
+    });
+
+    dropdownCloseBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeLocationDropdown();
+    });
+
+    locationOptions.forEach(option => {
+      option.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        selectLocationOption(this);
+      });
+    });
+
+    // Close dropdown when clicking backdrop
+    locationDropdownPanel.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeLocationDropdown();
+      }
+    });
+
+    // Initialize first option as selected
+    locationOptions[0].classList.add('selected');
 
     // ============ MOBILE ENHANCEMENTS ============
     
@@ -250,14 +410,14 @@
     const pullIndicator = document.getElementById('pullIndicator');
 
     document.addEventListener('touchstart', (e) => {
-      if (window.scrollY === 0) {
+      if (window.scrollY === 0 && !isLocationDropdownOpen) {
         startY = e.touches[0].pageY;
         isPulling = true;
       }
     });
 
     document.addEventListener('touchmove', (e) => {
-      if (!isPulling) return;
+      if (!isPulling || isLocationDropdownOpen) return;
       
       const currentY = e.touches[0].pageY;
       const pullDistance = currentY - startY;
@@ -275,7 +435,7 @@
     });
 
     document.addEventListener('touchend', () => {
-      if (isPulling && pullIndicator.classList.contains('ready')) {
+      if (isPulling && pullIndicator.classList.contains('ready') && !isLocationDropdownOpen) {
         // Refresh clan search if search is active
         const currentSearch = document.getElementById('searchText').textContent;
         if (currentSearch && currentSearch !== '—') {
@@ -309,56 +469,6 @@
         behavior: 'smooth'
       });
     });
-
-    // ============ REFRESH FUNCTIONALITY ============
-    
-    // Refresh buttons
-    const refreshClanSearchBtn = document.getElementById('refreshClanSearchBtn');
-    const refreshSectionBtn = document.getElementById('refreshSectionBtn');
-
-    refreshClanSearchBtn.addEventListener('click', refreshCurrentSearch);
-    refreshSectionBtn.addEventListener('click', refreshCurrentSearch);
-
-    function refreshCurrentSearch() {
-      const clanSearchInput = document.getElementById('clanSearchInput');
-      const currentSearch = clanSearchInput.value.trim();
-      
-      if (currentSearch) {
-        console.log('Refreshing clan search for:', currentSearch);
-        
-        // Add refresh animation
-        refreshClanSearchBtn.classList.add('refreshing');
-        refreshSectionBtn.classList.add('refreshing');
-        
-        // Trigger the search function
-        handleClanSearch();
-        
-        // Remove animation after a delay
-        setTimeout(() => {
-          refreshClanSearchBtn.classList.remove('refreshing');
-          refreshSectionBtn.classList.remove('refreshing');
-        }, 1000);
-      }
-    }
-
-    // ============ MOBILE TOUCH ENHANCEMENTS ============
-    
-    // Add touch feedback to clan cards
-    function addTouchFeedback() {
-      document.querySelectorAll('.clan-card').forEach(card => {
-        card.addEventListener('touchstart', function() {
-          this.style.transform = 'scale(0.98)';
-          this.style.transition = 'transform 0.1s ease';
-        });
-        
-        card.addEventListener('touchend', function() {
-          this.style.transform = 'scale(1)';
-          setTimeout(() => {
-            this.style.transition = 'transform 0.2s ease';
-          }, 100);
-        });
-      });
-    }
 
     // ============ ENHANCED USER FEEDBACK ============
     
@@ -412,51 +522,34 @@
       document.getElementById('errorMessage').classList.add('hidden');
     }
 
-    // ============ RESPONSIVE BEHAVIOR ============
+    // ============ REFRESH FUNCTIONALITY ============
     
-    // Adjust UI based on screen size
-    function adjustForMobile() {
-      const isMobile = window.innerWidth <= 520;
-      const searchContainer = document.querySelector('.clan-search-container');
+    // Refresh buttons
+    const refreshClanSearchBtn = document.getElementById('refreshClanSearchBtn');
+    const refreshSectionBtn = document.getElementById('refreshSectionBtn');
+
+    refreshClanSearchBtn.addEventListener('click', refreshCurrentSearch);
+    refreshSectionBtn.addEventListener('click', refreshCurrentSearch);
+
+    function refreshCurrentSearch() {
+      const clanSearchInput = document.getElementById('clanSearchInput');
+      const currentSearch = clanSearchInput.value.trim();
       
-      if (isMobile) {
-        searchContainer.classList.add('mobile-stack');
-      } else {
-        searchContainer.classList.remove('mobile-stack');
-      }
-    }
-
-    // Listen for screen size changes
-    window.addEventListener('resize', adjustForMobile);
-    document.addEventListener('DOMContentLoaded', adjustForMobile);
-
-    // ============ SHOW REFRESH CONTROLS AFTER CONTENT LOADS ============
-    
-    function showRefreshControls() {
-      refreshClanSearchBtn.classList.remove('hidden');
-    }
-
-    function hideRefreshControls() {
-      refreshClanSearchBtn.classList.add('hidden');
-    }
-
-    // ============ SEARCH OPTIMIZATION FEEDBACK ============
-    
-    function provideFeedbackForSearch(searchQuery, results) {
-      clearAllMessages();
-      
-      if (results.length === 0) {
-        if (searchQuery.length > 25) {
-          showWarning('No results found. Very long names are uncommon - try a shorter search or just the first few words');
-        } else if (searchQuery.includes('#')) {
-          showInfo('No clan found with that tag. Double-check the tag or try searching by name instead');
-        } else {
-          showInfo('No clans found. Try a different spelling, shorter name, or select a specific location');
-        }
-      } else if (results.length < 3 && searchQuery.length > 15) {
-        showInfo(`Found ${results.length} result(s). Shorter search terms often return more results`);
-      } else if (results.length >= 50) {
-        showInfo('Many results found! Use location filter or more specific search terms to narrow down');
+      if (currentSearch) {
+        console.log('Refreshing clan search for:', currentSearch);
+        
+        // Add refresh animation
+        refreshClanSearchBtn.classList.add('refreshing');
+        refreshSectionBtn.classList.add('refreshing');
+        
+        // Trigger the search function
+        handleClanSearch();
+        
+        // Remove animation after a delay
+        setTimeout(() => {
+          refreshClanSearchBtn.classList.remove('refreshing');
+          refreshSectionBtn.classList.remove('refreshing');
+        }, 1000);
       }
     }
 
@@ -470,7 +563,12 @@
       
       // Clear input fields
       clanSearchInput.value = '';
-      document.getElementById('locationSelect').value = '';
+      
+      // Reset location dropdown
+      locationText.textContent = '🌍 All Locations';
+      hiddenLocationSelect.value = '';
+      locationOptions.forEach(opt => opt.classList.remove('selected'));
+      locationOptions[0].classList.add('selected');
       
       // Hide all sections and messages
       clearAllMessages();
@@ -487,15 +585,272 @@
     // Helper function to hide all clan sections
     function hideAllClanSections() {
       document.getElementById('clansResultsSection').classList.add('hidden');
-      document.getElementById('popularClansSection').classList.add('hidden');
+    }
+
+    function showRefreshControls() {
+      refreshClanSearchBtn.classList.remove('hidden');
+    }
+
+    function hideRefreshControls() {
+      refreshClanSearchBtn.classList.add('hidden');
+    }
+
+    // ============ DUMMY CLAN SEARCH FUNCTION ============
+    // This replaces your existing clan search - you can integrate with your actual API
+    
+    const searchClansBtn = document.getElementById('searchClansBtn');
+    searchClansBtn.addEventListener('click', handleClanSearch);
+    
+    clanSearchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        handleClanSearch();
+      }
+    });
+
+    function handleClanSearch() {
+      const searchQuery = clanSearchInput.value.trim();
+      const locationId = hiddenLocationSelect.value;
+      
+      if (!searchQuery) {
+        showError('Please enter a clan tag or name to search');
+        return;
+      }
+      
+      // Show what we're searching for
+      const searchText = document.getElementById('searchText');
+      const currentSearchBar = document.getElementById('currentSearchBar');
+      
+      if (searchText && currentSearchBar) {
+        const locationText = hiddenLocationSelect.options[hiddenLocationSelect.selectedIndex].text;
+        const searchDisplay = `"${searchQuery}"`;
+        searchText.textContent = locationId ? `${searchDisplay} in ${locationText}` : searchDisplay;
+        currentSearchBar.classList.remove('hidden');
+      }
+      
+      // Show loading
+      document.getElementById('loadingIndicator').classList.remove('hidden');
+      hideAllClanSections();
+      clearAllMessages();
+      
+      // Simulate API call
+      setTimeout(() => {
+        document.getElementById('loadingIndicator').classList.add('hidden');
+        
+        // Show results section
+        document.getElementById('clansResultsSection').classList.remove('hidden');
+        showRefreshControls();
+        
+        // Add some dummy clan cards
+        const clansList = document.getElementById('clansList');
+        clansList.innerHTML = `
+          <div class="clan-card">
+            <div class="clan-card-content">
+              <div class="clan-card-left">
+                <div class="clan-badge">
+                  <img src="./assets/magnifier.png" alt="Clan Badge" />
+                </div>
+              </div>
+              <div class="clan-card-center">
+                <div class="clan-card-header">
+                  <div class="clan-name-section">
+                    <h4 class="clan-name">Example Clan</h4>
+                    <div class="clan-tag">#ABC123</div>
+                  </div>
+                  <div class="clan-location">🇺🇸 United States</div>
+                </div>
+                <div class="clan-stats-row">
+                  <div class="clan-stat">
+                    <span class="stat-label">Members</span>
+                    <span class="stat-value">45/50</span>
+                  </div>
+                  <div class="clan-stat">
+                    <span class="stat-label">Score</span>
+                    <span class="stat-value">52,340</span>
+                  </div>
+                  <div class="clan-stat">
+                    <span class="stat-label">War</span>
+                    <span class="stat-value">3,210</span>
+                  </div>
+                </div>
+              </div>
+              <div class="clan-card-right">
+                <div class="join-indicator joinable">✓</div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        showInfo('Search completed successfully!');
+      }, 1500);
     }
   </script>
 
-  <!-- Mobile-specific styles -->
+  <!-- Enhanced styles for the custom dropdown -->
   <style>
     /* Hide the pull-tab arrow - using hamburger instead */
     .drawer-tab { 
       display: none !important; 
+    }
+
+    /* Hide the native select */
+    .hidden-select {
+      display: none !important;
+    }
+
+    /* Custom Location Dropdown Styles */
+    .custom-location-dropdown {
+      position: relative;
+      width: 100%;
+      min-width: 200px;
+    }
+
+    /* Location Display Button */
+    .location-display {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--navy-card);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      color: var(--ink);
+      font-family: "Open Sans", sans-serif;
+      font-size: calc(16px * var(--user-font-scale));
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .location-display:hover {
+      border-color: var(--blue);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .location-display.active {
+      border-color: var(--blue);
+      background: rgba(45, 109, 246, 0.1);
+    }
+
+    .location-text {
+      flex: 1;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dropdown-arrow {
+      font-size: calc(12px * var(--user-font-scale));
+      transition: transform 0.3s ease;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Dropdown Panel */
+    .location-dropdown-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .location-dropdown-panel.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .location-dropdown-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+
+    /* Dropdown Content Container */
+    .location-dropdown-panel .dropdown-options {
+      position: relative;
+      z-index: 1001;
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 100%;
+      max-width: 400px;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding: 0;
+    }
+
+    /* Dropdown Header */
+    .dropdown-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: var(--blue);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    }
+
+    .dropdown-title {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 700;
+      font-size: calc(16px * var(--user-font-scale));
+      color: white;
+    }
+
+    .dropdown-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: calc(20px * var(--user-font-scale));
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+      line-height: 1;
+    }
+
+    .dropdown-close:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Location Options */
+    .location-option {
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: calc(15px * var(--user-font-scale));
+      color: var(--ink);
+    }
+
+    .location-option:last-child {
+      border-bottom: none;
+    }
+
+    .location-option:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .location-option.selected {
+      background: rgba(45, 109, 246, 0.2);
+      color: var(--blue);
+      font-weight: 600;
     }
 
     /* Enhanced message styles */
@@ -520,6 +875,29 @@
       padding: 8px 16px;
       border-radius: var(--radius-md);
       border: 1px solid rgba(66, 165, 245, 0.3);
+      font-size: calc(14px * var(--user-font-scale));
+    }
+
+    .error-message {
+      text-align: center;
+      color: #ff6b6b;
+      font-weight: 600;
+      margin-top: 12px;
+      background: rgba(255, 107, 107, 0.1);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      font-size: calc(14px * var(--user-font-scale));
+    }
+
+    .loading-message {
+      text-align: center;
+      color: var(--blue);
+      font-weight: 600;
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: rgba(45, 109, 246, 0.1);
+      border-radius: var(--radius-md);
       font-size: calc(14px * var(--user-font-scale));
     }
 
@@ -611,55 +989,6 @@
       to { transform: rotate(360deg); } 
     }
 
-    /* Enhanced location dropdown with scroll and better sizing */
-    .location-select {
-      padding: 12px 16px;
-      background: var(--navy-card);
-      border: 2px solid rgba(255,255,255,0.1);
-      border-radius: var(--radius-md);
-      color: var(--ink);
-      font-family: "Open Sans", sans-serif;
-      font-size: calc(16px * var(--user-font-scale));
-      cursor: pointer;
-      min-width: 200px;
-      max-height: 250px; /* Smaller max height */
-      overflow-y: auto;
-      transition: all 0.2s ease;
-    }
-
-    .location-select:focus {
-      border-color: var(--blue);
-      outline: none;
-      max-height: 200px;
-    }
-
-    .location-select option {
-      background: var(--navy-card);
-      color: var(--ink);
-      padding: 8px;
-      font-size: calc(15px * var(--user-font-scale));
-      line-height: 1.4;
-    }
-
-    /* Webkit scrollbar styling for dropdown */
-    .location-select::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .location-select::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-    }
-
-    .location-select::-webkit-scrollbar-thumb {
-      background: var(--gold);
-      border-radius: 4px;
-    }
-
-    .location-select::-webkit-scrollbar-thumb:hover {
-      background: #d4a017;
-    }
-
     /* Pull to refresh indicator */
     .pull-indicator {
       position: fixed;
@@ -742,20 +1071,26 @@
         gap: 12px;
       }
 
-      .location-select {
-        min-width: auto;
-        width: 100%;
-        max-height: 180px; /* Even smaller on mobile */
+      .location-dropdown-panel {
+        padding: 15px;
+      }
+
+      .location-dropdown-panel .dropdown-options {
+        max-height: 70vh;
+        max-width: 100%;
+      }
+
+      .dropdown-header {
+        padding: 12px 16px;
+      }
+
+      .dropdown-title {
         font-size: calc(14px * var(--user-font-scale));
       }
 
-      .location-select:focus {
-        max-height: 150px;
-      }
-
-      .location-select option {
-        font-size: calc(13px * var(--user-font-scale));
-        padding: 6px;
+      .location-option {
+        padding: 10px 16px;
+        font-size: calc(14px * var(--user-font-scale));
       }
 
       .refresh-matches-btn {
@@ -803,18 +1138,17 @@
         height: 36px;
       }
 
-      .location-select {
-        max-height: 140px;
+      .location-dropdown-panel {
+        padding: 10px;
+      }
+
+      .dropdown-header {
+        padding: 10px 12px;
+      }
+
+      .location-option {
+        padding: 8px 12px;
         font-size: calc(13px * var(--user-font-scale));
-      }
-
-      .location-select:focus {
-        max-height: 120px;
-      }
-
-      .location-select option {
-        font-size: calc(12px * var(--user-font-scale));
-        padding: 4px;
       }
     }
 
@@ -829,6 +1163,12 @@
       background: rgba(66, 165, 245, 0.15);
       color: #1565c0;
       border-color: rgba(66, 165, 245, 0.5);
+    }
+
+    body.light-theme .error-message {
+      background: rgba(255, 107, 107, 0.15);
+      color: #d32f2f;
+      border-color: rgba(255, 107, 107, 0.5);
     }
 
     body.light-theme .refresh-matches-btn {
@@ -855,19 +1195,175 @@
       background: var(--blue);
     }
 
-    body.light-theme .location-select {
+    body.light-theme .location-display {
       background: white;
       border-color: rgba(0,0,0,0.2);
       color: var(--ink);
     }
 
-    body.light-theme .location-select:focus {
+    body.light-theme .location-display:hover,
+    body.light-theme .location-display.active {
       border-color: var(--blue);
     }
 
-    body.light-theme .location-select option {
+    body.light-theme .location-dropdown-panel .dropdown-options {
       background: white;
+      border: 1px solid rgba(0,0,0,0.2);
+    }
+
+    body.light-theme .location-option {
       color: var(--ink);
+    }
+
+    body.light-theme .location-option:hover {
+      background: rgba(0,0,0,0.05);
+    }
+
+    body.light-theme .location-option.selected {
+      background: rgba(45, 109, 246, 0.1);
+      color: var(--blue);
+    }
+
+    /* Clan card styles - assuming you have these from your existing CSS */
+    .clans-results-section {
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .clans-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .clan-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border-left: 4px solid var(--gold);
+      transition: background 0.2s ease;
+    }
+
+    .clan-card:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .clan-card-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .clan-card-left {
+      flex-shrink: 0;
+    }
+
+    .clan-badge {
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .clan-badge img {
+      width: 18px;
+      height: 18px;
+      max-width: 18px !important;
+      max-height: 18px !important;
+      object-fit: contain !important;
+    }
+
+    .clan-card-center {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .clan-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .clan-name-section h4.clan-name {
+      font-family: "Montserrat", sans-serif;
+      font-size: calc(16px * var(--user-font-scale));
+      font-weight: 700;
+      margin: 0 0 2px 0;
+      color: var(--ink);
+    }
+
+    .clan-tag {
+      font-size: calc(12px * var(--user-font-scale));
+      color: var(--gold);
+      font-family: "Montserrat", sans-serif;
+      font-weight: 600;
+    }
+
+    .clan-location {
+      font-size: calc(12px * var(--user-font-scale));
+      color: rgba(255,255,255,0.7);
+      text-align: right;
+    }
+
+    .clan-stats-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .clan-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 60px;
+    }
+
+    .clan-stat .stat-label {
+      font-size: calc(10px * var(--user-font-scale));
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 2px;
+      font-weight: 600;
+    }
+
+    .clan-stat .stat-value {
+      font-size: calc(13px * var(--user-font-scale));
+      color: var(--gold);
+      font-family: "Montserrat", sans-serif;
+      font-weight: 700;
+    }
+
+    .clan-card-right {
+      flex-shrink: 0;
+    }
+
+    .join-indicator {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: calc(18px * var(--user-font-scale));
+    }
+
+    .join-indicator.joinable {
+      background: rgba(76, 205, 196, 0.2);
+      color: #4ecdc4;
+    }
+
+    .join-indicator.not-joinable {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
     }
   </style>
 
@@ -875,187 +1371,5 @@
   <script src="./js/clans.js"></script>
   <!-- settings functionality for all pages -->
   <script src="./js/settings.js"></script>
-
-  <!-- Enhanced clan search functionality -->
-  <script>
-    // Override the original handleClanSearch to show refresh controls and feedback
-    document.addEventListener('DOMContentLoaded', function() {
-      // Get the original clans.js functions
-      const originalHandleClanSearch = window.handleClanSearch;
-      
-      // Enhanced clan search with feedback
-      window.handleClanSearch = async function() {
-        const searchQuery = document.getElementById('clanSearchInput').value.trim();
-        
-        // Provide feedback before search
-        if (searchQuery.length > 30) {
-          showWarning('Searching very long clan name - this may take longer or return fewer results');
-        }
-        
-        // Call original search function
-        try {
-          await originalHandleClanSearch();
-          
-          // Show refresh controls after successful search
-          const resultsSection = document.getElementById('clansResultsSection');
-          if (!resultsSection.classList.contains('hidden')) {
-            showRefreshControls();
-            addTouchFeedback();
-            
-            // Provide feedback based on results
-            const clanCards = document.querySelectorAll('.clan-card');
-            provideFeedbackForSearch(searchQuery, Array.from(clanCards));
-          }
-        } catch (error) {
-          console.error('Search failed:', error);
-          showError('Search failed - please try again or check your connection');
-        }
-      };
-
-      // Initialize mobile optimizations
-      adjustForMobile();
-      
-      // Add enter key support for search
-      const clanSearchInput = document.getElementById('clanSearchInput');
-      clanSearchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          handleClanSearch();
-        }
-      });
-
-      // Enhanced clear function
-      const clearSearchBtn = document.getElementById('clearSearchBtn');
-      clearSearchBtn.addEventListener('click', function() {
-        clearAllMessages();
-        hideRefreshControls();
-      });
-
-      // Auto-format input
-      clanSearchInput.addEventListener('input', function(e) {
-        let value = this.value;
-        // Clean up multiple spaces
-        value = value.replace(/\s+/g, ' ');
-        this.value = value;
-      });
-
-      // Show helpful info on focus
-      clanSearchInput.addEventListener('focus', function() {
-        if (!this.value) {
-          showInfo('Search by clan name or tag (#ABC123) - use location filter to narrow results');
-        }
-      });
-
-      // Custom location dropdown functionality
-      const customLocationSelect = document.getElementById('customLocationSelect');
-      const locationDisplay = document.getElementById('locationDisplay');
-      const locationDropdown = document.getElementById('locationDropdown');
-      const dropdownCloseBtn = document.getElementById('dropdownCloseBtn');
-      const locationOptions = document.querySelectorAll('.location-option');
-      const hiddenLocationSelect = document.getElementById('locationSelect');
-      const locationText = document.querySelector('.location-text');
-
-      let isLocationDropdownOpen = false;
-
-      // Open dropdown
-      function openLocationDropdown() {
-        isLocationDropdownOpen = true;
-        locationDisplay.classList.add('active');
-        locationDropdown.classList.add('show');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
-      }
-
-      // Close dropdown
-      function closeLocationDropdown() {
-        isLocationDropdownOpen = false;
-        locationDisplay.classList.remove('active');
-        locationDropdown.classList.remove('show');
-        document.body.style.overflow = 'auto';
-      }
-
-      // Select location option
-      function selectLocationOption(option) {
-        const value = option.dataset.value;
-        const text = option.textContent;
-        
-        // Update display
-        locationText.textContent = text;
-        
-        // Update hidden select for API compatibility
-        hiddenLocationSelect.value = value;
-        
-        // Update selected state
-        locationOptions.forEach(opt => opt.classList.remove('selected'));
-        option.classList.add('selected');
-        
-        // Close dropdown
-        closeLocationDropdown();
-        
-        // Trigger change event for existing functionality
-        const changeEvent = new Event('change');
-        hiddenLocationSelect.dispatchEvent(changeEvent);
-        
-        // Show feedback
-        if (value) {
-          const countryName = text.split(' ').slice(1).join(' '); // Remove flag emoji
-          showInfo(`Location filter: ${countryName} - this will narrow your search results`);
-        } else {
-          clearAllMessages();
-        }
-      }
-
-      // Event listeners for custom dropdown
-      locationDisplay.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (isLocationDropdownOpen) {
-          closeLocationDropdown();
-        } else {
-          openLocationDropdown();
-        }
-      });
-
-      dropdownCloseBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        closeLocationDropdown();
-      });
-
-      locationOptions.forEach(option => {
-        option.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          selectLocationOption(this);
-        });
-      });
-
-      // Close dropdown when clicking backdrop
-      locationDropdown.addEventListener('click', function(e) {
-        if (e.target === this) {
-          closeLocationDropdown();
-        }
-      });
-
-      // Keyboard support
-      document.addEventListener('keydown', function(e) {
-        if (isLocationDropdownOpen && e.key === 'Escape') {
-          closeLocationDropdown();
-        }
-      });
-
-      // Initialize first option as selected
-      locationOptions[0].classList.add('selected');
-
-      // Enhanced location change feedback (now using hidden select)
-      hiddenLocationSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        if (selectedOption.value) {
-          const countryName = selectedOption.text;
-          showInfo(`Location filter: ${countryName} - this will narrow your search results`);
-        } else {
-          clearAllMessages();
-        }
-      });
-    });
-  </script>
 </body>
 </html>
