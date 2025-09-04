@@ -96,33 +96,32 @@
     <section class="settings-section">
       <h3>PREFERENCES</h3>
       
+      <!-- INVERT COLOURS SETTING -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-title">Light Theme</div>
+          <div class="setting-description">Switch between dark and light color themes</div>
+        </div>
+        <div class="setting-control">
+          <button type="button" id="invertColours" class="toggle-switch">
+            <!-- No inner content needed, CSS will handle it -->
+          </button>
+        </div>
+      </div>
+
+      <!-- SOUND SETTING -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-title">Sound Effects</div>
+          <div class="setting-description">Enable or disable UI sound feedback</div>
+        </div>
+        <div class="setting-control">
+          <button type="button" id="soundToggle" class="toggle-switch active">
+            <!-- No inner content needed, CSS will handle it -->
+          </button>
+        </div>
+      </div>
       
-
-<!-- INVERT COLOURS SETTING -->
-<div class="setting-item">
-  <div class="setting-info">
-    <div class="setting-title">Light Theme</div>
-    <div class="setting-description">Switch between dark and light color themes</div>
-  </div>
-  <div class="setting-control">
-    <button type="button" id="invertColours" class="toggle-switch">
-      <!-- No inner content needed, CSS will handle it -->
-    </button>
-  </div>
-</div>
-
-<!-- SOUND SETTING -->
-<div class="setting-item">
-  <div class="setting-info">
-    <div class="setting-title">Sound Effects</div>
-    <div class="setting-description">Enable or disable UI sound feedback</div>
-  </div>
-  <div class="setting-control">
-    <button type="button" id="soundToggle" class="toggle-switch active">
-      <!-- No inner content needed, CSS will handle it -->
-    </button>
-  </div>
-</div>
       <!-- FONT SIZE SETTING - Collapsible with slider - MOVED TO BOTTOM -->
       <div class="setting-item collapsible-setting">
         <div class="setting-main" id="fontSizeMain">
@@ -255,6 +254,7 @@
       align-items: center;
       cursor: pointer;
       user-select: none;
+      min-height: 60px; /* Match other setting items */
     }
 
     .setting-main:hover {
@@ -268,7 +268,7 @@
       font-family: "Montserrat", sans-serif;
       font-weight: 600;
       color: var(--gold);
-      font-size: 14px;
+      font-size: calc(14px * var(--user-font-scale));
       margin-right: 12px;
     }
 
@@ -280,6 +280,11 @@
       padding: 4px;
       border-radius: 4px;
       transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
     }
 
     .expand-button:hover {
@@ -316,7 +321,7 @@
     }
 
     .slider-label {
-      font-size: 12px;
+      font-size: calc(12px * var(--user-font-scale));
       font-weight: 600;
       color: var(--ink);
       min-width: 50px;
@@ -379,6 +384,20 @@
       transform: scale(1.1);
     }
 
+    /* Light theme adjustments for settings */
+    body.light-theme .slider-container {
+      background: rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    body.light-theme .expand-button:hover {
+      background: rgba(0,0,0,0.1);
+    }
+
+    body.light-theme .setting-main:hover {
+      background: rgba(0,0,0,0.05);
+    }
+
     /* Mobile adjustments */
     @media (max-width: 520px) {
       .slider-container {
@@ -387,12 +406,12 @@
       }
 
       .slider-label {
-        font-size: 11px;
+        font-size: calc(11px * var(--user-font-scale));
         min-width: 40px;
       }
 
       .current-font-size {
-        font-size: 13px;
+        font-size: calc(13px * var(--user-font-scale));
       }
     }
   </style>

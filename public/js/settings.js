@@ -182,9 +182,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // APPLY FONT SIZE - actually changes the font sizes using percentage scaling
+    // APPLY FONT SIZE - actually changes the font sizes using CSS custom property
     function applyFontSize(fontSize) {
-        document.body.style.fontSize = fontSize + '%';
+        // Use CSS custom property for better control
+        document.documentElement.style.setProperty('--user-font-scale', fontSize / 100);
         console.log('applied font size:', fontSize + '%');
     }
 
@@ -233,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const savedFontSize = localStorage.getItem(SETTINGS_KEYS.fontSize);
         if (savedFontSize !== null) {
             const fontSize = parseInt(savedFontSize) || 100;
-            document.body.style.fontSize = fontSize + '%';
+            document.documentElement.style.setProperty('--user-font-scale', fontSize / 100);
         }
 
         // apply saved theme

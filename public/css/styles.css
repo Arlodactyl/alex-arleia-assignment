@@ -23,6 +23,9 @@
 
   /* app width: starts mobile-first, grows on bigger screens */
   --app-max: 400px;  /* optimized for mobile first */
+  
+  /* Font scaling system */
+  --user-font-scale: 1; /* Default scale, controlled by settings */
 }
 
 /* Responsive breakpoints - tablet size */
@@ -39,7 +42,6 @@
     --app-max: 980px;
     --gap: 20px;
   }
-  body{ font-size: 18px; }         /* slightly larger base font */
 }
 
 /* CSS reset + base styles - removes browser defaults */
@@ -50,6 +52,15 @@ body{
   background:var(--navy);
   color:var(--ink);
   font-family:"Open Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  /* Apply user font scaling */
+  font-size: calc(16px * var(--user-font-scale));
+}
+
+/* Desktop gets slightly larger base font */
+@media (min-width: 1024px){
+  body{ 
+    font-size: calc(18px * var(--user-font-scale));
+  }
 }
 
 /* Main app container - centers everything and sets max width */
@@ -139,6 +150,7 @@ body{
   border-radius: var(--radius-md);
   color: white;
   font-weight: 600;
+  font-size: calc(14px * var(--user-font-scale));
 }
 
 /* ---------------- MATCHES PAGE: CURRENT TAG DISPLAY ---------------- */
@@ -149,7 +161,7 @@ body{
   border-radius: var(--radius-md);
   margin-bottom: 16px;
   text-align: center;
-  font-size: 14px;
+  font-size: calc(14px * var(--user-font-scale));
   border: 1px solid var(--blue);
 }
 
@@ -184,7 +196,7 @@ body{
   border-radius: var(--radius-md);
   color: var(--ink);
   font-family: "Open Sans", sans-serif;
-  font-size: 16px;
+  font-size: calc(16px * var(--user-font-scale));
 }
 
 .player-tag-input:focus {
@@ -206,6 +218,7 @@ body{
   cursor: pointer;
   font-family: "Montserrat", sans-serif;
   transition: background 0.2s ease;
+  font-size: calc(14px * var(--user-font-scale));
 }
 
 .load-matches-btn:hover {
@@ -220,6 +233,7 @@ body{
   padding: 8px 16px;
   background: rgba(45, 109, 246, 0.1);
   border-radius: var(--radius-md);
+  font-size: calc(14px * var(--user-font-scale));
 }
 
 .error-message {
@@ -231,6 +245,7 @@ body{
   padding: 8px 16px;
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 107, 107, 0.3);
+  font-size: calc(14px * var(--user-font-scale));
 }
 
 /* ---------------- PLAYER STATS SECTION ---------------- */
@@ -245,7 +260,7 @@ body{
 
 .player-stats h3, .matches-stats h3 {
   font-family: "Montserrat", sans-serif;
-  font-size: 18px;
+  font-size: calc(18px * var(--user-font-scale));
   font-weight: 700;
   margin: 0 0 12px 0;
   text-align: center;
@@ -289,7 +304,7 @@ body{
 
 /* Stat labels (like "Daily streak:") */
 .stat-label {
-  font-size: 12px;
+  font-size: calc(12px * var(--user-font-scale));
   opacity: 0.8;
   margin-bottom: 2px;
 }
@@ -298,7 +313,7 @@ body{
 .stat-value {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: calc(16px * var(--user-font-scale));
   color: var(--gold); /* gold makes numbers pop! */
 }
 
@@ -314,7 +329,7 @@ body{
 
 .matches-title {
   font-family: "Montserrat", sans-serif;
-  font-size: 16px;      /* Reduced from 18px */
+  font-size: calc(16px * var(--user-font-scale));      /* Reduced from 18px */
   font-weight: 700;
   margin: 0 0 12px 0;
   text-align: center;
@@ -401,7 +416,7 @@ body{
 .result-badge {
   font-weight: 700;
   font-family: "Montserrat", sans-serif;
-  font-size: 14px;
+  font-size: calc(14px * var(--user-font-scale));
 }
 
 .won .result-badge {
@@ -417,7 +432,7 @@ body{
 }
 
 .match-score {
-  font-size: 16px;
+  font-size: calc(16px * var(--user-font-scale));
   font-weight: 700;
   margin-left: 8px;
   color: var(--gold);
@@ -426,7 +441,7 @@ body{
 
 .match-time {
   color: rgba(255,255,255,0.6);
-  font-size: 12px;
+  font-size: calc(12px * var(--user-font-scale));
 }
 
 /* Match details section */
@@ -439,21 +454,21 @@ body{
 .game-mode {
   font-weight: 600;
   color: var(--blue);
-  font-size: 13px;
+  font-size: calc(13px * var(--user-font-scale));
 }
 
 .opponent-info {
-  font-size: 13px;
+  font-size: calc(13px * var(--user-font-scale));
 }
 
 .opponent-clan {
   color: var(--gold);
-  font-size: 11px;
+  font-size: calc(11px * var(--user-font-scale));
   margin-left: 6px;
 }
 
 .arena-name {
-  font-size: 11px;
+  font-size: calc(11px * var(--user-font-scale));
   color: rgba(255,255,255,0.7);
   margin-top: 2px;
 }
@@ -490,7 +505,7 @@ body{
 
 .pattern-title {
   font-family: "Montserrat", sans-serif;
-  font-size: 18px;
+  font-size: calc(18px * var(--user-font-scale));
   font-weight: 700;
   margin: 0 0 12px 0;
   text-align: center;
@@ -514,7 +529,7 @@ body{
   font-weight: 700;
   font-family: "Montserrat", sans-serif;
   color: white;
-  font-size: 16px;
+  font-size: calc(16px * var(--user-font-scale));
   transition: transform 0.2s ease;
 }
 
@@ -587,7 +602,7 @@ body{
 .mock-label {
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
-  font-size: 12px;
+  font-size: calc(12px * var(--user-font-scale));
   text-align: center;
   opacity: 0.9;
   line-height: 1.3;
@@ -595,7 +610,7 @@ body{
 
 @media (min-width: 768px) {
   .mock-label {
-    font-size: 14px;
+    font-size: calc(14px * var(--user-font-scale));
   }
 }
 
@@ -712,6 +727,7 @@ body{
   border-radius: 12px;
   font-weight: 600;
   transition: background 0.2s ease; /* smooth hover effect */
+  font-size: calc(14px * var(--user-font-scale));
 }
 
 .nav-item a:hover{ 
@@ -736,7 +752,7 @@ body{
 .footer-link {
   color: rgba(255,255,255,0.8);
   text-decoration: none;
-  font-size: 14px;
+  font-size: calc(14px * var(--user-font-scale));
   padding: 8px 0;
   text-align: center;
 }
@@ -785,7 +801,9 @@ body{
 
 .section-title{
   font-family:"Montserrat",sans-serif;
-  font-size:20px; font-weight:800; margin:0 0 8px;
+  font-size: calc(20px * var(--user-font-scale)); 
+  font-weight:800; 
+  margin:0 0 8px;
 }
 
 .list{ margin:0; padding-left:18px; }
@@ -847,7 +865,7 @@ body{
 
 .footer-text p {
   margin: 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--user-font-scale));
   color: var(--ink);
   opacity: 0.7;
   font-family: "Open Sans", sans-serif;
@@ -871,7 +889,7 @@ body{
   }
   
   .footer-text p {
-    font-size: 14px;
+    font-size: calc(14px * var(--user-font-scale));
   }
 }
 
@@ -901,6 +919,7 @@ body{
   font-family: "Montserrat", sans-serif;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  font-size: calc(14px * var(--user-font-scale));
 }
 
 .clear-btn:hover {
@@ -916,7 +935,7 @@ body{
   border-radius: var(--radius-md);
   color: var(--ink);
   font-family: "Open Sans", sans-serif;
-  font-size: 16px;
+  font-size: calc(16px * var(--user-font-scale));
   cursor: pointer;
   min-width: 180px;
 }
@@ -1007,21 +1026,21 @@ body{
 
 .clan-name-section h4.clan-name {
   font-family: "Montserrat", sans-serif;
-  font-size: 16px;
+  font-size: calc(16px * var(--user-font-scale));
   font-weight: 700;
   margin: 0 0 2px 0;
   color: var(--ink);
 }
 
 .clan-tag {
-  font-size: 12px;
+  font-size: calc(12px * var(--user-font-scale));
   color: var(--gold);
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
 }
 
 .clan-location {
-  font-size: 12px;
+  font-size: calc(12px * var(--user-font-scale));
   color: rgba(255,255,255,0.7);
   text-align: right;
 }
@@ -1042,14 +1061,14 @@ body{
 }
 
 .clan-stat .stat-label {
-  font-size: 10px;
+  font-size: calc(10px * var(--user-font-scale));
   color: rgba(255,255,255,0.6);
   margin-bottom: 2px;
   font-weight: 600;
 }
 
 .clan-stat .stat-value {
-  font-size: 13px;
+  font-size: calc(13px * var(--user-font-scale));
   color: var(--gold);
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
@@ -1064,7 +1083,7 @@ body{
 }
 
 .clan-type {
-  font-size: 12px;
+  font-size: calc(12px * var(--user-font-scale));
   font-weight: 600;
   padding: 4px 8px;
   border-radius: 4px;
@@ -1086,13 +1105,13 @@ body{
 }
 
 .required-trophies {
-  font-size: 11px;
+  font-size: calc(11px * var(--user-font-scale));
   color: rgba(255,255,255,0.7);
 }
 
 /* Clan description */
 .clan-description {
-  font-size: 12px;
+  font-size: calc(12px * var(--user-font-scale));
   color: rgba(255,255,255,0.8);
   line-height: 1.3;
   font-style: italic;
@@ -1111,7 +1130,7 @@ body{
   justify-content: center;
   border-radius: 50%;
   font-weight: 700;
-  font-size: 18px;
+  font-size: calc(18px * var(--user-font-scale));
 }
 
 .join-indicator.joinable {
@@ -1150,14 +1169,14 @@ body{
 
 .player-name-section h2 {
   font-family: "Montserrat", sans-serif;
-  font-size: 24px;
+  font-size: calc(24px * var(--user-font-scale));
   font-weight: 800;
   margin: 0 0 4px 0;
   color: var(--ink);
 }
 
 .player-tag-display {
-  font-size: 14px;
+  font-size: calc(14px * var(--user-font-scale));
   color: var(--gold);
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
@@ -1170,7 +1189,7 @@ body{
 
 .level-label {
   display: block;
-  font-size: 11px;      /* Reduced from 12px */
+  font-size: calc(11px * var(--user-font-scale));      /* Reduced from 12px */
   color: rgba(255,255,255,0.6);
   margin-bottom: 4px;
 }
@@ -1178,7 +1197,7 @@ body{
 .level-value {
   display: block;
   font-family: "Montserrat", sans-serif;
-  font-size: 24px;      /* Reduced from 28px */
+  font-size: calc(24px * var(--user-font-scale));      /* Reduced from 28px */
   font-weight: 700;
   color: var(--blue);
 }
@@ -1200,7 +1219,7 @@ body{
 }
 
 .player-main-stats .stat-label {
-  font-size: 11px;      /* Reduced from 12px */
+  font-size: calc(11px * var(--user-font-scale));      /* Reduced from 12px */
   opacity: 0.8;
   margin-bottom: 2px;
   text-align: center;
@@ -1209,7 +1228,7 @@ body{
 .player-main-stats .stat-value {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  font-size: 16px;      /* Reduced from 20px */
+  font-size: calc(16px * var(--user-font-scale));      /* Reduced from 20px */
   color: var(--gold);
   text-align: center;
 }
@@ -1254,7 +1273,7 @@ body{
 .stat-card-header span {
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
-  font-size: 13px;      /* Reduced from 14px */
+  font-size: calc(13px * var(--user-font-scale));      /* Reduced from 14px */
   color: var(--ink);
 }
 
@@ -1268,7 +1287,7 @@ body{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  font-size: calc(13px * var(--user-font-scale));
 }
 
 .stat-row span:first-child {
@@ -1331,14 +1350,14 @@ body{
 
 .clan-details h4.clan-name, .arena-details h4.arena-name {
   font-family: "Montserrat", sans-serif;
-  font-size: 16px;
+  font-size: calc(16px * var(--user-font-scale));
   font-weight: 700;
   margin: 0 0 2px 0;
   color: var(--ink);
 }
 
 .arena-details .arena-id {
-  font-size: 12px;
+  font-size: calc(12px * var(--user-font-scale));
   color: var(--gold);
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
@@ -1351,12 +1370,12 @@ body{
 }
 
 .role-label, .trophy-current, .trophy-best {
-  font-size: 13px;
+  font-size: calc(13px * var(--user-font-scale));
   color: rgba(255,255,255,0.7);
 }
 
 .role-value {
-  font-size: 13px;
+  font-size: calc(13px * var(--user-font-scale));
   color: var(--blue);
   font-weight: 600;
   font-family: "Montserrat", sans-serif;
@@ -1416,20 +1435,21 @@ img[src*="treasure.png"] {
 
 .settings-section h3 {
   font-family: "Montserrat", sans-serif;
-  font-size: 18px;
+  font-size: calc(18px * var(--user-font-scale));
   font-weight: 700;
   margin: 0 0 16px 0;
   text-align: center;
   color: var(--ink);
 }
 
-/* Individual setting item */
+/* Individual setting item - FIXED ALIGNMENT */
 .setting-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px 0;
   border-bottom: 1px solid rgba(255,255,255,0.1);
+  min-height: 60px; /* Ensure consistent height */
 }
 
 .setting-item:last-child {
@@ -1440,28 +1460,34 @@ img[src*="treasure.png"] {
 .setting-info {
   flex: 1;
   padding-right: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .setting-title {
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
-  font-size: 15px;
+  font-size: calc(15px * var(--user-font-scale));
   color: var(--ink);
   margin: 0 0 4px 0;
 }
 
 .setting-description {
-  font-size: 13px;
+  font-size: calc(13px * var(--user-font-scale));
   color: rgba(255,255,255,0.7);
   line-height: 1.3;
+  margin: 0;
 }
 
-/* Setting controls (right side) */
+/* Setting controls (right side) - FIXED ALIGNMENT */
 .setting-control {
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  min-width: 60px;
 }
 
 /* Toggle switch styles */
@@ -1475,6 +1501,7 @@ img[src*="treasure.png"] {
   transition: background-color 0.3s ease;
   border: none;
   outline: none;
+  flex-shrink: 0;
 }
 
 .toggle-switch.active {
@@ -1551,7 +1578,7 @@ img[src*="treasure.png"] {
 .font-size-display {
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
-  font-size: 14px;
+  font-size: calc(14px * var(--user-font-scale));
   color: var(--gold);
   min-width: 40px;
   text-align: center;
@@ -1568,7 +1595,7 @@ img[src*="treasure.png"] {
   font-weight: 600;
   cursor: pointer;
   font-family: "Montserrat", sans-serif;
-  font-size: 15px;
+  font-size: calc(15px * var(--user-font-scale));
   transition: all 0.2s ease;
   margin-top: 20px;
 }
@@ -1583,15 +1610,159 @@ img[src*="treasure.png"] {
 .icon{ display:block; }
 .hidden{ display:none !important; }
 
-/* ---------------- SETTINGS FUNCTIONALITY STYLES ---------------- */
-/* Light theme styles - when invert colors is ON */
+/* ---------------- IMPROVED LIGHT THEME STYLES ---------------- */
+/* Light theme styles - when invert colors is ON - IMPROVED CONTRAST */
 body.light-theme {
-  --navy: #f5f5f5;
-  --navy-card: #ffffff;
-  --ink: #2a2a2a;
-  --gold: #d4a017; /* Darker gold for better contrast on light backgrounds */
-  --blue: #1c5ff0; /* Slightly darker blue for accessibility */
-  --paper: #8a8a8a; /* Darker for light theme */
+  --navy: #f8f9fa;        /* Very light gray background */
+  --navy-card: #ffffff;   /* Pure white cards */
+  --ink: #1a1a1a;         /* Very dark text for high contrast */
+  --gold: #b8860b;        /* Darker gold for better contrast on light backgrounds */
+  --blue: #0056b3;        /* Darker blue for accessibility */
+  --paper: #666666;       /* Medium gray for secondary text */
+  
+  /* Ensure good contrast in light theme */
+  background: var(--navy);
+  color: var(--ink);
+}
+
+/* Light theme specific adjustments for better visibility */
+body.light-theme .hi {
+  background: var(--blue);
+  color: white;
+  border: 1px solid var(--blue);
+}
+
+body.light-theme .current-tag {
+  background: var(--navy-card);
+  color: var(--ink);
+  border: 2px solid var(--blue);
+}
+
+body.light-theme .current-tag strong {
+  color: var(--blue);
+}
+
+body.light-theme .player-tag-input {
+  background: var(--navy-card);
+  color: var(--ink);
+  border: 2px solid rgba(0,0,0,0.2);
+}
+
+body.light-theme .player-tag-input::placeholder {
+  color: rgba(0,0,0,0.5);
+}
+
+body.light-theme .player-tag-input:focus {
+  border-color: var(--blue);
+}
+
+body.light-theme .loading-message {
+  background: rgba(0, 86, 179, 0.1);
+  color: var(--blue);
+  border: 1px solid var(--blue);
+}
+
+body.light-theme .error-message {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+body.light-theme .mock-box,
+body.light-theme .player-stats,
+body.light-theme .matches-stats,
+body.light-theme .recent-matches-section,
+body.light-theme .game-pattern-section,
+body.light-theme .settings-section,
+body.light-theme .player-profile-section,
+body.light-theme .player-stats-detailed,
+body.light-theme .player-clan-section,
+body.light-theme .player-arena-section,
+body.light-theme .clans-results-section,
+body.light-theme .popular-clans-section {
+  background: var(--navy-card);
+  color: var(--ink);
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+body.light-theme .stat-icon,
+body.light-theme .clan-icon,
+body.light-theme .clan-badge,
+body.light-theme .arena-icon {
+  background: rgba(0,0,0,0.08);
+}
+
+body.light-theme .match-card,
+body.light-theme .clan-card,
+body.light-theme .stat-card,
+body.light-theme .clan-info-card,
+body.light-theme .arena-info-card {
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+body.light-theme .match-card:hover,
+body.light-theme .clan-card:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+body.light-theme .match-time,
+body.light-theme .clan-location,
+body.light-theme .required-trophies,
+body.light-theme .setting-description {
+  color: rgba(0,0,0,0.6);
+}
+
+body.light-theme .opponent-clan,
+body.light-theme .arena-name {
+  color: var(--gold);
+}
+
+body.light-theme .clan-stat .stat-label {
+  color: rgba(0,0,0,0.6);
+}
+
+/* Light theme social icons - maintain visibility */
+body.light-theme .social-link {
+  background: rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.2);
+}
+
+body.light-theme .social-link:hover {
+  background: rgba(0,0,0,0.2);
+}
+
+body.light-theme .footer-text p {
+  color: var(--ink);
+}
+
+/* Light theme settings controls */
+body.light-theme .toggle-switch {
+  background: rgba(0,0,0,0.2);
+}
+
+body.light-theme .font-size-slider {
+  background: rgba(0,0,0,0.2);
+}
+
+body.light-theme .setting-item {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Light theme drawer adjustments */
+body.light-theme .drawer {
+  background: linear-gradient(180deg, var(--blue), #004494);
+  color: white;
+}
+
+/* Ensure text remains visible in light theme */
+body.light-theme .section-title,
+body.light-theme .pattern-title,
+body.light-theme .matches-title,
+body.light-theme .archive-title,
+body.light-theme .page-title,
+body.light-theme h2, body.light-theme h3, body.light-theme h4 {
+  color: var(--ink);
 }
 
 /* ---------------- MOBILE RESPONSIVENESS ---------------- */
@@ -1606,10 +1777,10 @@ body.light-theme {
     padding: 12px;
   }
   .mock-label {
-    font-size: 11px;
+    font-size: calc(11px * var(--user-font-scale));
   }
   .hi {
-    font-size: 14px;
+    font-size: calc(14px * var(--user-font-scale));
     padding: 6px 12px;
   }
   /* Smaller logo on very small screens */
@@ -1628,7 +1799,7 @@ body.light-theme {
   .pattern-letter {
     width: 32px;
     height: 32px;
-    font-size: 14px;
+    font-size: calc(14px * var(--user-font-scale));
   }
   
   .match-card {
@@ -1636,7 +1807,7 @@ body.light-theme {
   }
   
   .match-score {
-    font-size: 16px;
+    font-size: calc(16px * var(--user-font-scale));
   }
   
   /* CLAN SEARCH: Mobile adjustments */
@@ -1687,15 +1858,15 @@ body.light-theme {
   }
   
   .player-main-stats .stat-value {
-    font-size: 14px;
+    font-size: calc(14px * var(--user-font-scale));
   }
   
   .player-main-stats .stat-label {
-    font-size: 10px;
+    font-size: calc(10px * var(--user-font-scale));
   }
   
   .level-value {
-    font-size: 20px;
+    font-size: calc(20px * var(--user-font-scale));
   }
   
   .clan-badge, .arena-icon {
@@ -1753,18 +1924,25 @@ body.light-theme {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+    min-height: auto;
+    padding: 20px 0;
   }
   
   .setting-info {
     padding-right: 0;
+    text-align: center;
+    width: 100%;
   }
   
   .setting-control {
     align-self: center;
+    width: 100%;
+    justify-content: center;
   }
   
   .font-size-control {
     min-width: 150px;
+    width: 100%;
   }
 }
 
@@ -1780,10 +1958,10 @@ body.light-theme {
     gap: 8px;
   }
   .stat-label {
-    font-size: 11px;
+    font-size: calc(11px * var(--user-font-scale));
   }
   .stat-value {
-    font-size: 14px;
+    font-size: calc(14px * var(--user-font-scale));
   }
   /* Even smaller logo for tiny screens */
   .brand__logo {
@@ -1806,7 +1984,7 @@ body.light-theme {
   .pattern-letter {
     width: 28px;
     height: 28px;
-    font-size: 12px;
+    font-size: calc(12px * var(--user-font-scale));
   }
   
   .match-card-header {
@@ -1816,7 +1994,7 @@ body.light-theme {
   }
   
   .player-tag-input {
-    font-size: 14px;
+    font-size: calc(14px * var(--user-font-scale));
     padding: 10px 14px;
   }
   
@@ -1840,13 +2018,13 @@ body.light-theme {
   }
   
   .clan-name-section h4.clan-name {
-    font-size: 14px;
+    font-size: calc(14px * var(--user-font-scale));
   }
   
   .join-indicator {
     width: 28px;
     height: 28px;
-    font-size: 16px;
+    font-size: calc(16px * var(--user-font-scale));
   }
 
   /* PLAYER PROFILE: Tiny screen adjustments */
@@ -1866,11 +2044,11 @@ body.light-theme {
   }
   
   .player-main-stats .stat-value {
-    font-size: 13px;
+    font-size: calc(13px * var(--user-font-scale));
   }
   
   .level-value {
-    font-size: 18px;
+    font-size: calc(18px * var(--user-font-scale));
   }
   
   .clan-badge, .arena-icon {
@@ -1888,11 +2066,11 @@ body.light-theme {
   }
   
   .player-name-section h2 {
-    font-size: 20px;
+    font-size: calc(20px * var(--user-font-scale));
   }
   
   .player-main-stats .stat-value {
-    font-size: 18px;
+    font-size: calc(18px * var(--user-font-scale));
   }
   
   .stat-card {
