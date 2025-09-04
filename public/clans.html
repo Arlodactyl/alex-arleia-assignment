@@ -97,7 +97,75 @@
       <div class="clan-search-container">
         <div class="search-input-container">
           <input type="text" id="clanSearchInput" placeholder="Enter clan tag (e.g., #2PP) or name" class="player-tag-input" maxlength="50" />
-          <select id="locationSelect" class="location-select">
+          
+          <!-- UPDATED: Compact Custom Location Dropdown -->
+          <div class="custom-location-select" id="customLocationSelect">
+            <div class="location-display" id="locationDisplay">
+              <span class="location-text" id="locationText">🌍 All Locations</span>
+              <span class="dropdown-arrow">▼</span>
+            </div>
+            
+            <!-- Compact dropdown overlay -->
+            <div class="location-dropdown-overlay" id="locationDropdown">
+              <div class="location-dropdown-content">
+                <div class="dropdown-header">
+                  <span class="dropdown-title">Select Location</span>
+                  <button class="dropdown-close-btn" id="dropdownCloseBtn">✕</button>
+                </div>
+                <div class="location-options-container">
+                  <div class="location-option" data-value="">🌍 All Locations</div>
+                  <div class="location-option" data-value="57000001">🇺🇸 United States</div>
+                  <div class="location-option" data-value="57000002">🇬🇧 United Kingdom</div>
+                  <div class="location-option" data-value="57000003">🇨🇦 Canada</div>
+                  <div class="location-option" data-value="57000004">🇦🇺 Australia</div>
+                  <div class="location-option" data-value="57000011">🇳🇿 New Zealand</div>
+                  <div class="location-option" data-value="57000005">🇩🇪 Germany</div>
+                  <div class="location-option" data-value="57000006">🇫🇷 France</div>
+                  <div class="location-option" data-value="57000007">🇮🇹 Italy</div>
+                  <div class="location-option" data-value="57000008">🇪🇸 Spain</div>
+                  <div class="location-option" data-value="57000009">🇧🇷 Brazil</div>
+                  <div class="location-option" data-value="57000010">🇲🇽 Mexico</div>
+                  <div class="location-option" data-value="57000012">🇯🇵 Japan</div>
+                  <div class="location-option" data-value="57000013">🇰🇷 South Korea</div>
+                  <div class="location-option" data-value="57000014">🇨🇳 China</div>
+                  <div class="location-option" data-value="57000015">🇮🇳 India</div>
+                  <div class="location-option" data-value="57000016">🇷🇺 Russia</div>
+                  <div class="location-option" data-value="57000017">🇳🇱 Netherlands</div>
+                  <div class="location-option" data-value="57000018">🇸🇪 Sweden</div>
+                  <div class="location-option" data-value="57000019">🇳🇴 Norway</div>
+                  <div class="location-option" data-value="57000020">🇩🇰 Denmark</div>
+                  <div class="location-option" data-value="57000021">🇫🇮 Finland</div>
+                  <div class="location-option" data-value="57000022">🇵🇱 Poland</div>
+                  <div class="location-option" data-value="57000023">🇨🇭 Switzerland</div>
+                  <div class="location-option" data-value="57000024">🇦🇹 Austria</div>
+                  <div class="location-option" data-value="57000025">🇧🇪 Belgium</div>
+                  <div class="location-option" data-value="57000026">🇵🇹 Portugal</div>
+                  <div class="location-option" data-value="57000027">🇬🇷 Greece</div>
+                  <div class="location-option" data-value="57000028">🇹🇷 Turkey</div>
+                  <div class="location-option" data-value="57000029">🇦🇷 Argentina</div>
+                  <div class="location-option" data-value="57000030">🇨🇱 Chile</div>
+                  <div class="location-option" data-value="57000031">🇵🇪 Peru</div>
+                  <div class="location-option" data-value="57000032">🇨🇴 Colombia</div>
+                  <div class="location-option" data-value="57000033">🇻🇪 Venezuela</div>
+                  <div class="location-option" data-value="57000034">🇺🇾 Uruguay</div>
+                  <div class="location-option" data-value="57000035">🇿🇦 South Africa</div>
+                  <div class="location-option" data-value="57000036">🇪🇬 Egypt</div>
+                  <div class="location-option" data-value="57000037">🇸🇦 Saudi Arabia</div>
+                  <div class="location-option" data-value="57000038">🇦🇪 UAE</div>
+                  <div class="location-option" data-value="57000039">🇮🇱 Israel</div>
+                  <div class="location-option" data-value="57000040">🇹🇭 Thailand</div>
+                  <div class="location-option" data-value="57000041">🇻🇳 Vietnam</div>
+                  <div class="location-option" data-value="57000042">🇸🇬 Singapore</div>
+                  <div class="location-option" data-value="57000043">🇲🇾 Malaysia</div>
+                  <div class="location-option" data-value="57000044">🇮🇩 Indonesia</div>
+                  <div class="location-option" data-value="57000045">🇵🇭 Philippines</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hidden select for API compatibility -->
+          <select id="locationSelect" class="location-select hidden">
             <option value="">🌍 All Locations</option>
             <option value="57000001">🇺🇸 United States</option>
             <option value="57000002">🇬🇧 United Kingdom</option>
@@ -470,7 +538,18 @@
       
       // Clear input fields
       clanSearchInput.value = '';
-      document.getElementById('locationSelect').value = '';
+      
+      // Reset custom dropdown to default
+      const locationText = document.getElementById('locationText');
+      const hiddenLocationSelect = document.getElementById('locationSelect');
+      const locationOptions = document.querySelectorAll('.location-option');
+      
+      locationText.textContent = '🌍 All Locations';
+      hiddenLocationSelect.value = '';
+      
+      // Update selected state
+      locationOptions.forEach(opt => opt.classList.remove('selected'));
+      locationOptions[0].classList.add('selected');
       
       // Hide all sections and messages
       clearAllMessages();
@@ -489,6 +568,107 @@
       document.getElementById('clansResultsSection').classList.add('hidden');
       document.getElementById('popularClansSection').classList.add('hidden');
     }
+
+    // ============ CUSTOM LOCATION DROPDOWN FUNCTIONALITY ============
+    
+    const customLocationSelect = document.getElementById('customLocationSelect');
+    const locationDisplay = document.getElementById('locationDisplay');
+    const locationDropdown = document.getElementById('locationDropdown');
+    const dropdownCloseBtn = document.getElementById('dropdownCloseBtn');
+    const locationOptions = document.querySelectorAll('.location-option');
+    const hiddenLocationSelect = document.getElementById('locationSelect');
+    const locationText = document.getElementById('locationText');
+
+    let isLocationDropdownOpen = false;
+
+    // Open dropdown
+    function openLocationDropdown() {
+      isLocationDropdownOpen = true;
+      locationDisplay.classList.add('active');
+      locationDropdown.classList.add('show');
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    // Close dropdown
+    function closeLocationDropdown() {
+      isLocationDropdownOpen = false;
+      locationDisplay.classList.remove('active');
+      locationDropdown.classList.remove('show');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Select location option
+    function selectLocationOption(option) {
+      const value = option.dataset.value;
+      const text = option.textContent;
+      
+      // Update display
+      locationText.textContent = text;
+      
+      // Update hidden select for API compatibility
+      hiddenLocationSelect.value = value;
+      
+      // Update selected state
+      locationOptions.forEach(opt => opt.classList.remove('selected'));
+      option.classList.add('selected');
+      
+      // Close dropdown
+      closeLocationDropdown();
+      
+      // Trigger change event for existing functionality
+      const changeEvent = new Event('change');
+      hiddenLocationSelect.dispatchEvent(changeEvent);
+      
+      // Show feedback
+      if (value) {
+        const countryName = text.split(' ').slice(1).join(' '); // Remove flag emoji
+        showInfo(`Location filter: ${countryName} - this will narrow your search results`);
+      } else {
+        clearAllMessages();
+      }
+    }
+
+    // Event listeners for custom dropdown
+    locationDisplay.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (isLocationDropdownOpen) {
+        closeLocationDropdown();
+      } else {
+        openLocationDropdown();
+      }
+    });
+
+    dropdownCloseBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeLocationDropdown();
+    });
+
+    locationOptions.forEach(option => {
+      option.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        selectLocationOption(this);
+      });
+    });
+
+    // Close dropdown when clicking backdrop
+    locationDropdown.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeLocationDropdown();
+      }
+    });
+
+    // Keyboard support
+    document.addEventListener('keydown', function(e) {
+      if (isLocationDropdownOpen && e.key === 'Escape') {
+        closeLocationDropdown();
+      }
+    });
+
+    // Initialize first option as selected
+    locationOptions[0].classList.add('selected');
   </script>
 
   <!-- Mobile-specific styles -->
@@ -496,6 +676,180 @@
     /* Hide the pull-tab arrow - using hamburger instead */
     .drawer-tab { 
       display: none !important; 
+    }
+
+    /* Hide the original select dropdown */
+    .location-select.hidden {
+      display: none !important;
+    }
+
+    /* COMPACT CUSTOM LOCATION DROPDOWN STYLES */
+    .custom-location-select {
+      position: relative;
+      display: inline-block;
+      min-width: 180px;
+    }
+
+    .location-display {
+      padding: 12px 16px;
+      background: var(--navy-card);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      color: var(--ink);
+      font-family: "Open Sans", sans-serif;
+      font-size: calc(16px * var(--user-font-scale));
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .location-display:hover {
+      border-color: var(--blue);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .location-display.active {
+      border-color: var(--blue);
+    }
+
+    .location-text {
+      flex: 1;
+    }
+
+    .dropdown-arrow {
+      font-size: calc(12px * var(--user-font-scale));
+      transition: transform 0.3s ease;
+      margin-left: 8px;
+    }
+
+    .location-display.active .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* COMPACT DROPDOWN OVERLAY - DOES NOT TAKE FULL SCREEN */
+    .location-dropdown-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .location-dropdown-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .location-dropdown-content {
+      background: var(--navy-card);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      max-width: 90vw;
+      max-height: 70vh;
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .location-dropdown-overlay.show .location-dropdown-content {
+      transform: scale(1);
+    }
+
+    .dropdown-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    }
+
+    .dropdown-title {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 600;
+      font-size: calc(16px * var(--user-font-scale));
+      color: var(--gold);
+    }
+
+    .dropdown-close-btn {
+      background: rgba(255,107,107,0.2);
+      border: none;
+      color: #ff6b6b;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: calc(14px * var(--user-font-scale));
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-close-btn:hover {
+      background: rgba(255,107,107,0.3);
+      transform: scale(1.1);
+    }
+
+    .location-options-container {
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .location-option {
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: calc(14px * var(--user-font-scale));
+      border-left: 3px solid transparent;
+    }
+
+    .location-option:hover {
+      background: rgba(255,255,255,0.05);
+      border-left-color: var(--blue);
+    }
+
+    .location-option.selected {
+      background: rgba(245,197,66,0.1);
+      border-left-color: var(--gold);
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Custom scrollbar for dropdown */
+    .location-options-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .location-options-container::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+    }
+
+    .location-options-container::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 3px;
+    }
+
+    .location-options-container::-webkit-scrollbar-thumb:hover {
+      background: #d4a017;
     }
 
     /* Enhanced message styles */
@@ -611,55 +965,6 @@
       to { transform: rotate(360deg); } 
     }
 
-    /* Enhanced location dropdown with scroll and better sizing */
-    .location-select {
-      padding: 12px 16px;
-      background: var(--navy-card);
-      border: 2px solid rgba(255,255,255,0.1);
-      border-radius: var(--radius-md);
-      color: var(--ink);
-      font-family: "Open Sans", sans-serif;
-      font-size: calc(16px * var(--user-font-scale));
-      cursor: pointer;
-      min-width: 200px;
-      max-height: 250px; /* Smaller max height */
-      overflow-y: auto;
-      transition: all 0.2s ease;
-    }
-
-    .location-select:focus {
-      border-color: var(--blue);
-      outline: none;
-      max-height: 200px;
-    }
-
-    .location-select option {
-      background: var(--navy-card);
-      color: var(--ink);
-      padding: 8px;
-      font-size: calc(15px * var(--user-font-scale));
-      line-height: 1.4;
-    }
-
-    /* Webkit scrollbar styling for dropdown */
-    .location-select::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .location-select::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-    }
-
-    .location-select::-webkit-scrollbar-thumb {
-      background: var(--gold);
-      border-radius: 4px;
-    }
-
-    .location-select::-webkit-scrollbar-thumb:hover {
-      background: #d4a017;
-    }
-
     /* Pull to refresh indicator */
     .pull-indicator {
       position: fixed;
@@ -742,20 +1047,27 @@
         gap: 12px;
       }
 
-      .location-select {
+      .custom-location-select {
         min-width: auto;
         width: 100%;
-        max-height: 180px; /* Even smaller on mobile */
+      }
+
+      .location-dropdown-content {
+        width: 95vw;
+        max-height: 60vh;
+      }
+
+      .dropdown-header {
+        padding: 12px 16px;
+      }
+
+      .dropdown-title {
         font-size: calc(14px * var(--user-font-scale));
       }
 
-      .location-select:focus {
-        max-height: 150px;
-      }
-
-      .location-select option {
+      .location-option {
+        padding: 10px 16px;
         font-size: calc(13px * var(--user-font-scale));
-        padding: 6px;
       }
 
       .refresh-matches-btn {
@@ -803,18 +1115,13 @@
         height: 36px;
       }
 
-      .location-select {
-        max-height: 140px;
-        font-size: calc(13px * var(--user-font-scale));
+      .location-dropdown-content {
+        width: 98vw;
+        max-height: 55vh;
       }
 
-      .location-select:focus {
-        max-height: 120px;
-      }
-
-      .location-select option {
-        font-size: calc(12px * var(--user-font-scale));
-        padding: 4px;
+      .location-options-container {
+        max-height: 200px;
       }
     }
 
@@ -855,19 +1162,33 @@
       background: var(--blue);
     }
 
-    body.light-theme .location-select {
+    body.light-theme .location-display {
       background: white;
       border-color: rgba(0,0,0,0.2);
       color: var(--ink);
     }
 
-    body.light-theme .location-select:focus {
+    body.light-theme .location-display:hover {
       border-color: var(--blue);
     }
 
-    body.light-theme .location-select option {
+    body.light-theme .location-dropdown-content {
       background: white;
-      color: var(--ink);
+      border: 1px solid rgba(0,0,0,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+
+    body.light-theme .dropdown-header {
+      background: rgba(0,0,0,0.05);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    body.light-theme .location-option:hover {
+      background: rgba(0,0,0,0.05);
+    }
+
+    body.light-theme .location-option.selected {
+      background: rgba(245,197,66,0.2);
     }
   </style>
 
@@ -942,117 +1263,6 @@
       clanSearchInput.addEventListener('focus', function() {
         if (!this.value) {
           showInfo('Search by clan name or tag (#ABC123) - use location filter to narrow results');
-        }
-      });
-
-      // Custom location dropdown functionality
-      const customLocationSelect = document.getElementById('customLocationSelect');
-      const locationDisplay = document.getElementById('locationDisplay');
-      const locationDropdown = document.getElementById('locationDropdown');
-      const dropdownCloseBtn = document.getElementById('dropdownCloseBtn');
-      const locationOptions = document.querySelectorAll('.location-option');
-      const hiddenLocationSelect = document.getElementById('locationSelect');
-      const locationText = document.querySelector('.location-text');
-
-      let isLocationDropdownOpen = false;
-
-      // Open dropdown
-      function openLocationDropdown() {
-        isLocationDropdownOpen = true;
-        locationDisplay.classList.add('active');
-        locationDropdown.classList.add('show');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
-      }
-
-      // Close dropdown
-      function closeLocationDropdown() {
-        isLocationDropdownOpen = false;
-        locationDisplay.classList.remove('active');
-        locationDropdown.classList.remove('show');
-        document.body.style.overflow = 'auto';
-      }
-
-      // Select location option
-      function selectLocationOption(option) {
-        const value = option.dataset.value;
-        const text = option.textContent;
-        
-        // Update display
-        locationText.textContent = text;
-        
-        // Update hidden select for API compatibility
-        hiddenLocationSelect.value = value;
-        
-        // Update selected state
-        locationOptions.forEach(opt => opt.classList.remove('selected'));
-        option.classList.add('selected');
-        
-        // Close dropdown
-        closeLocationDropdown();
-        
-        // Trigger change event for existing functionality
-        const changeEvent = new Event('change');
-        hiddenLocationSelect.dispatchEvent(changeEvent);
-        
-        // Show feedback
-        if (value) {
-          const countryName = text.split(' ').slice(1).join(' '); // Remove flag emoji
-          showInfo(`Location filter: ${countryName} - this will narrow your search results`);
-        } else {
-          clearAllMessages();
-        }
-      }
-
-      // Event listeners for custom dropdown
-      locationDisplay.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (isLocationDropdownOpen) {
-          closeLocationDropdown();
-        } else {
-          openLocationDropdown();
-        }
-      });
-
-      dropdownCloseBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        closeLocationDropdown();
-      });
-
-      locationOptions.forEach(option => {
-        option.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          selectLocationOption(this);
-        });
-      });
-
-      // Close dropdown when clicking backdrop
-      locationDropdown.addEventListener('click', function(e) {
-        if (e.target === this) {
-          closeLocationDropdown();
-        }
-      });
-
-      // Keyboard support
-      document.addEventListener('keydown', function(e) {
-        if (isLocationDropdownOpen && e.key === 'Escape') {
-          closeLocationDropdown();
-        }
-      });
-
-      // Initialize first option as selected
-      locationOptions[0].classList.add('selected');
-
-      // Enhanced location change feedback (now using hidden select)
-      hiddenLocationSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        if (selectedOption.value) {
-          const countryName = selectedOption.text;
-          showInfo(`Location filter: ${countryName} - this will narrow your search results`);
-        } else {
-          clearAllMessages();
         }
       });
     });
