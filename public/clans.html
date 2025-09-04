@@ -100,18 +100,52 @@
         <div class="search-input-container">
           <input type="text" id="clanSearchInput" placeholder="Enter clan tag (e.g., #2PP) or name" class="player-tag-input" maxlength="50" />
           <select id="locationSelect" class="location-select">
-            <option value="">All Locations</option>
-            <option value="57000001">United States</option>
-            <option value="57000002">United Kingdom</option>
-            <option value="57000003">Canada</option>
-            <option value="57000004">Australia</option>
-            <option value="57000011">New Zealand</option>
-            <option value="57000005">Germany</option>
-            <option value="57000006">France</option>
-            <option value="57000007">Italy</option>
-            <option value="57000008">Spain</option>
-            <option value="57000009">Brazil</option>
-            <option value="57000010">Mexico</option>
+            <option value="">🌍 All Locations</option>
+            <option value="57000001">🇺🇸 United States</option>
+            <option value="57000002">🇬🇧 United Kingdom</option>
+            <option value="57000003">🇨🇦 Canada</option>
+            <option value="57000004">🇦🇺 Australia</option>
+            <option value="57000011">🇳🇿 New Zealand</option>
+            <option value="57000005">🇩🇪 Germany</option>
+            <option value="57000006">🇫🇷 France</option>
+            <option value="57000007">🇮🇹 Italy</option>
+            <option value="57000008">🇪🇸 Spain</option>
+            <option value="57000009">🇧🇷 Brazil</option>
+            <option value="57000010">🇲🇽 Mexico</option>
+            <option value="57000012">🇯🇵 Japan</option>
+            <option value="57000013">🇰🇷 South Korea</option>
+            <option value="57000014">🇨🇳 China</option>
+            <option value="57000015">🇮🇳 India</option>
+            <option value="57000016">🇷🇺 Russia</option>
+            <option value="57000017">🇳🇱 Netherlands</option>
+            <option value="57000018">🇸🇪 Sweden</option>
+            <option value="57000019">🇳🇴 Norway</option>
+            <option value="57000020">🇩🇰 Denmark</option>
+            <option value="57000021">🇫🇮 Finland</option>
+            <option value="57000022">🇵🇱 Poland</option>
+            <option value="57000023">🇨🇭 Switzerland</option>
+            <option value="57000024">🇦🇹 Austria</option>
+            <option value="57000025">🇧🇪 Belgium</option>
+            <option value="57000026">🇵🇹 Portugal</option>
+            <option value="57000027">🇬🇷 Greece</option>
+            <option value="57000028">🇹🇷 Turkey</option>
+            <option value="57000029">🇦🇷 Argentina</option>
+            <option value="57000030">🇨🇱 Chile</option>
+            <option value="57000031">🇵🇪 Peru</option>
+            <option value="57000032">🇨🇴 Colombia</option>
+            <option value="57000033">🇻🇪 Venezuela</option>
+            <option value="57000034">🇺🇾 Uruguay</option>
+            <option value="57000035">🇿🇦 South Africa</option>
+            <option value="57000036">🇪🇬 Egypt</option>
+            <option value="57000037">🇸🇦 Saudi Arabia</option>
+            <option value="57000038">🇦🇪 UAE</option>
+            <option value="57000039">🇮🇱 Israel</option>
+            <option value="57000040">🇹🇭 Thailand</option>
+            <option value="57000041">🇻🇳 Vietnam</option>
+            <option value="57000042">🇸🇬 Singapore</option>
+            <option value="57000043">🇲🇾 Malaysia</option>
+            <option value="57000044">🇮🇩 Indonesia</option>
+            <option value="57000045">🇵🇭 Philippines</option>
           </select>
         </div>
         <div class="button-group">
@@ -431,6 +465,36 @@
         showInfo('Many results found! Use location filter or more specific search terms to narrow down');
       }
     }
+
+    // ============ CLEAR SEARCH FUNCTIONALITY ============
+    
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    clearSearchBtn.addEventListener('click', handleClearSearch);
+
+    function handleClearSearch() {
+      console.log('clearing clan search');
+      
+      // Clear input fields
+      clanSearchInput.value = '';
+      document.getElementById('locationSelect').value = '';
+      
+      // Hide all sections and messages
+      clearAllMessages();
+      hideAllClanSections();
+      document.getElementById('currentSearchBar').classList.add('hidden');
+      
+      // Reset refresh controls
+      hideRefreshControls();
+      
+      // Focus back to search input
+      clanSearchInput.focus();
+    }
+
+    // Helper function to hide all clan sections
+    function hideAllClanSections() {
+      document.getElementById('clansResultsSection').classList.add('hidden');
+      document.getElementById('popularClansSection').classList.add('hidden');
+    }
   </script>
 
   <!-- Mobile-specific styles -->
@@ -484,11 +548,12 @@
       gap: 8px;
       align-items: center;
       flex-wrap: wrap;
+      justify-content: center;
     }
 
     .refresh-matches-btn {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: var(--gold);
       color: white;
@@ -499,6 +564,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
       font-size: calc(18px * var(--user-font-scale));
+      flex-shrink: 0;
     }
 
     .refresh-matches-btn:hover {
@@ -527,8 +593,8 @@
       background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.2);
       color: var(--gold);
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -549,6 +615,55 @@
 
     @keyframes spin { 
       to { transform: rotate(360deg); } 
+    }
+
+    /* Enhanced location dropdown with scroll and better sizing */
+    .location-select {
+      padding: 12px 16px;
+      background: var(--navy-card);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      color: var(--ink);
+      font-family: "Open Sans", sans-serif;
+      font-size: calc(16px * var(--user-font-scale));
+      cursor: pointer;
+      min-width: 200px;
+      max-height: 300px; /* Limit height to prevent full screen takeover */
+      overflow-y: auto; /* Add scroll for long lists */
+      transition: all 0.2s ease;
+    }
+
+    .location-select:focus {
+      border-color: var(--blue);
+      outline: none;
+      max-height: 250px; /* Slightly smaller when focused */
+    }
+
+    .location-select option {
+      background: var(--navy-card);
+      color: var(--ink);
+      padding: 8px;
+      font-size: calc(15px * var(--user-font-scale));
+      line-height: 1.4;
+    }
+
+    /* Webkit scrollbar styling for dropdown */
+    .location-select::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .location-select::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+    }
+
+    .location-select::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 4px;
+    }
+
+    .location-select::-webkit-scrollbar-thumb:hover {
+      background: #d4a017;
     }
 
     /* Pull to refresh indicator */
@@ -588,8 +703,8 @@
       position: fixed;
       bottom: 30px;
       right: 20px;
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: var(--blue);
       color: white;
@@ -636,23 +751,28 @@
       .location-select {
         min-width: auto;
         width: 100%;
+        max-height: 200px; /* Smaller on mobile */
+      }
+
+      .location-select:focus {
+        max-height: 180px;
       }
 
       .refresh-matches-btn {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         font-size: calc(16px * var(--user-font-scale));
       }
 
       .refresh-section-btn {
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 32px;
         font-size: calc(16px * var(--user-font-scale));
       }
 
       .scroll-to-top {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         font-size: calc(18px * var(--user-font-scale));
         bottom: 20px;
         right: 15px;
@@ -674,10 +794,21 @@
 
       .load-matches-btn, .clear-btn {
         width: 100%;
+        max-width: 200px;
       }
 
       .refresh-matches-btn {
         align-self: center;
+        width: 36px;
+        height: 36px;
+      }
+
+      .location-select {
+        max-height: 150px;
+      }
+
+      .location-select:focus {
+        max-height: 140px;
       }
     }
 
@@ -716,6 +847,21 @@
 
     body.light-theme .pull-indicator.ready {
       background: var(--blue);
+    }
+
+    body.light-theme .location-select {
+      background: white;
+      border-color: rgba(0,0,0,0.2);
+      color: var(--ink);
+    }
+
+    body.light-theme .location-select:focus {
+      border-color: var(--blue);
+    }
+
+    body.light-theme .location-select option {
+      background: white;
+      color: var(--ink);
     }
   </style>
 
@@ -776,6 +922,33 @@
       clearSearchBtn.addEventListener('click', function() {
         clearAllMessages();
         hideRefreshControls();
+      });
+
+      // Auto-format input
+      clanSearchInput.addEventListener('input', function(e) {
+        let value = this.value;
+        // Clean up multiple spaces
+        value = value.replace(/\s+/g, ' ');
+        this.value = value;
+      });
+
+      // Show helpful info on focus
+      clanSearchInput.addEventListener('focus', function() {
+        if (!this.value) {
+          showInfo('Search by clan name or tag (#ABC123) - use location filter to narrow results');
+        }
+      });
+
+      // Enhanced location change feedback
+      const locationSelect = document.getElementById('locationSelect');
+      locationSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption.value) {
+          const countryName = selectedOption.text.split(' ').slice(1).join(' '); // Remove flag emoji
+          showInfo(`Location filter: ${countryName} - this will narrow your search results`);
+        } else {
+          clearAllMessages();
+        }
       });
     });
   </script>
