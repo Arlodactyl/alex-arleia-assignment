@@ -58,11 +58,6 @@
     </div>
   </aside>
 
-  <!-- pull-tab arrow that peeks from left (closer to content now) -->
-  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
-    <span style="color: white; font-size: 14px;">→</span>
-  </button>
-
   <!-- translucent overlay when drawer is open -->
   <div id="backdrop" class="backdrop"></div>
 
@@ -89,20 +84,33 @@
       </a>
     </header>
 
+    <!-- Mobile pull-to-refresh indicator -->
+    <div class="pull-indicator" id="pullIndicator">
+      <div class="pull-spinner"></div>
+      <span>Pull to refresh matches</span>
+    </div>
+
     <!-- player search section - where users enter their tag -->
     <div class="player-search-section">
       <div class="hi">Enter Player Tag to View Recent Matches</div>
       <div class="search-input-container">
         <input type="text" id="playerTagInput" placeholder="Enter player tag (e.g., 9Q2YJ0U)" class="player-tag-input" />
-        <button id="loadMatchesBtn" class="load-matches-btn">Load Matches</button>
+        <div class="search-buttons">
+          <button id="loadMatchesBtn" class="load-matches-btn">Load Matches</button>
+          <button id="refreshMatchesBtn" class="refresh-matches-btn hidden" title="Refresh matches data">
+            <span class="refresh-icon">↻</span>
+          </button>
+        </div>
       </div>
       <!-- loading and error messages appear here -->
       <div id="loadingIndicator" class="loading-message hidden">🔍 Fetching your recent matches...</div>
       <div id="errorMessage" class="error-message hidden"></div>
     </div>
-<div class="current-tag hidden" id="currentTagBar">
-  <strong>Player Tag:</strong> <span id="tagText">—</span>
-</div>   <!-- tag rendering -->
+
+    <!-- current search display -->
+    <div class="current-tag hidden" id="currentTagBar">
+      <strong>Player Tag:</strong> <span id="tagText">—</span>
+    </div>
 
     <!-- stats overview section - shows win rate and totals -->
     <section class="matches-stats hidden" id="matchesStats">
@@ -134,7 +142,12 @@
 
     <!-- recent matches list - individual battle cards appear here -->
     <section class="recent-matches-section hidden" id="recentMatchesSection">
-      <h3 class="matches-title">Recent Matches</h3>
+      <div class="section-header">
+        <h3 class="matches-title">Recent Matches</h3>
+        <button class="refresh-section-btn" id="refreshSectionBtn" title="Refresh match data">
+          ↻
+        </button>
+      </div>
       <div id="matchesList" class="matches-list">
         <!-- match cards get added here by javascript -->
       </div>
@@ -147,6 +160,11 @@
         <!-- w/l letters get added here by javascript -->
       </div>
     </section>
+
+    <!-- Scroll to top button - appears after content loads -->
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+      ↑
+    </button>
 
     <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
     <footer class="footer">
@@ -175,10 +193,10 @@
 
   </div>
 
-  <!-- tiny JS to handle drawer open/close (no framework) -->
+  <!-- Enhanced mobile features and match functionality -->
   <script>
+    // ============ DRAWER FUNCTIONALITY ============
     const drawer = document.getElementById('drawer');
-    const tab = document.getElementById('drawerTab');
     const burger = document.getElementById('hamburger');
     const backdrop = document.getElementById('backdrop');
 
@@ -195,17 +213,431 @@
     }
 
     burger.addEventListener('click', openDrawer);
-    tab.addEventListener('click', openDrawer);
     backdrop.addEventListener('click', closeDrawer);
 
     window.addEventListener('keydown', (e)=>{ 
       if(e.key === 'Escape') closeDrawer(); 
     });
+
+    // ============ MOBILE ENHANCEMENTS ============
+    
+    // Pull-to-refresh functionality (mobile)
+    let startY = 0;
+    let isPulling = false;
+    const pullIndicator = document.getElementById('pullIndicator');
+
+    document.addEventListener('touchstart', (e) => {
+      if (window.scrollY === 0) {
+        startY = e.touches[0].pageY;
+        isPulling = true;
+      }
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isPulling) return;
+      
+      const currentY = e.touches[0].pageY;
+      const pullDistance = currentY - startY;
+      
+      if (pullDistance > 0 && pullDistance < 150) {
+        pullIndicator.style.transform = `translateY(${pullDistance}px)`;
+        pullIndicator.style.opacity = pullDistance / 100;
+        
+        if (pullDistance > 80) {
+          pullIndicator.classList.add('ready');
+        } else {
+          pullIndicator.classList.remove('ready');
+        }
+      }
+    });
+
+    document.addEventListener('touchend', () => {
+      if (isPulling && pullIndicator.classList.contains('ready')) {
+        // Refresh matches if player tag is loaded
+        const currentTag = document.getElementById('tagText').textContent;
+        if (currentTag && currentTag !== '—') {
+          refreshCurrentMatches();
+        } else {
+          // Just refresh the page if no matches loaded
+          location.reload();
+        }
+      }
+      
+      isPulling = false;
+      pullIndicator.style.transform = 'translateY(0)';
+      pullIndicator.style.opacity = '0';
+      pullIndicator.classList.remove('ready');
+    });
+
+    // Scroll to top button functionality
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollToTopBtn.classList.add('visible');
+      } else {
+        scrollToTopBtn.classList.remove('visible');
+      }
+    });
+
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // ============ REFRESH FUNCTIONALITY ============
+    
+    // Refresh button in header
+    const refreshMatchesBtn = document.getElementById('refreshMatchesBtn');
+    const refreshSectionBtn = document.getElementById('refreshSectionBtn');
+
+    refreshMatchesBtn.addEventListener('click', refreshCurrentMatches);
+    refreshSectionBtn.addEventListener('click', refreshCurrentMatches);
+
+    function refreshCurrentMatches() {
+      const playerTagInput = document.getElementById('playerTagInput');
+      const currentTag = playerTagInput.value.trim();
+      
+      if (currentTag) {
+        console.log('Refreshing matches for:', currentTag);
+        
+        // Add refresh animation
+        refreshMatchesBtn.classList.add('refreshing');
+        refreshSectionBtn.classList.add('refreshing');
+        
+        // Trigger the load matches function
+        handleLoadMatches();
+        
+        // Remove animation after a delay
+        setTimeout(() => {
+          refreshMatchesBtn.classList.remove('refreshing');
+          refreshSectionBtn.classList.remove('refreshing');
+        }, 1000);
+      }
+    }
+
+    // ============ MOBILE TOUCH ENHANCEMENTS ============
+    
+    // Add touch feedback to match cards
+    function addTouchFeedback() {
+      document.querySelectorAll('.match-card').forEach(card => {
+        card.addEventListener('touchstart', function() {
+          this.style.transform = 'scale(0.98)';
+          this.style.transition = 'transform 0.1s ease';
+        });
+        
+        card.addEventListener('touchend', function() {
+          this.style.transform = 'scale(1)';
+          setTimeout(() => {
+            this.style.transition = 'transform 0.2s ease';
+          }, 100);
+        });
+      });
+    }
+
+    // ============ RESPONSIVE BEHAVIOR ============
+    
+    // Adjust UI based on screen size
+    function adjustForMobile() {
+      const isMobile = window.innerWidth <= 520;
+      const searchContainer = document.querySelector('.search-input-container');
+      
+      if (isMobile) {
+        // Stack search elements vertically on very small screens
+        searchContainer.classList.add('mobile-stack');
+      } else {
+        searchContainer.classList.remove('mobile-stack');
+      }
+    }
+
+    // Listen for screen size changes
+    window.addEventListener('resize', adjustForMobile);
+    document.addEventListener('DOMContentLoaded', adjustForMobile);
+
+    // ============ SHOW REFRESH BUTTON AFTER CONTENT LOADS ============
+    
+    function showRefreshControls() {
+      refreshMatchesBtn.classList.remove('hidden');
+    }
+
+    function hideRefreshControls() {
+      refreshMatchesBtn.classList.add('hidden');
+    }
   </script>
+
+  <!-- Mobile-specific styles -->
+  <style>
+    /* Hide the pull-tab arrow - using hamburger instead */
+    .drawer-tab { 
+      display: none !important; 
+    }
+
+    /* Mobile search layout improvements */
+    .search-input-container {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      align-items: center;
+    }
+
+    .search-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .refresh-matches-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: calc(18px * var(--user-font-scale));
+    }
+
+    .refresh-matches-btn:hover {
+      background: #d4a017;
+      transform: scale(1.05);
+    }
+
+    .refresh-matches-btn.refreshing {
+      animation: spin 1s linear infinite;
+    }
+
+    .refresh-icon {
+      display: block;
+      line-height: 1;
+    }
+
+    /* Section header with refresh button */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .refresh-section-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--gold);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: calc(18px * var(--user-font-scale));
+      transition: all 0.3s ease;
+    }
+
+    .refresh-section-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(360deg);
+    }
+
+    .refresh-section-btn.refreshing {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { 
+      to { transform: rotate(360deg); } 
+    }
+
+    /* Pull to refresh indicator */
+    .pull-indicator {
+      position: fixed;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--navy-card);
+      padding: 10px 20px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      font-size: calc(14px * var(--user-font-scale));
+    }
+
+    .pull-indicator.ready { 
+      background: var(--blue); 
+    }
+
+    .pull-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gold);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Scroll to top button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(20px * var(--user-font-scale));
+      font-weight: bold;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 20;
+    }
+
+    .scroll-to-top.visible { 
+      opacity: 1; 
+      visibility: visible; 
+    }
+
+    .scroll-to-top:hover { 
+      background: #1c5ff0; 
+      transform: translateY(-2px); 
+    }
+
+    .scroll-to-top:active { 
+      transform: translateY(0); 
+    }
+
+    /* Enhanced mobile responsiveness */
+    @media (max-width: 520px) {
+      .search-input-container.mobile-stack {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .search-input-container.mobile-stack .search-buttons {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .refresh-matches-btn {
+        width: 36px;
+        height: 36px;
+        font-size: calc(16px * var(--user-font-scale));
+      }
+
+      .refresh-section-btn {
+        width: 28px;
+        height: 28px;
+        font-size: calc(16px * var(--user-font-scale));
+      }
+
+      .scroll-to-top {
+        width: 36px;
+        height: 36px;
+        font-size: calc(18px * var(--user-font-scale));
+        bottom: 20px;
+        right: 15px;
+      }
+
+      .pull-indicator {
+        font-size: calc(12px * var(--user-font-scale));
+        padding: 8px 16px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 360px) {
+      .search-buttons {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .load-matches-btn {
+        width: 100%;
+      }
+
+      .refresh-matches-btn {
+        align-self: center;
+      }
+    }
+
+    /* Light theme adjustments */
+    body.light-theme .refresh-matches-btn {
+      background: var(--gold);
+      color: white;
+    }
+
+    body.light-theme .refresh-section-btn {
+      background: rgba(0,0,0,0.1);
+      border: 1px solid rgba(0,0,0,0.2);
+      color: var(--gold);
+    }
+
+    body.light-theme .refresh-section-btn:hover {
+      background: rgba(0,0,0,0.2);
+    }
+
+    body.light-theme .pull-indicator {
+      background: var(--navy-card);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    body.light-theme .pull-indicator.ready {
+      background: var(--blue);
+    }
+  </style>
 
   <!-- matches page functionality -->
   <script src="./js/matches.js"></script>
   <!-- settings functionality for all pages -->
   <script src="./js/settings.js"></script>
+
+  <!-- Enhanced matches functionality -->
+  <script>
+    // Override the original handleLoadMatches to show refresh controls
+    const originalHandleLoadMatches = handleLoadMatches;
+    
+    window.handleLoadMatches = async function() {
+      await originalHandleLoadMatches();
+      
+      // Show refresh controls after successful load
+      const matchesSection = document.getElementById('recentMatchesSection');
+      if (!matchesSection.classList.contains('hidden')) {
+        showRefreshControls();
+        addTouchFeedback();
+      }
+    };
+
+    // Add this to the existing matches.js functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize mobile optimizations
+      adjustForMobile();
+      
+      // Add enter key support for search
+      const playerTagInput = document.getElementById('playerTagInput');
+      playerTagInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          handleLoadMatches();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
