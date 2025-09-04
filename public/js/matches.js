@@ -28,55 +28,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // enhanced input validation with real-time feedback
-    playerTagInput.addEventListener('input', function() {
-        const value = this.value.trim();
-        hideError();
-        
-        // provide real-time feedback
-        if (value.length > 0) {
-            if (!value.startsWith('#') && !value.match(/^[A-Z0-9]+$/i)) {
-                showError('Player tags should start with # or contain only letters and numbers');
-                return;
-            }
-            
-            if (value.length > 15) {
-                showError('Player tags are usually shorter - check for extra characters');
-                return;
-            }
-            
-            if (value.length < 3 && value.startsWith('#')) {
-                showError('Player tag seems too short - need at least 3 characters after #');
-                return;
-            }
-        }
-    });
-
-    // main function that coordinates everything with enhanced error handling
+    // main function that coordinates everything
     async function handleLoadMatches() {
         const raw = playerTagInput.value.trim();
         if (!raw) {
-            showError('Please enter a player tag first');
+            showError('need a player tag first');
             return;
         }
 
-        // enhanced tag validation
+        // normalize player tag for api + display
         const normalized = raw.replace(/^#/, '').toUpperCase();
-        if (!normalized.match(/^[A-Z0-9]{3,}$/)) {
-            showError('Invalid player tag format - use only letters and numbers (e.g., #9Q2YJ0U)');
-            return;
-        }
-
-        if (normalized.length < 3) {
-            showError('Player tag too short - need at least 3 characters');
-            return;
-        }
-
-        if (normalized.length > 12) {
-            showError('Player tag too long - most tags are 8-10 characters');
-            return;
-        }
-
         const displayTag = `#${normalized}`;
 
         // show tag in UI
@@ -99,13 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('got', matches.length, 'matches');
             
             if (matches.length === 0) {
-                showError('No recent matches found for this player - they may not have played recently');
+                showError('no matches found for this player');
                 return;
             }
             
             // process and display the data
             displayMatches(matches);
-            calculateAndShowStats(matches);      // last-25 stats
+            calculateAndShowStats(matches);      // ← last-25 stats
             showRecentGamePattern(matches.slice(0, 5));
             
             // show everything
@@ -116,34 +77,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
         } catch (error) {
             console.error('failed to load matches:', error);
-            handleMatchesError(error, normalized);
+            showError('couldnt load matches - check the player tag');
         } finally {
             showLoading(false);
         }
     }
 
-    // enhanced error handling with specific messages
-    function handleMatchesError(error, playerTag) {
-        const errorMessage = error.message || 'Unknown error';
-        
-        if (errorMessage.includes('404') || errorMessage.includes('not found')) {
-            showError(`Player #${playerTag} not found - check the tag is correct`);
-        } else if (errorMessage.includes('403') || errorMessage.includes('forbidden')) {
-            showError('API access issue - please try again in a moment');
-        } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
-            showError('Too many requests - please wait a moment and try again');
-        } else if (errorMessage.includes('500') || errorMessage.includes('internal')) {
-            showError('Clash Royale servers are having issues - try again later');
-        } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
-            showError('Connection problem - check your internet and try again');
-        } else if (errorMessage.includes('No recent matches')) {
-            showError('This player has no recent match history available');
-        } else {
-            showError('Could not load match data - please try again');
-        }
-    }
-
-    // makes the actual api request through our proxy with better error handling
+    // makes the actual api request through our proxy
     async function loadRecentMatches(tag) {
         // clean up the tag for the url
         const cleanTag = encodeURIComponent(String(tag).replace(/^#/, ""));
@@ -152,41 +92,14 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('calling api:', apiUrl);
         
         const response = await fetch(apiUrl);
-        
-        if (!response.ok) {
-            if (response.status === 404) {
-                throw new Error('Player not found - check the tag is correct');
-            } else if (response.status === 403) {
-                throw new Error('API access forbidden - please try again');
-            } else if (response.status === 429) {
-                throw new Error('Rate limit exceeded - please wait and try again');
-            } else if (response.status >= 500) {
-                throw new Error('Server error - Clash Royale API is having issues');
-            } else {
-                throw new Error(`API error: ${response.status}`);
-            }
-        }
-        
         const text = await response.text();
-        
-        try {
-            const data = JSON.parse(text);
-            
-            if (!Array.isArray(data)) {
-                throw new Error('Invalid match data received from server');
-            }
-            
-            if (data.length === 0) {
-                throw new Error('No recent matches found for this player');
-            }
-            
-            return data;
-        } catch (parseError) {
-            if (parseError.message.includes('No recent matches')) {
-                throw parseError;
-            }
-            throw new Error('Invalid response from server - please try again');
+
+        if (!response.ok) {
+            console.error('proxy error:', response.status, text);
+            throw new Error(`api call failed: ${response.status}`);
         }
+        
+        return JSON.parse(text);
     }
 
     // creates all the match cards and adds them to the page
@@ -201,20 +114,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // builds a single match card element with safe data handling
+    // builds a single match card element
     function createMatchCard(match, index) {
         const card = document.createElement('div');
         card.className = 'match-card';
         
-        // figure out if we won or lost with safe fallbacks
+        // figure out if we won or lost
         const result = analyzeMatchResult(match);
-        const timeAgo = formatTimeAgo(match.battleTime);
+        const timeAgo = formatTimeAgo(match.battleTime);   // ← fixed parsing
         const opponentInfo = getOpponentInfo(match);
 
         // pick the right-side icon based on result
-        const iconSrc = getResultIcon(result.status);
+        const iconSrc = getResultIcon(result.status);  // up arrow for win, down arrow for loss
         
-        // build the html with safe fallbacks
+        // build the html with clan swords on left and result arrow on right
         card.innerHTML = `
             <div class="match-card-content">
                 <div class="match-card-left">
@@ -231,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="match-time">${timeAgo}</div>
                     </div>
                     <div class="match-details">
-                        <div class="game-mode">${match.gameMode?.name || 'Unknown Mode'}</div>
+                        <div class="game-mode">${match.gameMode?.name || 'unknown mode'}</div>
                         <div class="opponent-info">
                             <strong>vs ${opponentInfo.name}</strong>
                             ${opponentInfo.clan ? `<span class="opponent-clan">[${opponentInfo.clan}]</span>` : ''}
@@ -250,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
 
-    // compares crown counts to determine win/loss/draw with safe handling
+    // compares crown counts to determine win/loss/draw
     function analyzeMatchResult(match) {
         const playerCrowns = (match.team || []).reduce((sum, p) => sum + (p.crowns || 0), 0);
         const opponentCrowns = (match.opponent || []).reduce((sum, p) => sum + (p.crowns || 0), 0);
@@ -271,21 +184,21 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // gets opponent name and clan info with safe fallbacks
+    // gets opponent name and clan info
     function getOpponentInfo(match) {
         if (!match.opponent || match.opponent.length === 0) {
-            return { name: 'Unknown Player', clan: null };
+            return { name: 'unknown', clan: null };
         }
         
         // handle 2v2 matches with multiple opponents
         if (match.opponent.length > 1) {
-            const names = match.opponent.map(op => op.name || 'Unknown').join(' & ');
+            const names = match.opponent.map(op => op.name).join(' & ');
             return { name: names, clan: match.opponent[0]?.clan?.name };
         }
         
         // regular 1v1 match
         return {
-            name: match.opponent[0]?.name || 'Unknown Player',
+            name: match.opponent[0]?.name || 'unknown',
             clan: match.opponent[0]?.clan?.name
         };
     }
@@ -311,14 +224,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log(`stats(last ${totalMatches}): ${winPercentage}% win rate, ${totalWins}/${totalMatches}, ${crownWins} 3-crown wins`);
         
-        // update the ui values with safe fallbacks
-        const winPercentageEl = document.getElementById('winPercentage');
-        const totalWinsEl = document.getElementById('totalWins');
-        const crownWinsEl = document.getElementById('crownWins');
-        
-        if (winPercentageEl) winPercentageEl.textContent = `${winPercentage}%`;
-        if (totalWinsEl) totalWinsEl.textContent = totalWins;
-        if (crownWinsEl) crownWinsEl.textContent = crownWins;
+        // update the ui values
+        document.getElementById('winPercentage').textContent = `${winPercentage}%`;
+        document.getElementById('totalWins').textContent = totalWins;
+        document.getElementById('crownWins').textContent = crownWins;
 
         // update the labels so it's obvious these are from the log
         const statLabels = matchesStats.querySelectorAll('.stat-label');
@@ -330,8 +239,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // shows the w/l pattern for last 5 games
     function showRecentGamePattern(recentMatches) {
         const patternContainer = document.getElementById('gamePattern');
-        if (!patternContainer) return;
-        
         patternContainer.innerHTML = '';
         
         console.log('showing pattern for last', recentMatches.length, 'games');
@@ -357,14 +264,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // converts CR battleTime ("YYYYMMDDTHHMMSS.000Z") to "xh ago" properly
     function formatTimeAgo(crTime) {
         try {
-            if (!crTime) return 'unknown';
-            
             const m = String(crTime).match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/);
             if (!m) return 'recently';
             const iso = `${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}Z`;
             const battleTime = new Date(iso);
-
-            if (isNaN(battleTime.getTime())) return 'recently';
 
             const now = new Date();
             const diff = Math.max(0, now - battleTime);
@@ -383,45 +286,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // pick the arrow icon depending on result - UP for win, DOWN for loss
     function getResultIcon(status) {
+        // put these files in public/assets:
+        //  - winarrow.png  (up arrow for wins)
+        //  - down-arrow.png (down arrow for losses)
         return status === 'WON'
-            ? './assets/winarrow.png'
+            ? './assets/winarrow.png'      // up arrow for wins
             : status === 'LOST'
-                ? './assets/down-arrow.png'
-                : './assets/arrow.png';
+                ? './assets/down-arrow.png'  // down arrow for losses
+                : './assets/arrow.png'; // fallback for DRAW/unknown
     }
 
     // ui helper functions
     function showLoading(show) {
-        if (loadingIndicator) {
-            loadingIndicator.classList.toggle('hidden', !show);
-        }
+        loadingIndicator.classList.toggle('hidden', !show);
     }
 
     function showError(message) {
-        if (errorMessage) {
-            errorMessage.textContent = message;
-            errorMessage.classList.remove('hidden');
-        }
+        errorMessage.textContent = message;
+        errorMessage.classList.remove('hidden');
     }
 
     function hideError() {
-        if (errorMessage) {
-            errorMessage.classList.add('hidden');
-        }
+        errorMessage.classList.add('hidden');
     }
 
     function showAllMatchSections() {
-        if (matchesStats) matchesStats.classList.remove('hidden');
-        if (recentMatchesSection) recentMatchesSection.classList.remove('hidden');
-        if (gamePatternSection) gamePatternSection.classList.remove('hidden');
+        matchesStats.classList.remove('hidden');
+        recentMatchesSection.classList.remove('hidden');
+        gamePatternSection.classList.remove('hidden');
     }
 
     function hideAllMatchSections() {
-        if (matchesStats) matchesStats.classList.add('hidden');
-        if (recentMatchesSection) recentMatchesSection.classList.add('hidden');
-        if (gamePatternSection) gamePatternSection.classList.add('hidden');
+        matchesStats.classList.add('hidden');
+        recentMatchesSection.classList.add('hidden');
+        gamePatternSection.classList.add('hidden');
     }
-
-    // expose handleLoadMatches globally for refresh functionality
-    window.handleLoadMatches = handleLoadMatches;
 });
