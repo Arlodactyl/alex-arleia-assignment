@@ -58,11 +58,6 @@
     </div>
   </aside>
 
-  <!-- pull-tab arrow that peeks from left (closer to content now) -->
-  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
-    <span style="color: white; font-size: 14px;">→</span>
-  </button>
-
   <!-- translucent overlay when drawer is open -->
   <div id="backdrop" class="backdrop"></div>
 
@@ -70,20 +65,20 @@
 
     <!-- HEADER -->
     <header class="header">
-      <!-- hamburger – just the icon, no lines -->
-      <button id="hamburger" class="hamburger-simple" aria-label="Open menu">
-        <span class="hamburger-icon">☰</span>
+      <!-- hamburger – clicking opens drawer (like the site you showed) -->
+      <button id="hamburger" class="hamburger" aria-label="Open menu">
+        <span class="bars"><span class="line"></span></span>
       </button>
 
       <!-- Logo and brand - no title text needed since logo includes it -->
       <div class="brand">
-        <!-- make logo link to Home (index) -->
+        <!-- Make logo go to Home (index) -->
         <a href="./index.html" class="brand__link" aria-label="Go to Home">
           <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
         </a>
       </div>
 
-      <!-- make settings icon go to settings page -->
+      <!-- Make settings icon go to settings page -->
       <a href="./settings.html" class="icon-btn" title="Settings" aria-label="Go to Settings">
         <img src="./assets/settings.png" alt="Settings" />
       </a>
@@ -242,7 +237,7 @@
       <section class="section live-feed">
         <div class="section-header">
           <h2 class="section-title">
-            Recent Activity
+            Your Recent Activity
             <span class="live-indicator">● LIVE</span>
           </h2>
           <button class="refresh-btn" onclick="fetchRecentActivity()" title="Refresh Now">
@@ -297,7 +292,6 @@
   <script>
     // ============ DRAWER FUNCTIONALITY ============
     const drawer = document.getElementById('drawer');
-    const tab = document.getElementById('drawerTab');
     const burger = document.getElementById('hamburger');
     const backdrop = document.getElementById('backdrop');
 
@@ -314,8 +308,6 @@
     }
 
     burger.addEventListener('click', openDrawer);
-    // tab button is hidden in CSS; keeping listener is harmless
-    tab.addEventListener('click', openDrawer);
     backdrop.addEventListener('click', closeDrawer);
 
     window.addEventListener('keydown', (e)=>{ 
@@ -606,33 +598,10 @@
 
   <!-- Additional styles for new features - UPDATED WITH FONT SCALING -->
   <style>
-    /* Simplified hamburger button */
-    .hamburger-simple {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: rgba(255,255,255,.08);
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s ease;
+    /* Hide the pull-tab arrow completely on all pages */
+    .drawer-tab { 
+      display: none !important; 
     }
-
-    .hamburger-simple:hover {
-      background: rgba(255,255,255,.12);
-      transform: scale(1.05);
-    }
-
-    .hamburger-icon {
-      color: white;
-      font-size: calc(24px * var(--user-font-scale));
-      line-height: 1;
-    }
-
-    /* hide the side drawer pull-tab arrow */
-    .drawer-tab { display: none !important; }
 
     /* Section header with refresh button */
     .section-header {

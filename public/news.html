@@ -58,11 +58,6 @@
     </div>
   </aside>
 
-  <!-- pull-tab arrow that peeks from left (closer to content now) -->
-  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
-    <span style="color: white; font-size: 14px;">→</span>
-  </button>
-
   <!-- translucent overlay when drawer is open -->
   <div id="backdrop" class="backdrop"></div>
 
@@ -266,7 +261,6 @@
   <!-- tiny JS to handle drawer open/close (no framework) -->
   <script>
     const drawer = document.getElementById('drawer');
-    const tab = document.getElementById('drawerTab');
     const burger = document.getElementById('hamburger');
     const backdrop = document.getElementById('backdrop');
 
@@ -283,7 +277,6 @@
     }
 
     burger.addEventListener('click', openDrawer);
-    tab.addEventListener('click', openDrawer);
     backdrop.addEventListener('click', closeDrawer);
 
     window.addEventListener('keydown', (e)=>{ 
@@ -292,6 +285,11 @@
   </script>
 
   <style>
+    /* Hide the pull-tab arrow completely on all pages */
+    .drawer-tab { 
+      display: none !important; 
+    }
+
     /* =============================
        NEWS PAGE SPECIFIC STYLES
        Extends the main Clash Hub design
