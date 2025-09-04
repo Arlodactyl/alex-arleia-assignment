@@ -1,27 +1,4 @@
-// Custom dropdown functionality
-      const customSelect = document.getElementById('customLocationSelect');
-      const selectDisplay = document.getElementById('selectDisplay');
-      const selectDropdown = document.getElementById('selectDropdown');
-      const dropdownClose = document.getElementById('dropdownClose');
-      const dropdownOptions = document.querySelectorAll('.dropdown-option');
-      const hiddenSelect = document.getElementById('locationSelect');
-      const selectedText = document.querySelector('.selected-text');
-
-      let isDropdownOpen = false;
-
-      // Toggle dropdown
-      function toggleDropdown() {
-        isDropdownOpen = !isDropdownOpen;
-        selectDisplay.classList.toggle('active', isDropdownOpen);
-        selectDropdown.classList.toggle('show', isDropdownOpen);
-        
-        if (isDropdownOpen) {
-          // Add backdrop to close on click outside
-          document.addEventListener('click', closeOnClickOutside);
-          document.body.style.overflow = 'hidden'; // Prevent body scroll on mobile
-        } else {
-          document.removeEventListener('click', closeOnClickOutside);
-          document.body.style.overflow<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -89,20 +66,18 @@
 
     <!-- HEADER -->
     <header class="header">
-      <!-- hamburger – clicking opens drawer (like the site you showed) -->
+      <!-- hamburger – clicking opens drawer -->
       <button id="hamburger" class="hamburger" aria-label="Open menu">
         <span class="bars"><span class="line"></span></span>
       </button>
 
       <!-- Logo and brand - no title text needed since logo includes it -->
       <div class="brand">
-        <!-- Make logo go to Home (index) -->
         <a href="./index.html" class="brand__link" aria-label="Go to Home">
           <img src="./assets/logo-full-light.png" alt="Clash Hub Logo" class="brand__logo" />
         </a>
       </div>
 
-      <!-- Make settings icon go to settings page -->
       <a href="./settings.html" class="icon-btn" title="Settings" aria-label="Go to Settings">
         <img src="./assets/settings.png" alt="Settings" />
       </a>
@@ -221,19 +196,15 @@
     <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
     <footer class="footer">
       <div class="social-icons">
-        <!-- YouTube - this is where our real YouTube channel link would be if this was a real deployment -->
         <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube">
           <img src="./assets/youtube.png" alt="YouTube" />
         </a>
-        <!-- Discord - this is where our real Discord server invite would be if this was a real deployment -->
         <a href="https://discord.com" target="_blank" class="social-link" title="Discord">
           <img src="./assets/discord.png" alt="Discord" />
         </a>
-        <!-- Instagram - this is where our real Instagram profile would be if this was a real deployment -->
         <a href="https://instagram.com" target="_blank" class="social-link" title="Instagram">
           <img src="./assets/instagram.png" alt="Instagram" />
         </a>
-        <!-- Facebook - this is where our real Facebook page would be if this was a real deployment -->
         <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook">
           <img src="./assets/facebook.png" alt="Facebook" />
         </a>
@@ -651,15 +622,15 @@
       font-size: calc(16px * var(--user-font-scale));
       cursor: pointer;
       min-width: 200px;
-      max-height: 300px; /* Limit height to prevent full screen takeover */
-      overflow-y: auto; /* Add scroll for long lists */
+      max-height: 250px; /* Smaller max height */
+      overflow-y: auto;
       transition: all 0.2s ease;
     }
 
     .location-select:focus {
       border-color: var(--blue);
       outline: none;
-      max-height: 250px; /* Slightly smaller when focused */
+      max-height: 200px;
     }
 
     .location-select option {
@@ -774,11 +745,17 @@
       .location-select {
         min-width: auto;
         width: 100%;
-        max-height: 200px; /* Smaller on mobile */
+        max-height: 180px; /* Even smaller on mobile */
+        font-size: calc(14px * var(--user-font-scale));
       }
 
       .location-select:focus {
-        max-height: 180px;
+        max-height: 150px;
+      }
+
+      .location-select option {
+        font-size: calc(13px * var(--user-font-scale));
+        padding: 6px;
       }
 
       .refresh-matches-btn {
@@ -827,11 +804,17 @@
       }
 
       .location-select {
-        max-height: 150px;
+        max-height: 140px;
+        font-size: calc(13px * var(--user-font-scale));
       }
 
       .location-select:focus {
-        max-height: 140px;
+        max-height: 120px;
+      }
+
+      .location-select option {
+        font-size: calc(12px * var(--user-font-scale));
+        padding: 4px;
       }
     }
 
@@ -962,104 +945,17 @@
         }
       });
 
-      // Custom dropdown functionality
-      const customSelect = document.getElementById('customLocationSelect');
-      const selectDisplay = document.getElementById('selectDisplay');
-      const selectDropdown = document.getElementById('selectDropdown');
-      const dropdownClose = document.getElementById('dropdownClose');
-      const dropdownOptions = document.querySelectorAll('.dropdown-option');
-      const hiddenSelect = document.getElementById('locationSelect');
-      const selectedText = document.querySelector('.selected-text');
-
-      let isDropdownOpen = false;
-
-      // Toggle dropdown
-      function toggleDropdown() {
-        isDropdownOpen = !isDropdownOpen;
-        selectDisplay.classList.toggle('active', isDropdownOpen);
-        selectDropdown.classList.toggle('show', isDropdownOpen);
-        
-        if (isDropdownOpen) {
-          // Add backdrop to close on click outside
-          document.addEventListener('click', closeOnClickOutside);
-          document.body.style.overflow = 'hidden'; // Prevent body scroll on mobile
-        } else {
-          document.removeEventListener('click', closeOnClickOutside);
-          document.body.style.overflow = 'auto';
-        }
-      }
-
-      // Close dropdown
-      function closeDropdown() {
-        if (isDropdownOpen) {
-          isDropdownOpen = false;
-          selectDisplay.classList.remove('active');
-          selectDropdown.classList.remove('show');
-          document.removeEventListener('click', closeOnClickOutside);
-          document.body.style.overflow = 'auto';
-        }
-      }
-
-      // Close on click outside
-      function closeOnClickOutside(event) {
-        if (!customSelect.contains(event.target)) {
-          closeDropdown();
-        }
-      }
-
-      // Select option
-      function selectOption(option) {
-        const value = option.dataset.value;
-        const text = option.textContent;
-        
-        // Update display
-        selectedText.textContent = text;
-        
-        // Update hidden select for form compatibility
-        hiddenSelect.value = value;
-        
-        // Update selected state
-        dropdownOptions.forEach(opt => opt.classList.remove('selected'));
-        option.classList.add('selected');
-        
-        // Close dropdown
-        closeDropdown();
-        
-        // Trigger change event for existing functionality
-        const changeEvent = new Event('change');
-        hiddenSelect.dispatchEvent(changeEvent);
-        
-        // Show feedback
-        if (value) {
-          const countryName = text.split(' ').slice(1).join(' '); // Remove flag emoji
+      // Enhanced location change feedback
+      const locationSelect = document.getElementById('locationSelect');
+      locationSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption.value) {
+          const countryName = selectedOption.text.split(' ').slice(1).join(' '); // Remove flag emoji
           showInfo(`Location filter: ${countryName} - this will narrow your search results`);
         } else {
           clearAllMessages();
         }
-      }
-
-      // Event listeners
-      selectDisplay.addEventListener('click', toggleDropdown);
-      dropdownClose.addEventListener('click', function(e) {
-        e.stopPropagation();
-        closeDropdown();
       });
-
-      dropdownOptions.forEach(option => {
-        option.addEventListener('click', function() {
-          selectOption(this);
-        });
-      });
-
-      // Keyboard support
-      document.addEventListener('keydown', function(e) {
-        if (isDropdownOpen && e.key === 'Escape') {
-          closeDropdown();
-        }
-      });
-
-      // Initialize first option as selected
-      dropdownOptions[0].classList.add('selected');
     });
   </script>
 </body>
