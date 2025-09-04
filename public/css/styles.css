@@ -88,15 +88,33 @@ body{
   margin-bottom: 16px;
 }
 
-/* Hamburger menu button (three horizontal lines) */
+/* FORCE HIDE PULL-TAB ON ALL PAGES - universal fix */
+.drawer-tab { 
+  display: none !important; 
+  visibility: hidden !important;
+}
+
+/* Hamburger menu button (three horizontal lines) - CONSISTENT ACROSS ALL PAGES */
 .hamburger{
-  display:inline-grid;
+  display:inline-grid !important;
   place-items:center;
-  width:40px;height:40px;
+  width:40px;
+  height:40px;
   border-radius:10px;
   background:rgba(255,255,255,.08);
-  cursor:pointer;
+  cursor: pointer;
   border:none;
+  transition: all 0.3s ease;
+}
+
+.hamburger:hover {
+  background: rgba(255,255,255,.12);
+  transform: scale(1.05);
+}
+
+/* Remove any simplified hamburger variations */
+.hamburger-simple {
+  display: none !important;
 }
 
 /* Creates the three lines effect using CSS pseudo-elements */
@@ -267,19 +285,23 @@ body{
   color: var(--ink);
 }
 
-/* Three stat items laid out horizontally */
+/* IMPROVED STATS GRID ALIGNMENT - fixes spacing issues */
 .stats-grid {
-  display: flex;
-  justify-content: space-around;
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: stretch !important; /* Ensure equal height */
   gap: 12px;
 }
 
 /* Individual stat item (icon + label + value) */
 .stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
   flex: 1;
+  text-align: center;
+  min-height: 80px; /* Ensure consistent height */
 }
 
 /* Icon container for each stat - FIXED SIZING */
@@ -492,7 +514,7 @@ body{
   object-fit: contain;
 }
 
-/* ---------------- MATCHES PAGE: GAME PATTERN ---------------- */
+/* ---------------- MATCHES PAGE: GAME PATTERN - FIXED ALIGNMENT ---------------- */
 /* Game pattern section - shows W/L/W/L/W for last 5 games */
 .game-pattern-section {
   background: var(--navy-card);
@@ -512,25 +534,29 @@ body{
   color: var(--ink);
 }
 
+/* FIXED GAME PATTERN SECTION - better mobile alignment */
 .game-pattern-container {
-  display: flex;
-  justify-content: center;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
   gap: 8px;
   flex-wrap: wrap;
+  padding: 8px 0; /* Add padding for better spacing */
 }
 
 .pattern-letter {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   border-radius: var(--radius-md);
   font-weight: 700;
   font-family: "Montserrat", sans-serif;
   color: white;
   font-size: calc(16px * var(--user-font-scale));
   transition: transform 0.2s ease;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .pattern-letter:hover {
@@ -760,20 +786,6 @@ body{
 .footer-link:hover {
   color: white;
 }
-
-/* Pull-tab arrow on the left edge -can grab this to open menu */
-.drawer-tab{
-  position:fixed; left:0; top:140px;   /* positioned near main content */
-  transform:translateX(-40%);          /* peeks out a bit so it's visible */
-  z-index:41; cursor:pointer;
-  width:34px; height:60px;
-  border-radius:0 12px 12px 0;
-  background:linear-gradient(180deg,#3a51f3,#1c2adf);
-  box-shadow:var(--shadow);
-  display:grid; place-items:center;
-  border: none;
-}
-.drawer-tab img{ width:18px;height:18px; filter:drop-shadow(0 1px 1px rgba(0,0,0,.4)); }
 
 /* Dark overlay behind drawer when open - clicking closes menu */
 .backdrop{
@@ -1796,10 +1808,17 @@ body.light-theme h2, body.light-theme h3, body.light-theme h4 {
     flex-direction: column;
   }
   
+  /* IMPROVED MOBILE PATTERN ALIGNMENT */
+  .game-pattern-container {
+    gap: 6px !important;
+    padding: 12px 8px !important;
+    justify-content: center !important;
+  }
+  
   .pattern-letter {
-    width: 32px;
-    height: 32px;
-    font-size: calc(14px * var(--user-font-scale));
+    width: 36px !important;
+    height: 36px !important;
+    font-size: calc(14px * var(--user-font-scale)) !important;
   }
   
   .match-card {
@@ -1808,6 +1827,15 @@ body.light-theme h2, body.light-theme h3, body.light-theme h4 {
   
   .match-score {
     font-size: calc(16px * var(--user-font-scale));
+  }
+  
+  /* Better mobile stats alignment */
+  .stats-grid {
+    gap: 8px !important;
+  }
+  
+  .stat-item {
+    min-height: 70px !important;
   }
   
   /* CLAN SEARCH: Mobile adjustments */
@@ -2099,4 +2127,330 @@ body.light-theme h2, body.light-theme h3, body.light-theme h4 {
   .toggle-switch.active::after {
     transform: translateX(20px);
   }
+
+/* CRITICAL FIXES FOR CLASH HUB - Add to styles.css */
+
+/* =============================
+   MOBILE TOUCH TARGET FIXES
+   Ensures 44px minimum for accessibility
+   ============================= */
+
+/* Fix refresh buttons - too small on mobile */
+@media (max-width: 520px) {
+  .refresh-matches-btn,
+  .refresh-page-btn {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: calc(16px * var(--user-font-scale)) !important;
+  }
+
+  .refresh-section-btn {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: calc(16px * var(--user-font-scale)) !important;
+  }
+
+  /* Ensure hamburger is large enough */
+  .hamburger {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* Ensure settings icon is large enough */
+  .icon-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* Scroll to top button */
+  .scroll-to-top {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: calc(18px * var(--user-font-scale)) !important;
+  }
+}
+
+/* =============================
+   ICON SIZE STANDARDIZATION
+   Consistent sizing across all pages
+   ============================= */
+
+/* Standard icon size system */
+.icon-sm, 
+.stat-icon img,
+.stat-card-header img,
+.clan-badge img,
+.arena-icon img {
+  width: 18px !important;
+  height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  object-fit: contain !important;
+}
+
+/* Navigation icons */
+.nav-item img,
+.icon-btn img {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Social media icons */
+.social-link img {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Play button and larger interactive icons */
+.play-button {
+  width: 56px !important;
+  height: 56px !important;
+}
+
+@media (max-width: 520px) {
+  .play-button {
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
+
+/* =============================
+   GRID RESPONSIVE FIXES
+   Better mobile behavior for content grid
+   ============================= */
+
+/* Fix homepage grid stacking on very small screens */
+@media (max-width: 480px) {
+  .content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  /* Ensure video section still spans full width */
+  .video-section {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =============================
+   BUTTON SPACING STANDARDIZATION
+   Consistent gaps and sizing
+   ============================= */
+
+/* Search button containers */
+.search-input-container {
+  gap: 12px;
+}
+
+.button-group {
+  gap: 12px;
+}
+
+/* Ensure buttons have consistent padding */
+.load-matches-btn,
+.clear-btn {
+  padding: 12px 20px;
+  font-size: calc(14px * var(--user-font-scale));
+  min-height: 44px; /* Touch target */
+}
+
+@media (max-width: 520px) {
+  .load-matches-btn,
+  .clear-btn {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+}
+
+/* =============================
+   LIGHT THEME COMPLETION
+   Missing light theme styles
+   ============================= */
+
+/* Video page light theme fixes */
+body.light-theme .video-placeholder {
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  border: 2px dashed rgba(0,0,0,0.3);
+}
+
+body.light-theme .video-description {
+  color: rgba(0,0,0,0.7);
+}
+
+body.light-theme .video-meta {
+  color: rgba(0,0,0,0.6);
+}
+
+/* Complete light theme for all card types */
+body.light-theme .mock-box:hover {
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(45, 109, 246, 0.3);
+}
+
+body.light-theme .featured-image-card:hover {
+  transform: translateY(-4px);
+}
+
+/* =============================
+   HEADER ALIGNMENT FIXES
+   Consistent positioning across pages
+   ============================= */
+
+/* Ensure logo is perfectly centered */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px; /* Consistent header height */
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 44px; /* Touch target for logo link */
+}
+
+/* Ensure side elements don't interfere with centering */
+.hamburger,
+.icon-btn {
+  flex-shrink: 0;
+}
+
+/* =============================
+   PULL-TO-REFRESH INDICATOR FIXES
+   Consistent styling across pages
+   ============================= */
+
+.pull-indicator {
+  position: fixed;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy-card);
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  font-size: calc(14px * var(--user-font-scale));
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.pull-indicator.ready { 
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+/* Light theme for pull indicator */
+body.light-theme .pull-indicator {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  color: var(--ink);
+}
+
+body.light-theme .pull-indicator.ready {
+  background: var(--blue);
+  color: white;
+  border-color: var(--blue);
+}
+
+/* =============================
+   ANIMATION CONSISTENCY
+   Standardized transitions
+   ============================= */
+
+/* Consistent refresh button animations */
+.refresh-matches-btn,
+.refresh-page-btn,
+.refresh-section-btn {
+  transition: all 0.3s ease;
+}
+
+.refresh-matches-btn.refreshing,
+.refresh-page-btn.refreshing,
+.refresh-section-btn.refreshing {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Touch feedback consistency */
+.touch-card {
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-card:active {
+  transform: scale(0.98);
+}
+
+/* =============================
+   FORCED DRAWER TAB HIDING
+   Ensure no pull-tabs appear anywhere
+   ============================= */
+
+.drawer-tab,
+#drawerTab,
+button[id*="drawerTab"],
+button[class*="drawer-tab"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* =============================
+   FONT SCALING COMPLETENESS
+   Ensure all text scales properly
+   ============================= */
+
+/* Complete font scaling for missed elements */
+.page-title {
+  font-size: calc(28px * var(--user-font-scale));
+}
+
+.page-subtitle {
+  font-size: calc(14px * var(--user-font-scale));
+}
+
+.archive-title {
+  font-size: calc(24px * var(--user-font-scale));
+}
+
+.section-title {
+  font-size: calc(24px * var(--user-font-scale));
+}
+
+.news-title {
+  font-size: calc(20px * var(--user-font-scale));
+}
+
+.terms-section h2 {
+  font-size: calc(20px * var(--user-font-scale));
+}
+
+/* Mobile font scaling adjustments */
+@media (max-width: 520px) {
+  .page-title {
+    font-size: calc(24px * var(--user-font-scale));
+  }
+  
+  .archive-title,
+  .section-title {
+    font-size: calc(20px * var(--user-font-scale));
+  }
+  
+  .news-title {
+    font-size: calc(18px * var(--user-font-scale));
+  }
+}
 }
