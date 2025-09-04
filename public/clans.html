@@ -1,4 +1,27 @@
-<!DOCTYPE html>
+// Custom dropdown functionality
+      const customSelect = document.getElementById('customLocationSelect');
+      const selectDisplay = document.getElementById('selectDisplay');
+      const selectDropdown = document.getElementById('selectDropdown');
+      const dropdownClose = document.getElementById('dropdownClose');
+      const dropdownOptions = document.querySelectorAll('.dropdown-option');
+      const hiddenSelect = document.getElementById('locationSelect');
+      const selectedText = document.querySelector('.selected-text');
+
+      let isDropdownOpen = false;
+
+      // Toggle dropdown
+      function toggleDropdown() {
+        isDropdownOpen = !isDropdownOpen;
+        selectDisplay.classList.toggle('active', isDropdownOpen);
+        selectDropdown.classList.toggle('show', isDropdownOpen);
+        
+        if (isDropdownOpen) {
+          // Add backdrop to close on click outside
+          document.addEventListener('click', closeOnClickOutside);
+          document.body.style.overflow = 'hidden'; // Prevent body scroll on mobile
+        } else {
+          document.removeEventListener('click', closeOnClickOutside);
+          document.body.style.overflow<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -939,57 +962,104 @@
         }
       });
 
-      // Enhanced location change feedback with close button functionality
-      const locationSelect = document.getElementById('locationSelect');
-      const locationCloseBtn = document.getElementById('locationCloseBtn');
+      // Custom dropdown functionality
+      const customSelect = document.getElementById('customLocationSelect');
+      const selectDisplay = document.getElementById('selectDisplay');
+      const selectDropdown = document.getElementById('selectDropdown');
+      const dropdownClose = document.getElementById('dropdownClose');
+      const dropdownOptions = document.querySelectorAll('.dropdown-option');
+      const hiddenSelect = document.getElementById('locationSelect');
+      const selectedText = document.querySelector('.selected-text');
 
-      // Show/hide close button based on dropdown interaction
-      locationSelect.addEventListener('focus', function() {
-        locationCloseBtn.classList.add('visible');
-      });
+      let isDropdownOpen = false;
 
-      locationSelect.addEventListener('blur', function() {
-        setTimeout(() => {
-          locationCloseBtn.classList.remove('visible');
-        }, 200); // Small delay to allow clicking the close button
-      });
+      // Toggle dropdown
+      function toggleDropdown() {
+        isDropdownOpen = !isDropdownOpen;
+        selectDisplay.classList.toggle('active', isDropdownOpen);
+        selectDropdown.classList.toggle('show', isDropdownOpen);
+        
+        if (isDropdownOpen) {
+          // Add backdrop to close on click outside
+          document.addEventListener('click', closeOnClickOutside);
+          document.body.style.overflow = 'hidden'; // Prevent body scroll on mobile
+        } else {
+          document.removeEventListener('click', closeOnClickOutside);
+          document.body.style.overflow = 'auto';
+        }
+      }
 
-      // Close button functionality
-      locationCloseBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        locationSelect.blur(); // Close the dropdown
-        locationCloseBtn.classList.remove('visible');
-        clearAllMessages();
-      });
+      // Close dropdown
+      function closeDropdown() {
+        if (isDropdownOpen) {
+          isDropdownOpen = false;
+          selectDisplay.classList.remove('active');
+          selectDropdown.classList.remove('show');
+          document.removeEventListener('click', closeOnClickOutside);
+          document.body.style.overflow = 'auto';
+        }
+      }
 
-      // Enhanced location selection feedback
-      locationSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        if (selectedOption.value) {
-          const countryName = selectedOption.text.split(' ').slice(1).join(' '); // Remove flag emoji
+      // Close on click outside
+      function closeOnClickOutside(event) {
+        if (!customSelect.contains(event.target)) {
+          closeDropdown();
+        }
+      }
+
+      // Select option
+      function selectOption(option) {
+        const value = option.dataset.value;
+        const text = option.textContent;
+        
+        // Update display
+        selectedText.textContent = text;
+        
+        // Update hidden select for form compatibility
+        hiddenSelect.value = value;
+        
+        // Update selected state
+        dropdownOptions.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        
+        // Close dropdown
+        closeDropdown();
+        
+        // Trigger change event for existing functionality
+        const changeEvent = new Event('change');
+        hiddenSelect.dispatchEvent(changeEvent);
+        
+        // Show feedback
+        if (value) {
+          const countryName = text.split(' ').slice(1).join(' '); // Remove flag emoji
           showInfo(`Location filter: ${countryName} - this will narrow your search results`);
         } else {
           clearAllMessages();
         }
-        locationCloseBtn.classList.remove('visible');
+      }
+
+      // Event listeners
+      selectDisplay.addEventListener('click', toggleDropdown);
+      dropdownClose.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeDropdown();
       });
 
-      // Mobile-specific enhancements for dropdown
-      if (window.innerWidth <= 520) {
-        locationSelect.addEventListener('touchstart', function() {
-          locationCloseBtn.classList.add('visible');
+      dropdownOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          selectOption(this);
         });
+      });
 
-        // Hide close button when scrolling the dropdown options
-        locationSelect.addEventListener('scroll', function() {
-          locationCloseBtn.style.opacity = '0.7';
-        });
+      // Keyboard support
+      document.addEventListener('keydown', function(e) {
+        if (isDropdownOpen && e.key === 'Escape') {
+          closeDropdown();
+        }
+      });
 
-        locationSelect.addEventListener('scrollend', function() {
-          locationCloseBtn.style.opacity = '1';
-        });
-      }
+      // Initialize first option as selected
+      dropdownOptions[0].classList.add('selected');
     });
   </script>
 </body>
