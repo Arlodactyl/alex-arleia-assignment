@@ -82,38 +82,27 @@
       </a>
     </header>
 
-    <!-- Mobile pull-to-refresh indicator -->
-    <div class="pull-indicator" id="pullIndicator">
-      <div class="pull-spinner"></div>
-      <span>Pull to refresh matches</span>
-    </div>
-
-    <!-- player search section - REDESIGNED to match player.html -->
+    <!-- STANDARDIZED PLAYER SEARCH SECTION - matches player.html exactly -->
     <div class="player-search-section">
       <div class="hi">Enter Player Tag to View Recent Matches</div>
       
-      <!-- search input container - IMPROVED LAYOUT -->
+      <!-- STANDARDIZED search container - same as player.html -->
       <div class="player-lookup-container">
         <div class="search-input-container">
           <input type="text" id="playerTagInput" placeholder="Enter player tag (e.g., #9Q2YJ0U)" class="player-tag-input" maxlength="15" />
         </div>
         <div class="button-group">
           <button id="loadMatchesBtn" class="load-matches-btn">Load Matches</button>
-          <button id="refreshMatchesBtn" class="refresh-matches-btn hidden" title="Refresh matches data">
-            <span class="refresh-icon">↻</span>
-          </button>
           <button id="clearSearchBtn" class="clear-btn">Clear</button>
         </div>
       </div>
       
-      <!-- Enhanced feedback messages -->
-      <div id="loadingIndicator" class="loading-message hidden">🔍 Fetching recent matches...</div>
+      <!-- STANDARDIZED feedback messages - same as player.html -->
+      <div id="loadingIndicator" class="loading-message hidden">Loading recent matches...</div>
       <div id="errorMessage" class="error-message hidden"></div>
-      <div id="warningMessage" class="warning-message hidden"></div>
-      <div id="infoMessage" class="info-message hidden"></div>
     </div>
 
-    <!-- current player display - IMPROVED -->
+    <!-- current player display - STANDARDIZED -->
     <div class="current-tag hidden" id="currentPlayerBar">
       <strong>Player:</strong> <span id="playerText">—</span>
     </div>
@@ -235,57 +224,183 @@
       if(e.key === 'Escape') closeDrawer(); 
     });
 
-    // ============ MOBILE ENHANCEMENTS ============
+    // ============ STANDARDIZED INPUT HANDLING ============
+    const playerTagInput = document.getElementById('playerTagInput');
     
-    // Pull-to-refresh functionality (mobile)
-    let startY = 0;
-    let isPulling = false;
-    const pullIndicator = document.getElementById('pullIndicator');
-
-    document.addEventListener('touchstart', (e) => {
-      if (window.scrollY === 0) {
-        startY = e.touches[0].pageY;
-        isPulling = true;
+    // Enhanced input validation with real-time feedback
+    playerTagInput.addEventListener('input', function() {
+      const value = this.value.trim();
+      hideError();
+      
+      // Auto-format input
+      let cleanValue = value.toUpperCase().replace(/[^A-Z0-9#]/g, '');
+      if (cleanValue.includes('#')) {
+        cleanValue = '#' + cleanValue.replace(/#/g, '');
+      }
+      this.value = cleanValue;
+      
+      // Provide real-time feedback
+      if (value.length > 12) {
+        showError('Player tags are usually 8-10 characters - check for extra characters');
+      } else if (value.length > 0 && !value.startsWith('#') && !value.match(/^[A-Z0-9]+$/i)) {
+        showError('Player tags should start with # or contain only letters and numbers');
       }
     });
 
-    document.addEventListener('touchmove', (e) => {
-      if (!isPulling) return;
+    // ============ SEARCH FUNCTIONALITY ============
+    const loadMatchesBtn = document.getElementById('loadMatchesBtn');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+    loadMatchesBtn.addEventListener('click', handleLoadMatches);
+    clearSearchBtn.addEventListener('click', handleClearSearch);
+    
+    playerTagInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        handleLoadMatches();
+      }
+    });
+
+    async function handleLoadMatches() {
+      const playerTag = playerTagInput.value.trim();
       
-      const currentY = e.touches[0].pageY;
-      const pullDistance = currentY - startY;
+      if (!playerTag) {
+        showError('Please enter a player tag to search');
+        return;
+      }
+
+      const cleanTag = playerTag.replace(/^#/, '');
+      if (!cleanTag.match(/^[A-Z0-9]{3,}$/i)) {
+        showError('Invalid player tag format - use only letters and numbers (e.g., #9Q2YJ0U)');
+        return;
+      }
+
+      if (cleanTag.length < 3) {
+        showError('Player tag too short - need at least 3 characters');
+        return;
+      }
+
+      if (cleanTag.length > 12) {
+        showError('Player tag too long - most tags are 8-10 characters');
+        return;
+      }
       
-      if (pullDistance > 0 && pullDistance < 150) {
-        pullIndicator.style.transform = `translateY(${pullDistance}px)`;
-        pullIndicator.style.opacity = pullDistance / 100;
+      // Show what we're loading
+      const playerText = document.getElementById('playerText');
+      const currentPlayerBar = document.getElementById('currentPlayerBar');
+      if (playerText && currentPlayerBar) {
+        playerText.textContent = `#${cleanTag}`;
+        currentPlayerBar.classList.remove('hidden');
+      }
+      
+      showLoading(true);
+      hideError();
+      hideAllMatchSections();
+      
+      try {
+        console.log('fetching matches for:', cleanTag);
         
-        if (pullDistance > 80) {
-          pullIndicator.classList.add('ready');
-        } else {
-          pullIndicator.classList.remove('ready');
-        }
+        // Your existing matches API call would go here
+        // const matches = await loadRecentMatches(cleanTag);
+        
+        // For demo purposes, show success
+        setTimeout(() => {
+          showLoading(false);
+          showAllMatchSections();
+          
+          // Add some demo content
+          document.getElementById('winPercentage').textContent = '73%';
+          document.getElementById('totalWins').textContent = '18';
+          document.getElementById('crownWins').textContent = '5';
+          
+          const matchesList = document.getElementById('matchesList');
+          matchesList.innerHTML = `
+            <div class="match-card won">
+              <div class="match-card-content">
+                <div class="match-card-left">
+                  <div class="clan-icon">
+                    <img src="./assets/icon_menu_battle.png" alt="Battle Icon" />
+                  </div>
+                </div>
+                <div class="match-card-center">
+                  <div class="match-card-header">
+                    <div class="match-result won">
+                      <span class="result-badge">WON</span>
+                      <span class="match-score">3 - 1</span>
+                    </div>
+                    <div class="match-time">2h ago</div>
+                  </div>
+                  <div class="match-details">
+                    <div class="game-mode">Ladder</div>
+                    <div class="opponent-info">
+                      <strong>vs Player123</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="match-card-right">
+                  <div class="result-arrow">
+                    <img src="./assets/winarrow.png" alt="WIN icon" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          const gamePattern = document.getElementById('gamePattern');
+          gamePattern.innerHTML = `
+            <span class="pattern-letter won">W</span>
+            <span class="pattern-letter lost">L</span>
+            <span class="pattern-letter won">W</span>
+            <span class="pattern-letter won">W</span>
+            <span class="pattern-letter lost">L</span>
+          `;
+        }, 1500);
+        
+      } catch (error) {
+        console.error('failed to load matches:', error);
+        showError('Could not load matches - please try again');
+        showLoading(false);
       }
-    });
+    }
 
-    document.addEventListener('touchend', () => {
-      if (isPulling && pullIndicator.classList.contains('ready')) {
-        // Refresh matches if player tag is loaded
-        const currentTag = document.getElementById('playerText').textContent;
-        if (currentTag && currentTag !== '—') {
-          refreshCurrentMatches();
-        } else {
-          // Just refresh the page if no matches loaded
-          location.reload();
-        }
-      }
+    function handleClearSearch() {
+      console.log('clearing matches search');
       
-      isPulling = false;
-      pullIndicator.style.transform = 'translateY(0)';
-      pullIndicator.style.opacity = '0';
-      pullIndicator.classList.remove('ready');
-    });
+      playerTagInput.value = '';
+      hideError();
+      hideAllMatchSections();
+      document.getElementById('currentPlayerBar').classList.add('hidden');
+      
+      playerTagInput.focus();
+    }
 
-    // Scroll to top button functionality
+    // ============ UI HELPER FUNCTIONS ============
+    function showLoading(show) {
+      document.getElementById('loadingIndicator').classList.toggle('hidden', !show);
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('errorMessage');
+      errorDiv.textContent = message;
+      errorDiv.classList.remove('hidden');
+    }
+
+    function hideError() {
+      document.getElementById('errorMessage').classList.add('hidden');
+    }
+
+    function showAllMatchSections() {
+      document.getElementById('matchesStats').classList.remove('hidden');
+      document.getElementById('recentMatchesSection').classList.remove('hidden');
+      document.getElementById('gamePatternSection').classList.remove('hidden');
+    }
+
+    function hideAllMatchSections() {
+      document.getElementById('matchesStats').classList.add('hidden');
+      document.getElementById('recentMatchesSection').classList.add('hidden');
+      document.getElementById('gamePatternSection').classList.add('hidden');
+    }
+
+    // ============ SCROLL TO TOP FUNCTIONALITY ============
     const scrollToTopBtn = document.getElementById('scrollToTop');
 
     window.addEventListener('scroll', () => {
@@ -302,354 +417,13 @@
         behavior: 'smooth'
       });
     });
-
-    // ============ ENHANCED USER FEEDBACK ============
-    
-    // Input validation and feedback
-    const playerTagInput = document.getElementById('playerTagInput');
-    
-    playerTagInput.addEventListener('input', function() {
-      const value = this.value;
-      clearAllMessages();
-      
-      // Provide real-time feedback
-      if (value.length > 12) {
-        showWarning('Player tags are usually 8-10 characters - check for extra characters');
-      } else if (value.length > 0) {
-        if (!value.startsWith('#') && !value.match(/^[A-Z0-9]+$/i)) {
-          showInfo('Player tags should start with # or contain only letters and numbers');
-        } else if (value.length >= 3 && value.startsWith('#') && value.length < 5) {
-          showInfo('Player tag seems short - most tags are 8-10 characters total');
-        }
-      }
-      
-      // Check for common issues
-      if (value.includes(' ')) {
-        showWarning('Player tags cannot contain spaces');
-      }
-    });
-
-    // Message display functions
-    function showWarning(message) {
-      const warningDiv = document.getElementById('warningMessage');
-      warningDiv.textContent = message;
-      warningDiv.classList.remove('hidden');
-    }
-
-    function showInfo(message) {
-      const infoDiv = document.getElementById('infoMessage');
-      infoDiv.textContent = message;
-      infoDiv.classList.remove('hidden');
-    }
-
-    function showError(message) {
-      const errorDiv = document.getElementById('errorMessage');
-      errorDiv.textContent = message;
-      errorDiv.classList.remove('hidden');
-    }
-
-    function clearAllMessages() {
-      document.getElementById('warningMessage').classList.add('hidden');
-      document.getElementById('infoMessage').classList.add('hidden');
-      document.getElementById('errorMessage').classList.add('hidden');
-    }
-
-    // ============ REFRESH FUNCTIONALITY ============
-    
-    // All refresh buttons
-    const refreshMatchesBtn = document.getElementById('refreshMatchesBtn');
-    const refreshSectionBtn = document.getElementById('refreshSectionBtn');
-    const refreshSectionBtnMatches = document.getElementById('refreshSectionBtnMatches');
-    const refreshSectionBtnPattern = document.getElementById('refreshSectionBtnPattern');
-
-    // Add event listeners to all refresh buttons
-    [refreshMatchesBtn, refreshSectionBtn, refreshSectionBtnMatches, refreshSectionBtnPattern].forEach(btn => {
-      if (btn) {
-        btn.addEventListener('click', refreshCurrentMatches);
-      }
-    });
-
-    function refreshCurrentMatches() {
-      const currentTag = playerTagInput.value.trim();
-      
-      if (currentTag) {
-        console.log('Refreshing matches for:', currentTag);
-        
-        // Add refresh animation to all buttons
-        [refreshMatchesBtn, refreshSectionBtn, refreshSectionBtnMatches, refreshSectionBtnPattern].forEach(btn => {
-          if (btn) btn.classList.add('refreshing');
-        });
-        
-        // Trigger the load matches function
-        handleLoadMatches();
-        
-        // Remove animation after a delay
-        setTimeout(() => {
-          [refreshMatchesBtn, refreshSectionBtn, refreshSectionBtnMatches, refreshSectionBtnPattern].forEach(btn => {
-            if (btn) btn.classList.remove('refreshing');
-          });
-        }, 1000);
-      }
-    }
-
-    // ============ MOBILE TOUCH ENHANCEMENTS ============
-    
-    // Add touch feedback to match cards
-    function addTouchFeedback() {
-      document.querySelectorAll('.match-card').forEach(card => {
-        card.addEventListener('touchstart', function() {
-          this.style.transform = 'scale(0.98)';
-          this.style.transition = 'transform 0.1s ease';
-        });
-        
-        card.addEventListener('touchend', function() {
-          this.style.transform = 'scale(1)';
-          setTimeout(() => {
-            this.style.transition = 'transform 0.2s ease';
-          }, 100);
-        });
-      });
-
-      // Add touch feedback to pattern letters
-      document.querySelectorAll('.pattern-letter').forEach(letter => {
-        letter.addEventListener('touchstart', function() {
-          this.style.transform = 'scale(1.2)';
-          this.style.transition = 'transform 0.1s ease';
-        });
-        
-        letter.addEventListener('touchend', function() {
-          this.style.transform = 'scale(1)';
-          setTimeout(() => {
-            this.style.transition = 'transform 0.2s ease';
-          }, 100);
-        });
-      });
-    }
-
-    // ============ RESPONSIVE BEHAVIOR ============
-    
-    // Adjust UI based on screen size
-    function adjustForMobile() {
-      const isMobile = window.innerWidth <= 520;
-      const searchContainer = document.querySelector('.player-lookup-container');
-      
-      if (isMobile) {
-        searchContainer.classList.add('mobile-stack');
-      } else {
-        searchContainer.classList.remove('mobile-stack');
-      }
-    }
-
-    // Listen for screen size changes
-    window.addEventListener('resize', adjustForMobile);
-    document.addEventListener('DOMContentLoaded', adjustForMobile);
-
-    // ============ SHOW REFRESH CONTROLS AFTER CONTENT LOADS ============
-    
-    function showRefreshControls() {
-      refreshMatchesBtn.classList.remove('hidden');
-    }
-
-    function hideRefreshControls() {
-      refreshMatchesBtn.classList.add('hidden');
-    }
-
-    // ============ CLEAR SEARCH FUNCTIONALITY ============
-    
-    const clearSearchBtn = document.getElementById('clearSearchBtn');
-    clearSearchBtn.addEventListener('click', handleClearSearch);
-
-    function handleClearSearch() {
-      console.log('clearing matches search');
-      
-      // Clear input field
-      playerTagInput.value = '';
-      
-      // Hide all sections and messages
-      clearAllMessages();
-      hideAllMatchSections();
-      document.getElementById('currentPlayerBar').classList.add('hidden');
-      
-      // Reset refresh controls
-      hideRefreshControls();
-      
-      // Focus back to search input
-      playerTagInput.focus();
-    }
-
-    // Helper function to hide all match sections
-    function hideAllMatchSections() {
-      document.getElementById('matchesStats').classList.add('hidden');
-      document.getElementById('recentMatchesSection').classList.add('hidden');
-      document.getElementById('gamePatternSection').classList.add('hidden');
-    }
-
-    // ============ SWIPE GESTURES FOR MATCH CARDS ============
-    
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let currentCard = null;
-
-    function addSwipeGestures() {
-      document.querySelectorAll('.match-card').forEach((card, index) => {
-        card.addEventListener('touchstart', function(e) {
-          touchStartX = e.touches[0].clientX;
-          touchStartY = e.touches[0].clientY;
-          currentCard = this;
-        });
-
-        card.addEventListener('touchmove', function(e) {
-          if (!currentCard) return;
-          
-          const touchX = e.touches[0].clientX;
-          const touchY = e.touches[0].clientY;
-          const deltaX = touchX - touchStartX;
-          const deltaY = touchY - touchStartY;
-          
-          // Only respond to horizontal swipes
-          if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 30) {
-            e.preventDefault();
-            this.style.transform = `translateX(${deltaX * 0.3}px) scale(0.98)`;
-            
-            if (deltaX > 50) {
-              this.style.backgroundColor = 'rgba(76, 205, 196, 0.1)';
-            } else if (deltaX < -50) {
-              this.style.backgroundColor = 'rgba(255, 107, 107, 0.1)';
-            }
-          }
-        });
-
-        card.addEventListener('touchend', function(e) {
-          if (!currentCard) return;
-          
-          const touchX = e.changedTouches[0].clientX;
-          const deltaX = touchX - touchStartX;
-          
-          // Reset card appearance
-          this.style.transform = 'translateX(0) scale(1)';
-          this.style.backgroundColor = '';
-          
-          // Show feedback for swipe actions
-          if (Math.abs(deltaX) > 50) {
-            const feedback = deltaX > 0 ? 'Good game! 👍' : 'Better luck next time! 💪';
-            showSwipeFeedback(feedback);
-          }
-          
-          currentCard = null;
-        });
-      });
-    }
-
-    function showSwipeFeedback(message) {
-      const feedback = document.createElement('div');
-      feedback.className = 'swipe-feedback';
-      feedback.textContent = message;
-      feedback.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: var(--blue);
-        color: white;
-        padding: 12px 24px;
-        border-radius: 12px;
-        font-weight: 600;
-        z-index: 1000;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-      `;
-      
-      document.body.appendChild(feedback);
-      
-      setTimeout(() => feedback.style.opacity = '1', 10);
-      setTimeout(() => {
-        feedback.style.opacity = '0';
-        setTimeout(() => document.body.removeChild(feedback), 300);
-      }, 1500);
-    }
   </script>
 
-  <!-- Enhanced mobile styles -->
+  <!-- STANDARDIZED STYLES - matches player.html -->
   <style>
-    /* Hide the pull-tab arrow - using hamburger instead */
+    /* Hide the pull-tab arrow */
     .drawer-tab { 
       display: none !important; 
-    }
-
-    /* Enhanced message styles - matching player.html */
-    .warning-message {
-      text-align: center;
-      color: #ffa726;
-      font-weight: 600;
-      margin-top: 12px;
-      background: rgba(255, 167, 38, 0.1);
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
-      border: 1px solid rgba(255, 167, 38, 0.3);
-      font-size: calc(14px * var(--user-font-scale));
-    }
-
-    .info-message {
-      text-align: center;
-      color: #42a5f5;
-      font-weight: 600;
-      margin-top: 12px;
-      background: rgba(66, 165, 245, 0.1);
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
-      border: 1px solid rgba(66, 165, 245, 0.3);
-      font-size: calc(14px * var(--user-font-scale));
-    }
-
-    /* Mobile search layout improvements - matching player.html */
-    .player-lookup-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .search-input-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .refresh-matches-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--gold);
-      color: white;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: calc(18px * var(--user-font-scale));
-      flex-shrink: 0;
-    }
-
-    .refresh-matches-btn:hover {
-      background: #d4a017;
-      transform: scale(1.05);
-    }
-
-    .refresh-matches-btn.refreshing {
-      animation: spin 1s linear infinite;
-    }
-
-    .refresh-icon {
-      display: block;
-      line-height: 1;
     }
 
     /* Section header with refresh button */
@@ -686,38 +460,6 @@
 
     @keyframes spin { 
       to { transform: rotate(360deg); } 
-    }
-
-    /* Pull to refresh indicator */
-    .pull-indicator {
-      position: fixed;
-      top: -60px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--navy-card);
-      padding: 10px 20px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 100;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      font-size: calc(14px * var(--user-font-scale));
-    }
-
-    .pull-indicator.ready { 
-      background: var(--blue); 
-    }
-
-    .pull-spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--gold);
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
     }
 
     /* Scroll to top button */
@@ -758,25 +500,8 @@
       transform: translateY(0); 
     }
 
-    /* Enhanced mobile responsiveness */
+    /* Mobile optimizations */
     @media (max-width: 520px) {
-      .player-lookup-container.mobile-stack .search-input-container {
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .player-lookup-container.mobile-stack .button-group {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      .refresh-matches-btn {
-        width: 40px;
-        height: 40px;
-        font-size: calc(16px * var(--user-font-scale));
-      }
-
       .refresh-section-btn {
         width: 32px;
         height: 32px;
@@ -790,117 +515,19 @@
         bottom: 20px;
         right: 15px;
       }
-
-      .pull-indicator {
-        font-size: calc(12px * var(--user-font-scale));
-        padding: 8px 16px;
-      }
-
-      /* Better mobile pattern layout */
-      .game-pattern-container {
-        justify-content: center !important;
-        gap: 8px !important;
-        padding: 12px 8px !important;
-      }
-
-      .pattern-letter {
-        width: 40px !important;
-        height: 40px !important;
-        font-size: calc(16px * var(--user-font-scale)) !important;
-      }
-
-      /* Mobile match card improvements */
-      .match-card {
-        padding: 14px;
-        margin-bottom: 12px;
-        border-radius: var(--radius-md);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .match-card-content {
-        gap: 10px;
-      }
-
-      .match-card-header {
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-
-      .match-details {
-        gap: 4px;
-      }
-
-      /* Improved mobile stats grid */
-      .stats-grid {
-        gap: 8px !important;
-        padding: 8px 0;
-      }
-
-      .stat-item {
-        min-height: 80px !important;
-        padding: 8px;
-      }
-
-      .stat-icon {
-        width: 32px !important;
-        height: 32px !important;
-      }
-
-      .stat-icon img {
-        width: 18px !important;
-        height: 18px !important;
-      }
     }
 
     /* Very small screens */
     @media (max-width: 360px) {
-      .button-group {
-        flex-direction: column;
-        gap: 8px;
-        width: 100%;
-      }
-
-      .load-matches-btn, .clear-btn {
-        width: 100%;
-        max-width: 200px;
-      }
-
-      .refresh-matches-btn {
-        align-self: center;
+      .scroll-to-top {
         width: 36px;
         height: 36px;
-      }
-
-      .pattern-letter {
-        width: 36px !important;
-        height: 36px !important;
-        font-size: calc(14px * var(--user-font-scale)) !important;
-      }
-
-      .game-pattern-container {
-        gap: 6px !important;
+        bottom: 15px;
+        right: 12px;
       }
     }
 
     /* Light theme adjustments */
-    body.light-theme .warning-message {
-      background: rgba(255, 167, 38, 0.15);
-      color: #e65100;
-      border-color: rgba(255, 167, 38, 0.5);
-    }
-
-    body.light-theme .info-message {
-      background: rgba(66, 165, 245, 0.15);
-      color: #1565c0;
-      border-color: rgba(66, 165, 245, 0.5);
-    }
-
-    body.light-theme .refresh-matches-btn {
-      background: var(--gold);
-      color: white;
-    }
-
     body.light-theme .refresh-section-btn {
       background: rgba(0,0,0,0.1);
       border: 1px solid rgba(0,0,0,0.2);
@@ -910,182 +537,11 @@
     body.light-theme .refresh-section-btn:hover {
       background: rgba(0,0,0,0.2);
     }
-
-    body.light-theme .pull-indicator {
-      background: var(--navy-card);
-      border: 1px solid rgba(0,0,0,0.1);
-    }
-
-    body.light-theme .pull-indicator.ready {
-      background: var(--blue);
-    }
-
-    /* Enhanced match card touch feedback */
-    .match-card {
-      transition: all 0.3s ease;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .match-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    }
-
-    /* Pattern letter touch feedback */
-    .pattern-letter {
-      transition: all 0.2s ease;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .pattern-letter:hover {
-      transform: scale(1.1);
-    }
-
-    /* Swipe gesture visual feedback */
-    .match-card.swiping {
-      z-index: 10;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    }
   </style>
 
   <!-- matches page functionality -->
   <script src="./js/matches.js"></script>
   <!-- settings functionality for all pages -->
   <script src="./js/settings.js"></script>
-
-  <!-- Enhanced matches functionality -->
-  <script>
-    // Override the original handleLoadMatches to show refresh controls and add enhancements
-    document.addEventListener('DOMContentLoaded', function() {
-      // Store reference to original function if it exists
-      const originalHandleLoadMatches = window.handleLoadMatches;
-      
-      // Enhanced load matches function
-      window.handleLoadMatches = async function() {
-        try {
-          // Call original function
-          if (originalHandleLoadMatches) {
-            await originalHandleLoadMatches();
-          }
-          
-          // Show refresh controls after successful load
-          const matchesSection = document.getElementById('recentMatchesSection');
-          if (!matchesSection.classList.contains('hidden')) {
-            showRefreshControls();
-            addTouchFeedback();
-            addSwipeGestures();
-          }
-          
-          // Clear any lingering messages
-          clearAllMessages();
-          
-        } catch (error) {
-          console.error('Enhanced load matches failed:', error);
-          showError('Failed to load matches - please try again');
-        }
-      };
-
-      // Initialize mobile optimizations
-      adjustForMobile();
-      
-      // Add enter key support for search
-      const playerTagInput = document.getElementById('playerTagInput');
-      playerTagInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          handleLoadMatches();
-        }
-      });
-
-      // Enhanced input validation
-      playerTagInput.addEventListener('paste', function(e) {
-        setTimeout(() => {
-          // Clean pasted content
-          let value = this.value.trim();
-          if (value.startsWith('#')) {
-            value = value.substring(1);
-          }
-          this.value = value.toUpperCase();
-        }, 10);
-      });
-
-      // Auto-format input
-      playerTagInput.addEventListener('input', function(e) {
-        let value = this.value.toUpperCase();
-        // Remove any non-alphanumeric characters except #
-        value = value.replace(/[^A-Z0-9#]/g, '');
-        // Ensure only one # at the start
-        if (value.includes('#')) {
-          value = '#' + value.replace(/#/g, '');
-        }
-        this.value = value;
-      });
-
-      // Show loading animation on first input
-      playerTagInput.addEventListener('focus', function() {
-        if (!this.value) {
-          showInfo('Enter your player tag to view recent battle history');
-        }
-      });
-
-      // Auto-clear messages when typing
-      playerTagInput.addEventListener('input', function() {
-        if (this.value.length === 0) {
-          clearAllMessages();
-        }
-      });
-    });
-
-    // Enhanced error handling with specific feedback
-    function provideFeedbackForMatches(playerTag, matches) {
-      clearAllMessages();
-      
-      if (!matches || matches.length === 0) {
-        showError('No matches found for this player - they may not have played recently');
-      } else if (matches.length < 5) {
-        showInfo(`Found ${matches.length} recent matches - player may be new or inactive`);
-      } else if (matches.length >= 20) {
-        showInfo('Loaded recent match history - swipe match cards for quick feedback!');
-      }
-    }
-
-    // Enhanced mobile gestures
-    let longPressTimer;
-    
-    function addLongPressGestures() {
-      document.querySelectorAll('.pattern-letter').forEach(letter => {
-        letter.addEventListener('touchstart', function(e) {
-          longPressTimer = setTimeout(() => {
-            // Vibrate if available
-            if (navigator.vibrate) {
-              navigator.vibrate(50);
-            }
-            
-            // Show match details
-            const result = this.textContent;
-            const resultText = result === 'W' ? 'Victory!' : result === 'L' ? 'Defeat' : 'Draw';
-            showSwipeFeedback(`${resultText} 🎮`);
-          }, 500);
-        });
-        
-        letter.addEventListener('touchend', function() {
-          clearTimeout(longPressTimer);
-        });
-        
-        letter.addEventListener('touchmove', function() {
-          clearTimeout(longPressTimer);
-        });
-      });
-    }
-
-    // Call enhanced gestures after content loads
-    const originalAddTouchFeedback = addTouchFeedback;
-    addTouchFeedback = function() {
-      originalAddTouchFeedback();
-      addLongPressGestures();
-    };
-  </script>
 </body>
 </html>

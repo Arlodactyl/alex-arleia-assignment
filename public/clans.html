@@ -378,9 +378,11 @@
     // ============ MESSAGE FUNCTIONS ============
     function showInfo(message) {
       const infoDiv = document.getElementById('infoMessage');
-      infoDiv.textContent = message;
-      infoDiv.classList.remove('hidden');
-      setTimeout(() => infoDiv.classList.add('hidden'), 3000);
+      if (infoDiv) {
+        infoDiv.textContent = message;
+        infoDiv.classList.remove('hidden');
+        setTimeout(() => infoDiv.classList.add('hidden'), 3000);
+      }
     }
 
     function showError(message) {
@@ -390,19 +392,53 @@
     }
 
     function clearAllMessages() {
-      document.getElementById('warningMessage').classList.add('hidden');
-      document.getElementById('infoMessage').classList.add('hidden');
-      document.getElementById('errorMessage').classList.add('hidden');
+      const warningDiv = document.getElementById('warningMessage');
+      const infoDiv = document.getElementById('infoMessage');
+      const errorDiv = document.getElementById('errorMessage');
+      
+      if (warningDiv) warningDiv.classList.add('hidden');
+      if (infoDiv) infoDiv.classList.add('hidden');
+      if (errorDiv) errorDiv.classList.add('hidden');
     }
 
     // ============ SEARCH FUNCTIONALITY ============
     const searchClansBtn = document.getElementById('searchClansBtn');
-    const clanSearchInput = document.getElementById('clanSearchInput');
     const clearSearchBtn = document.getElementById('clearSearchBtn');
 
     searchClansBtn.addEventListener('click', handleClanSearch);
+    clearSearchBtn.addEventListener('click', handleClearSearch);
+    
     clanSearchInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') handleClanSearch();
+    });
+
+    function handleClanSearch() {
+      const searchQuery = clanSearchInput.value.trim();
+      if (!searchQuery) {
+        showError('Please enter a clan tag or name to search');
+        return;
+      }
+      
+      clearAllMessages();
+      showInfo('Search functionality would connect to your clan search API here');
+      
+      // Update search display
+      const searchText = document.getElementById('searchText');
+      const currentSearchBar = document.getElementById('currentSearchBar');
+      searchText.textContent = `"${searchQuery}"`;
+      currentSearchBar.classList.remove('hidden');
+    }
+
+    function handleClearSearch() {
+      clanSearchInput.value = '';
+      locationText.textContent = '🌍 All Locations';
+      hiddenSelect.value = '';
+      document.querySelectorAll('.location-option').forEach(opt => opt.classList.remove('selected'));
+      document.querySelector('.location-option[data-value=""]').classList.add('selected');
+      clearAllMessages();
+      document.getElementById('currentSearchBar').classList.add('hidden');
+      clanSearchInput.focus();
+    }key === 'Enter') handleClanSearch();
     });
     clearSearchBtn.addEventListener('click', handleClearSearch);
 
@@ -705,3 +741,5 @@
       align-items: center;
       flex-wrap: wrap;
       justify-content: center;
+    }
+    
