@@ -58,11 +58,6 @@
     </div>
   </aside>
 
-  <!-- pull-tab arrow that peeks from left (closer to content now) -->
-  <button id="drawerTab" class="drawer-tab" aria-label="Open menu">
-    <span style="color: white; font-size: 14px;">→</span>
-  </button>
-
   <!-- translucent overlay when drawer is open -->
   <div id="backdrop" class="backdrop"></div>
 
@@ -84,23 +79,39 @@
       </div>
 
       <!-- keep button element; navigate to settings on click -->
-      <button class="icon-btn" title="Settings" aria-label="Go to Settings" onclick="window.location.href='./settings.html'">
+      <a href="./settings.html" class="icon-btn" title="Settings" aria-label="Go to Settings">
         <img src="./assets/settings.png" alt="Settings" />
-      </button>
+      </a>
     </header>
 
-    <!-- page title -->
-    <div class="hi">Video Archive - Best Clash Royale Content!</div>
+    <!-- Mobile pull-to-refresh indicator -->
+    <div class="pull-indicator" id="pullIndicator">
+      <div class="pull-spinner"></div>
+      <span>Pull to refresh videos</span>
+    </div>
+
+    <!-- page title with refresh button -->
+    <div class="page-header-section">
+      <div class="hi">Video Archive - Best Clash Royale Content!</div>
+      <button id="refreshVideosBtn" class="refresh-page-btn" title="Refresh video content">
+        <span class="refresh-icon">↻</span>
+      </button>
+    </div>
 
     <!-- VIDEO ARCHIVE SECTION -->
     <section class="video-archive">
-      <h2 class="archive-title">Latest Videos</h2>
+      <div class="section-header">
+        <h2 class="archive-title">Latest Videos</h2>
+        <button class="refresh-section-btn" id="refreshSectionBtn" title="Refresh video archive">
+          ↻
+        </button>
+      </div>
       
       <!-- Video Grid Container -->
       <div class="video-grid">
         
         <!-- Video Item 1 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -118,7 +129,7 @@
         </div>
 
         <!-- Video Item 2 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -136,7 +147,7 @@
         </div>
 
         <!-- Video Item 3 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -154,7 +165,7 @@
         </div>
 
         <!-- Video Item 4 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -172,7 +183,7 @@
         </div>
 
         <!-- Video Item 5 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -190,7 +201,7 @@
         </div>
 
         <!-- Video Item 6 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -208,7 +219,7 @@
         </div>
 
         <!-- Video Item 7 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -226,7 +237,7 @@
         </div>
 
         <!-- Video Item 8 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -244,7 +255,7 @@
         </div>
 
         <!-- Video Item 9 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -262,7 +273,7 @@
         </div>
 
         <!-- Video Item 10 -->
-        <div class="video-item">
+        <div class="video-item touch-card">
           <div class="video-thumbnail">
             <div class="video-placeholder">
               <div class="play-button">▶</div>
@@ -286,6 +297,11 @@
         <button class="load-more-btn">Load More Videos</button>
       </div>
     </section>
+
+    <!-- Scroll to top button - appears after scrolling -->
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+      ↑
+    </button>
 
     <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
     <footer class="footer">
@@ -314,10 +330,10 @@
 
   </div>
 
-  <!-- tiny JS to handle drawer open/close (no framework) -->
+  <!-- Enhanced mobile features and video functionality -->
   <script>
+    // ============ DRAWER FUNCTIONALITY ============
     const drawer = document.getElementById('drawer');
-    const tab = document.getElementById('drawerTab');
     const burger = document.getElementById('hamburger');
     const backdrop = document.getElementById('backdrop');
 
@@ -334,33 +350,350 @@
     }
 
     burger.addEventListener('click', openDrawer);
-    tab.addEventListener('click', openDrawer);
     backdrop.addEventListener('click', closeDrawer);
 
     window.addEventListener('keydown', (e)=>{ 
       if(e.key === 'Escape') closeDrawer(); 
     });
 
-    // Load more functionality
+    // ============ MOBILE ENHANCEMENTS ============
+    
+    // Pull-to-refresh functionality (mobile)
+    let startY = 0;
+    let isPulling = false;
+    const pullIndicator = document.getElementById('pullIndicator');
+
+    document.addEventListener('touchstart', (e) => {
+      if (window.scrollY === 0) {
+        startY = e.touches[0].pageY;
+        isPulling = true;
+      }
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isPulling) return;
+      
+      const currentY = e.touches[0].pageY;
+      const pullDistance = currentY - startY;
+      
+      if (pullDistance > 0 && pullDistance < 150) {
+        pullIndicator.style.transform = `translateY(${pullDistance}px)`;
+        pullIndicator.style.opacity = pullDistance / 100;
+        
+        if (pullDistance > 80) {
+          pullIndicator.classList.add('ready');
+        } else {
+          pullIndicator.classList.remove('ready');
+        }
+      }
+    });
+
+    document.addEventListener('touchend', () => {
+      if (isPulling && pullIndicator.classList.contains('ready')) {
+        // Refresh the video page
+        refreshVideoContent();
+      }
+      
+      isPulling = false;
+      pullIndicator.style.transform = 'translateY(0)';
+      pullIndicator.style.opacity = '0';
+      pullIndicator.classList.remove('ready');
+    });
+
+    // Scroll to top button functionality
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollToTopBtn.classList.add('visible');
+      } else {
+        scrollToTopBtn.classList.remove('visible');
+      }
+    });
+
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // ============ REFRESH FUNCTIONALITY ============
+    
+    const refreshVideosBtn = document.getElementById('refreshVideosBtn');
+    const refreshSectionBtn = document.getElementById('refreshSectionBtn');
     const loadMoreBtn = document.querySelector('.load-more-btn');
+
+    refreshVideosBtn.addEventListener('click', refreshVideoContent);
+    refreshSectionBtn.addEventListener('click', refreshVideoContent);
+
+    function refreshVideoContent() {
+      console.log('Refreshing video content...');
+      
+      // Add refresh animation
+      refreshVideosBtn.classList.add('refreshing');
+      refreshSectionBtn.classList.add('refreshing');
+      
+      // Simulate refresh (in real app, this would reload video data)
+      setTimeout(() => {
+        refreshVideosBtn.classList.remove('refreshing');
+        refreshSectionBtn.classList.remove('refreshing');
+        
+        // Show feedback
+        showTemporaryMessage('Video content refreshed!');
+      }, 1000);
+    }
+
+    function showTemporaryMessage(message) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'temporary-message';
+      messageDiv.textContent = message;
+      messageDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--blue);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        z-index: 1000;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      `;
+      
+      document.body.appendChild(messageDiv);
+      
+      // Show message
+      setTimeout(() => messageDiv.style.opacity = '1', 10);
+      
+      // Hide and remove message
+      setTimeout(() => {
+        messageDiv.style.opacity = '0';
+        setTimeout(() => document.body.removeChild(messageDiv), 300);
+      }, 2000);
+    }
+
+    // ============ MOBILE TOUCH ENHANCEMENTS ============
+    
+    // Add touch feedback to video cards
+    function addTouchFeedback() {
+      document.querySelectorAll('.touch-card').forEach(card => {
+        card.addEventListener('touchstart', function() {
+          this.style.transform = 'scale(0.98)';
+          this.style.transition = 'transform 0.1s ease';
+        });
+        
+        card.addEventListener('touchend', function() {
+          this.style.transform = 'scale(1)';
+          setTimeout(() => {
+            this.style.transition = 'transform 0.2s ease';
+          }, 100);
+        });
+      });
+    }
+
+    // Load more functionality
     loadMoreBtn.addEventListener('click', function() {
-      // Here you would typically load more videos via JavaScript/API
-      alert('Load more videos functionality would go here!');
+      // In a real app, this would load more videos from an API
+      this.textContent = 'Loading more videos...';
+      this.disabled = true;
+      
+      setTimeout(() => {
+        this.textContent = 'Load More Videos';
+        this.disabled = false;
+        showTemporaryMessage('More videos would be loaded here!');
+      }, 1500);
+    });
+
+    // ============ RESPONSIVE BEHAVIOR ============
+    
+    // Adjust UI based on screen size
+    function adjustForMobile() {
+      const isMobile = window.innerWidth <= 520;
+      const videoGrid = document.querySelector('.video-grid');
+      
+      if (isMobile) {
+        videoGrid.classList.add('mobile-optimized');
+      } else {
+        videoGrid.classList.remove('mobile-optimized');
+      }
+    }
+
+    // Listen for screen size changes
+    window.addEventListener('resize', adjustForMobile);
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      adjustForMobile();
+      addTouchFeedback();
     });
   </script>
 
-  <!-- Additional CSS for video page -->
+  <!-- Mobile-specific styles with font scaling -->
   <style>
-    /* VIDEO ARCHIVE PAGE STYLES */
+    /* Hide the pull-tab arrow - using hamburger instead */
+    .drawer-tab { 
+      display: none !important; 
+    }
+
+    /* Page header with refresh button */
+    .page-header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .refresh-page-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: calc(18px * var(--user-font-scale));
+      flex-shrink: 0;
+    }
+
+    .refresh-page-btn:hover {
+      background: #d4a017;
+      transform: scale(1.05);
+    }
+
+    .refresh-page-btn.refreshing {
+      animation: spin 1s linear infinite;
+    }
+
+    .refresh-icon {
+      display: block;
+      line-height: 1;
+    }
+
+    /* Section header with refresh button */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .refresh-section-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--gold);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: calc(18px * var(--user-font-scale));
+      transition: all 0.3s ease;
+    }
+
+    .refresh-section-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(360deg);
+    }
+
+    .refresh-section-btn.refreshing {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { 
+      to { transform: rotate(360deg); } 
+    }
+
+    /* Pull to refresh indicator */
+    .pull-indicator {
+      position: fixed;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--navy-card);
+      padding: 10px 20px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      font-size: calc(14px * var(--user-font-scale));
+    }
+
+    .pull-indicator.ready { 
+      background: var(--blue); 
+    }
+
+    .pull-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gold);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Scroll to top button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(20px * var(--user-font-scale));
+      font-weight: bold;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 20;
+    }
+
+    .scroll-to-top.visible { 
+      opacity: 1; 
+      visibility: visible; 
+    }
+
+    .scroll-to-top:hover { 
+      background: #1c5ff0; 
+      transform: translateY(-2px); 
+    }
+
+    .scroll-to-top:active { 
+      transform: translateY(0); 
+    }
+
+    /* Enhanced video styles with font scaling */
     .video-archive {
       margin-bottom: 20px;
     }
 
     .archive-title {
       font-family: "Montserrat", sans-serif;
-      font-size: 24px;
+      font-size: calc(24px * var(--user-font-scale));
       font-weight: 700;
-      margin: 0 0 20px 0;
+      margin: 0;
       text-align: center;
       color: var(--ink);
     }
@@ -431,7 +764,7 @@
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 24px;
+      font-size: calc(24px * var(--user-font-scale));
       font-weight: bold;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -452,7 +785,7 @@
       color: white;
       padding: 4px 8px;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: calc(12px * var(--user-font-scale));
       font-weight: 600;
     }
 
@@ -463,7 +796,7 @@
 
     .video-title {
       font-family: "Montserrat", sans-serif;
-      font-size: 16px;
+      font-size: calc(16px * var(--user-font-scale));
       font-weight: 700;
       margin: 0 0 8px 0;
       color: var(--ink);
@@ -471,7 +804,7 @@
     }
 
     .video-description {
-      font-size: 14px;
+      font-size: calc(14px * var(--user-font-scale));
       color: rgba(255,255,255,0.8);
       margin: 0 0 12px 0;
       line-height: 1.4;
@@ -482,7 +815,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12px;
+      font-size: calc(12px * var(--user-font-scale));
       color: rgba(255,255,255,0.6);
     }
 
@@ -510,7 +843,7 @@
       cursor: pointer;
       font-family: "Montserrat", sans-serif;
       transition: all 0.2s ease;
-      font-size: 14px;
+      font-size: calc(14px * var(--user-font-scale));
     }
 
     .load-more-btn:hover {
@@ -519,32 +852,158 @@
       box-shadow: 0 4px 12px rgba(45, 109, 246, 0.3);
     }
 
-    /* Mobile Responsiveness */
+    .load-more-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Touch card feedback */
+    .touch-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .touch-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(45, 109, 246, 0.3);
+    }
+
+    /* Mobile optimizations */
     @media (max-width: 520px) {
-      .archive-title {
-        font-size: 20px;
+      .page-header-section {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
       }
-      
+
+      .hi {
+        font-size: calc(16px * var(--user-font-scale));
+        padding: 8px 16px;
+        margin: 0;
+      }
+
+      .refresh-page-btn {
+        width: 36px;
+        height: 36px;
+        font-size: calc(16px * var(--user-font-scale));
+      }
+
+      .refresh-section-btn {
+        width: 28px;
+        height: 28px;
+        font-size: calc(16px * var(--user-font-scale));
+      }
+
+      .archive-title {
+        font-size: calc(20px * var(--user-font-scale));
+      }
+
       .video-info {
         padding: 12px;
       }
-      
+
       .video-title {
-        font-size: 14px;
+        font-size: calc(14px * var(--user-font-scale));
       }
-      
+
       .video-description {
-        font-size: 13px;
+        font-size: calc(13px * var(--user-font-scale));
       }
-      
+
       .play-button {
         width: 50px;
         height: 50px;
-        font-size: 20px;
+        font-size: calc(20px * var(--user-font-scale));
+      }
+
+      .scroll-to-top {
+        width: 36px;
+        height: 36px;
+        font-size: calc(18px * var(--user-font-scale));
+        bottom: 20px;
+        right: 15px;
+      }
+
+      .pull-indicator {
+        font-size: calc(12px * var(--user-font-scale));
+        padding: 8px 16px;
+      }
+
+      .video-grid.mobile-optimized {
+        gap: 12px;
       }
     }
+
+    /* Very small screens */
+    @media (max-width: 360px) {
+      .page-header-section {
+        gap: 8px;
+      }
+
+      .video-grid {
+        gap: 10px;
+      }
+
+      .video-info {
+        padding: 10px;
+      }
+
+      .archive-title {
+        font-size: calc(18px * var(--user-font-scale));
+      }
+
+      .load-more-btn {
+        padding: 10px 24px;
+        font-size: calc(13px * var(--user-font-scale));
+      }
+    }
+
+    /* Light theme adjustments */
+    body.light-theme .refresh-page-btn {
+      background: var(--gold);
+      color: white;
+    }
+
+    body.light-theme .refresh-section-btn {
+      background: rgba(0,0,0,0.1);
+      border: 1px solid rgba(0,0,0,0.2);
+      color: var(--gold);
+    }
+
+    body.light-theme .refresh-section-btn:hover {
+      background: rgba(0,0,0,0.2);
+    }
+
+    body.light-theme .pull-indicator {
+      background: var(--navy-card);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    body.light-theme .pull-indicator.ready {
+      background: var(--blue);
+    }
+
+    body.light-theme .video-item {
+      background: var(--navy-card);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    body.light-theme .video-title {
+      color: var(--ink);
+    }
+
+    body.light-theme .video-description {
+      color: rgba(0,0,0,0.7);
+    }
+
+    body.light-theme .video-meta {
+      color: rgba(0,0,0,0.6);
+    }
   </style>
+
   <!-- settings functionality for all pages -->
-<script src="./js/settings.js"></script>
+  <script src="./js/settings.js"></script>
 </body>
 </html>
