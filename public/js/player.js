@@ -29,18 +29,59 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // main search function
+    // enhanced input validation with real-time feedback
+    playerTagInput.addEventListener('input', function() {
+        const value = this.value.trim();
+        hideError();
+        
+        // provide real-time feedback
+        if (value.length > 0) {
+            if (!value.startsWith('#') && !value.match(/^[A-Z0-9]+$/i)) {
+                showError('Player tags should start with # or contain only letters and numbers');
+                return;
+            }
+            
+            if (value.length > 15) {
+                showError('Player tags are usually shorter - check for extra characters');
+                return;
+            }
+            
+            if (value.length < 3 && value.startsWith('#')) {
+                showError('Player tag seems too short - need at least 3 characters after #');
+                return;
+            }
+        }
+    });
+
+    // main search function with enhanced error handling
     async function handlePlayerSearch() {
         const playerTag = playerTagInput.value.trim();
         
         if (!playerTag) {
-            showError('need a player tag to search');
+            showError('Please enter a player tag to search');
+            return;
+        }
+
+        // enhanced tag validation
+        const cleanTag = playerTag.replace(/^#/, '');
+        if (!cleanTag.match(/^[A-Z0-9]{3,}$/i)) {
+            showError('Invalid player tag format - use only letters and numbers (e.g., #9Q2YJ0U)');
+            return;
+        }
+
+        if (cleanTag.length < 3) {
+            showError('Player tag too short - need at least 3 characters');
+            return;
+        }
+
+        if (cleanTag.length > 12) {
+            showError('Player tag too long - most tags are 8-10 characters');
             return;
         }
         
         // show what we're loading
         if (playerText && currentPlayerBar) {
-            playerText.textContent = playerTag;
+            playerText.textContent = `#${cleanTag}`;
             currentPlayerBar.classList.remove('hidden');
         }
         
@@ -49,9 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
         hideAllPlayerSections();
         
         try {
-            console.log('fetching player data for:', playerTag);
+            console.log('fetching player data for:', cleanTag);
             
-            const player = await loadPlayerData(playerTag);
+            const player = await loadPlayerData(cleanTag);
             
             console.log('player data loaded:', player.name);
             
@@ -65,9 +106,28 @@ document.addEventListener('DOMContentLoaded', function() {
             
         } catch (error) {
             console.error('failed to load player:', error);
-            showError('couldnt find player - check the tag and try again');
+            handleSearchError(error, cleanTag);
         } finally {
             showLoading(false);
+        }
+    }
+
+    // enhanced error handling with specific messages
+    function handleSearchError(error, playerTag) {
+        const errorMessage = error.message || 'Unknown error';
+        
+        if (errorMessage.includes('404') || errorMessage.includes('not found')) {
+            showError(`Player #${playerTag} not found - check the tag is correct`);
+        } else if (errorMessage.includes('403') || errorMessage.includes('forbidden')) {
+            showError('API access issue - please try again in a moment');
+        } else if (errorMessage.includes('429') || errorMessage.includes('rate limit')) {
+            showError('Too many requests - please wait a moment and try again');
+        } else if (errorMessage.includes('500') || errorMessage.includes('internal')) {
+            showError('Clash Royale servers are having issues - try again later');
+        } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+            showError('Connection problem - check your internet and try again');
+        } else {
+            showError('Could not load player data - please try again');
         }
     }
 
@@ -83,25 +143,42 @@ document.addEventListener('DOMContentLoaded', function() {
         playerTagInput.focus();
     }
 
-    // loads player data from the api
+    // loads player data from the api with better error handling
     async function loadPlayerData(tag) {
         const cleanTag = encodeURIComponent(tag.replace(/^#/, ''));
         const response = await fetch(`/api/royale?path=players&tag=${cleanTag}`);
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('Player not found - check the tag is correct');
+            } else if (response.status === 403) {
+                throw new Error('API access forbidden - please try again');
+            } else if (response.status === 429) {
+                throw new Error('Rate limit exceeded - please wait and try again');
+            } else if (response.status >= 500) {
+                throw new Error('Server error - Clash Royale API is having issues');
+            } else {
+                throw new Error(`API error: ${response.status}`);
+            }
+        }
+        
         const text = await response.text();
         
-        if (!response.ok) throw new Error(`player lookup failed: ${response.status}`);
-        
-        return JSON.parse(text);
+        try {
+            return JSON.parse(text);
+        } catch (parseError) {
+            throw new Error('Invalid response from server - please try again');
+        }
     }
 
     // displays basic player profile info
     function displayPlayerProfile(player) {
-        // basic info
+        // basic info with validation
         document.getElementById('playerName').textContent = player.name || 'Unknown Player';
         document.getElementById('playerTag').textContent = player.tag || '#UNKNOWN';
         document.getElementById('playerLevel').textContent = player.expLevel || 1;
         
-        // main stats
+        // main stats with safe fallbacks
         document.getElementById('playerTrophies').textContent = (player.trophies || 0).toLocaleString();
         document.getElementById('playerBest').textContent = (player.bestTrophies || 0).toLocaleString();
         document.getElementById('playerExp').textContent = (player.expPoints || 0).toLocaleString();
@@ -114,12 +191,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // displays detailed player statistics
     function displayPlayerStats(player) {
-        // battle stats
+        // battle stats with safe fallbacks
         document.getElementById('playerWins').textContent = (player.wins || 0).toLocaleString();
         document.getElementById('playerLosses').textContent = (player.losses || 0).toLocaleString();
         document.getElementById('playerThreeCrowns').textContent = (player.threeCrownWins || 0).toLocaleString();
         
-        // clan activity stats
+        // clan activity stats with safe fallbacks
         document.getElementById('playerDonations').textContent = (player.donations || 0).toLocaleString();
         document.getElementById('playerReceived').textContent = (player.donationsReceived || 0).toLocaleString();
         document.getElementById('playerClanWars').textContent = (player.clanCardsCollected || 0).toLocaleString();
@@ -129,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayPlayerClan(player) {
         const clanInfo = document.getElementById('playerClanInfo');
         
-        if (player.clan) {
+        if (player.clan && player.clan.name) {
             clanInfo.innerHTML = `
                 <div class="clan-info-content">
                     <div class="clan-info-header">
@@ -138,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                         <div class="clan-details">
                             <h4 class="clan-name">${player.clan.name}</h4>
-                            <div class="clan-tag">${player.clan.tag}</div>
+                            <div class="clan-tag">${player.clan.tag || 'No tag'}</div>
                         </div>
                     </div>
                     <div class="clan-role">
@@ -161,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayPlayerArena(player) {
         const arenaInfo = document.getElementById('playerArenaInfo');
         
-        if (player.arena) {
+        if (player.arena && player.arena.name) {
             arenaInfo.innerHTML = `
                 <div class="arena-info-content">
                     <div class="arena-header">
@@ -170,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                         <div class="arena-details">
                             <h4 class="arena-name">${player.arena.name}</h4>
-                            <div class="arena-id">Arena ${player.arena.id}</div>
+                            <div class="arena-id">Arena ${player.arena.id || 'Unknown'}</div>
                         </div>
                     </div>
                     <div class="trophy-info">
