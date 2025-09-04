@@ -939,8 +939,31 @@
         }
       });
 
-      // Enhanced location change feedback
+      // Enhanced location change feedback with close button functionality
       const locationSelect = document.getElementById('locationSelect');
+      const locationCloseBtn = document.getElementById('locationCloseBtn');
+
+      // Show/hide close button based on dropdown interaction
+      locationSelect.addEventListener('focus', function() {
+        locationCloseBtn.classList.add('visible');
+      });
+
+      locationSelect.addEventListener('blur', function() {
+        setTimeout(() => {
+          locationCloseBtn.classList.remove('visible');
+        }, 200); // Small delay to allow clicking the close button
+      });
+
+      // Close button functionality
+      locationCloseBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        locationSelect.blur(); // Close the dropdown
+        locationCloseBtn.classList.remove('visible');
+        clearAllMessages();
+      });
+
+      // Enhanced location selection feedback
       locationSelect.addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
         if (selectedOption.value) {
@@ -949,7 +972,24 @@
         } else {
           clearAllMessages();
         }
+        locationCloseBtn.classList.remove('visible');
       });
+
+      // Mobile-specific enhancements for dropdown
+      if (window.innerWidth <= 520) {
+        locationSelect.addEventListener('touchstart', function() {
+          locationCloseBtn.classList.add('visible');
+        });
+
+        // Hide close button when scrolling the dropdown options
+        locationSelect.addEventListener('scroll', function() {
+          locationCloseBtn.style.opacity = '0.7';
+        });
+
+        locationSelect.addEventListener('scrollend', function() {
+          locationCloseBtn.style.opacity = '1';
+        });
+      }
     });
   </script>
 </body>
