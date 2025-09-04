@@ -98,21 +98,21 @@
         <div class="search-input-container">
           <input type="text" id="clanSearchInput" placeholder="Enter clan tag (e.g., #2PP) or name" class="player-tag-input" maxlength="50" />
           
-          <!-- Custom Location Dropdown -->
-          <div class="custom-location-dropdown">
-            <button type="button" class="location-display" id="locationDisplay">
-              <span class="location-text">🌍 All Locations</span>
-              <span class="dropdown-arrow">▼</span>
+          <!-- Simple custom dropdown that behaves like native select -->
+          <div class="location-dropdown-wrapper">
+            <button type="button" class="location-button" id="locationButton">
+              <span class="location-text" id="locationText">🌍 All Locations</span>
+              <span class="dropdown-icon">▼</span>
             </button>
             
-            <!-- Dropdown panel -->
-            <div class="location-dropdown-panel" id="locationDropdownPanel">
+            <!-- Dropdown list that appears below button -->
+            <div class="location-dropdown" id="locationDropdown">
               <div class="dropdown-header">
-                <span class="dropdown-title">Select Location</span>
-                <button class="dropdown-close" id="dropdownCloseBtn" aria-label="Close dropdown">✕</button>
+                <span>Select Location</span>
+                <button class="close-btn" id="closeDropdown">×</button>
               </div>
-              <div class="dropdown-options">
-                <div class="location-option" data-value="">🌍 All Locations</div>
+              <div class="location-options" id="locationOptions">
+                <div class="location-option selected" data-value="">🌍 All Locations</div>
                 <div class="location-option" data-value="57000001">🇺🇸 United States</div>
                 <div class="location-option" data-value="57000002">🇬🇧 United Kingdom</div>
                 <div class="location-option" data-value="57000003">🇨🇦 Canada</div>
@@ -163,7 +163,7 @@
           </div>
 
           <!-- Hidden select for API compatibility -->
-          <select id="locationSelect" class="hidden-select">
+          <select id="locationSelect" style="display: none;">
             <option value="">🌍 All Locations</option>
             <option value="57000001">🇺🇸 United States</option>
             <option value="57000002">🇬🇧 United Kingdom</option>
@@ -274,7 +274,7 @@
 
   </div>
 
-  <!-- Enhanced mobile features and clan search functionality -->
+  <!-- Clean JavaScript implementation -->
   <script>
     // ============ DRAWER FUNCTIONALITY ============
     const drawer = document.getElementById('drawer');
@@ -296,128 +296,160 @@
     burger.addEventListener('click', openDrawer);
     backdrop.addEventListener('click', closeDrawer);
 
-    window.addEventListener('keydown', (e)=>{ 
-      if(e.key === 'Escape') {
+    window.addEventListener('keydown', (e) => { 
+      if (e.key === 'Escape') {
         closeDrawer();
-        closeLocationDropdown(); // Also close location dropdown
+        closeLocationDropdown();
       }
     });
 
-    // ============ CUSTOM LOCATION DROPDOWN ============
-    const locationDisplay = document.getElementById('locationDisplay');
-    const locationDropdownPanel = document.getElementById('locationDropdownPanel');
-    const dropdownCloseBtn = document.getElementById('dropdownCloseBtn');
-    const locationOptions = document.querySelectorAll('.location-option');
-    const hiddenLocationSelect = document.getElementById('locationSelect');
-    const locationText = document.querySelector('.location-text');
-    const dropdownArrow = document.querySelector('.dropdown-arrow');
+    // ============ LOCATION DROPDOWN (SIMPLE IMPLEMENTATION) ============
+    const locationButton = document.getElementById('locationButton');
+    const locationDropdown = document.getElementById('locationDropdown');
+    const locationText = document.getElementById('locationText');
+    const closeDropdown = document.getElementById('closeDropdown');
+    const locationOptions = document.getElementById('locationOptions');
+    const hiddenSelect = document.getElementById('locationSelect');
+    
+    let isDropdownOpen = false;
 
-    let isLocationDropdownOpen = false;
-
-    // Open dropdown
     function openLocationDropdown() {
-      isLocationDropdownOpen = true;
-      locationDisplay.classList.add('active');
-      locationDropdownPanel.classList.add('open');
-      dropdownArrow.style.transform = 'rotate(180deg)';
-      
-      // Prevent background scrolling on mobile
-      document.body.style.overflow = 'hidden';
+      isDropdownOpen = true;
+      locationDropdown.classList.add('show');
+      locationButton.classList.add('active');
     }
 
-    // Close dropdown
     function closeLocationDropdown() {
-      isLocationDropdownOpen = false;
-      locationDisplay.classList.remove('active');
-      locationDropdownPanel.classList.remove('open');
-      dropdownArrow.style.transform = 'rotate(0deg)';
-      
-      // Restore background scrolling
-      document.body.style.overflow = 'auto';
+      isDropdownOpen = false;
+      locationDropdown.classList.remove('show');
+      locationButton.classList.remove('active');
     }
 
-    // Select location option
-    function selectLocationOption(option) {
-      const value = option.dataset.value;
-      const text = option.textContent;
-      
-      // Update display
-      locationText.textContent = text;
-      
-      // Update hidden select for API compatibility
-      hiddenLocationSelect.value = value;
-      
-      // Update selected state
-      locationOptions.forEach(opt => opt.classList.remove('selected'));
-      option.classList.add('selected');
-      
-      // Close dropdown
-      closeLocationDropdown();
-      
-      // Trigger change event for existing functionality
-      const changeEvent = new Event('change');
-      hiddenLocationSelect.dispatchEvent(changeEvent);
-      
-      // Show feedback
-      if (value) {
-        const countryName = text.split(' ').slice(1).join(' '); // Remove flag emoji
-        showInfo(`Location filter: ${countryName} - this will narrow your search results`);
-      } else {
-        clearAllMessages();
-      }
-    }
-
-    // Event listeners for custom dropdown
-    locationDisplay.addEventListener('click', function(e) {
-      e.preventDefault();
+    // Button click to toggle
+    locationButton.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (isLocationDropdownOpen) {
+      if (isDropdownOpen) {
         closeLocationDropdown();
       } else {
         openLocationDropdown();
       }
     });
 
-    dropdownCloseBtn.addEventListener('click', function(e) {
-      e.preventDefault();
+    // Close button
+    closeDropdown.addEventListener('click', (e) => {
       e.stopPropagation();
       closeLocationDropdown();
     });
 
-    locationOptions.forEach(option => {
-      option.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        selectLocationOption(this);
-      });
+    // Option selection
+    locationOptions.addEventListener('click', (e) => {
+      if (e.target.classList.contains('location-option')) {
+        const value = e.target.getAttribute('data-value');
+        const text = e.target.textContent;
+        
+        // Update display
+        locationText.textContent = text;
+        
+        // Update hidden select
+        hiddenSelect.value = value;
+        
+        // Update selected state
+        document.querySelectorAll('.location-option').forEach(opt => {
+          opt.classList.remove('selected');
+        });
+        e.target.classList.add('selected');
+        
+        closeLocationDropdown();
+        
+        // Show feedback
+        if (value) {
+          showInfo(`Location set to: ${text.substring(3)}`);
+        }
+      }
     });
 
-    // Close dropdown when clicking backdrop
-    locationDropdownPanel.addEventListener('click', function(e) {
-      if (e.target === this) {
+    // Click outside to close
+    document.addEventListener('click', (e) => {
+      if (isDropdownOpen && !locationButton.contains(e.target) && !locationDropdown.contains(e.target)) {
         closeLocationDropdown();
       }
     });
 
-    // Initialize first option as selected
-    locationOptions[0].classList.add('selected');
+    // ============ MESSAGE FUNCTIONS ============
+    function showInfo(message) {
+      const infoDiv = document.getElementById('infoMessage');
+      infoDiv.textContent = message;
+      infoDiv.classList.remove('hidden');
+      setTimeout(() => infoDiv.classList.add('hidden'), 3000);
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('errorMessage');
+      errorDiv.textContent = message;
+      errorDiv.classList.remove('hidden');
+    }
+
+    function clearAllMessages() {
+      document.getElementById('warningMessage').classList.add('hidden');
+      document.getElementById('infoMessage').classList.add('hidden');
+      document.getElementById('errorMessage').classList.add('hidden');
+    }
+
+    // ============ SEARCH FUNCTIONALITY ============
+    const searchClansBtn = document.getElementById('searchClansBtn');
+    const clanSearchInput = document.getElementById('clanSearchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+    searchClansBtn.addEventListener('click', handleClanSearch);
+    clanSearchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleClanSearch();
+    });
+    clearSearchBtn.addEventListener('click', handleClearSearch);
+
+    function handleClanSearch() {
+      const searchQuery = clanSearchInput.value.trim();
+      if (!searchQuery) {
+        showError('Please enter a clan tag or name to search');
+        return;
+      }
+      
+      clearAllMessages();
+      showInfo('Search functionality would connect to your clan search API here');
+      
+      // Update search display
+      const searchText = document.getElementById('searchText');
+      const currentSearchBar = document.getElementById('currentSearchBar');
+      searchText.textContent = `"${searchQuery}"`;
+      currentSearchBar.classList.remove('hidden');
+    }
+
+    function handleClearSearch() {
+      clanSearchInput.value = '';
+      locationText.textContent = '🌍 All Locations';
+      hiddenSelect.value = '';
+      document.querySelectorAll('.location-option').forEach(opt => opt.classList.remove('selected'));
+      document.querySelector('.location-option[data-value=""]').classList.add('selected');
+      clearAllMessages();
+      document.getElementById('currentSearchBar').classList.add('hidden');
+      clanSearchInput.focus();
+    }
 
     // ============ MOBILE ENHANCEMENTS ============
     
-    // Pull-to-refresh functionality (mobile)
+    // Pull-to-refresh functionality
     let startY = 0;
     let isPulling = false;
     const pullIndicator = document.getElementById('pullIndicator');
 
     document.addEventListener('touchstart', (e) => {
-      if (window.scrollY === 0 && !isLocationDropdownOpen) {
+      if (window.scrollY === 0 && !isDropdownOpen) {
         startY = e.touches[0].pageY;
         isPulling = true;
       }
     });
 
     document.addEventListener('touchmove', (e) => {
-      if (!isPulling || isLocationDropdownOpen) return;
+      if (!isPulling || isDropdownOpen) return;
       
       const currentY = e.touches[0].pageY;
       const pullDistance = currentY - startY;
@@ -435,15 +467,8 @@
     });
 
     document.addEventListener('touchend', () => {
-      if (isPulling && pullIndicator.classList.contains('ready') && !isLocationDropdownOpen) {
-        // Refresh clan search if search is active
-        const currentSearch = document.getElementById('searchText').textContent;
-        if (currentSearch && currentSearch !== '—') {
-          refreshCurrentSearch();
-        } else {
-          // Just refresh the page if no search active
-          location.reload();
-        }
+      if (isPulling && pullIndicator.classList.contains('ready') && !isDropdownOpen) {
+        location.reload();
       }
       
       isPulling = false;
@@ -452,7 +477,7 @@
       pullIndicator.classList.remove('ready');
     });
 
-    // Scroll to top button functionality
+    // Scroll to top button
     const scrollToTopBtn = document.getElementById('scrollToTop');
 
     window.addEventListener('scroll', () => {
@@ -464,248 +489,26 @@
     });
 
     scrollToTopBtn.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-
-    // ============ ENHANCED USER FEEDBACK ============
-    
-    // Input validation and feedback
-    const clanSearchInput = document.getElementById('clanSearchInput');
-    
-    clanSearchInput.addEventListener('input', function() {
-      const value = this.value;
-      clearAllMessages();
-      
-      // Provide real-time feedback
-      if (value.length > 30) {
-        showWarning('Very long clan names are rare - try shorter search terms for better results');
-      } else if (value.length > 20) {
-        showInfo('Long clan name detected - search will try multiple variations');
-      }
-      
-      // Check for common issues
-      if (value.includes('  ')) {
-        showWarning('Extra spaces detected - these will be cleaned up automatically');
-      }
-      
-      if (value.match(/[^\w\s#]/g)) {
-        const symbols = value.match(/[^\w\s#]/g).join('');
-        showInfo(`Special characters (${symbols}) will be removed during search`);
-      }
-    });
-
-    // Message display functions
-    function showWarning(message) {
-      const warningDiv = document.getElementById('warningMessage');
-      warningDiv.textContent = message;
-      warningDiv.classList.remove('hidden');
-    }
-
-    function showInfo(message) {
-      const infoDiv = document.getElementById('infoMessage');
-      infoDiv.textContent = message;
-      infoDiv.classList.remove('hidden');
-    }
-
-    function showError(message) {
-      const errorDiv = document.getElementById('errorMessage');
-      errorDiv.textContent = message;
-      errorDiv.classList.remove('hidden');
-    }
-
-    function clearAllMessages() {
-      document.getElementById('warningMessage').classList.add('hidden');
-      document.getElementById('infoMessage').classList.add('hidden');
-      document.getElementById('errorMessage').classList.add('hidden');
-    }
-
-    // ============ REFRESH FUNCTIONALITY ============
-    
-    // Refresh buttons
-    const refreshClanSearchBtn = document.getElementById('refreshClanSearchBtn');
-    const refreshSectionBtn = document.getElementById('refreshSectionBtn');
-
-    refreshClanSearchBtn.addEventListener('click', refreshCurrentSearch);
-    refreshSectionBtn.addEventListener('click', refreshCurrentSearch);
-
-    function refreshCurrentSearch() {
-      const clanSearchInput = document.getElementById('clanSearchInput');
-      const currentSearch = clanSearchInput.value.trim();
-      
-      if (currentSearch) {
-        console.log('Refreshing clan search for:', currentSearch);
-        
-        // Add refresh animation
-        refreshClanSearchBtn.classList.add('refreshing');
-        refreshSectionBtn.classList.add('refreshing');
-        
-        // Trigger the search function
-        handleClanSearch();
-        
-        // Remove animation after a delay
-        setTimeout(() => {
-          refreshClanSearchBtn.classList.remove('refreshing');
-          refreshSectionBtn.classList.remove('refreshing');
-        }, 1000);
-      }
-    }
-
-    // ============ CLEAR SEARCH FUNCTIONALITY ============
-    
-    const clearSearchBtn = document.getElementById('clearSearchBtn');
-    clearSearchBtn.addEventListener('click', handleClearSearch);
-
-    function handleClearSearch() {
-      console.log('clearing clan search');
-      
-      // Clear input fields
-      clanSearchInput.value = '';
-      
-      // Reset location dropdown
-      locationText.textContent = '🌍 All Locations';
-      hiddenLocationSelect.value = '';
-      locationOptions.forEach(opt => opt.classList.remove('selected'));
-      locationOptions[0].classList.add('selected');
-      
-      // Hide all sections and messages
-      clearAllMessages();
-      hideAllClanSections();
-      document.getElementById('currentSearchBar').classList.add('hidden');
-      
-      // Reset refresh controls
-      hideRefreshControls();
-      
-      // Focus back to search input
-      clanSearchInput.focus();
-    }
-
-    // Helper function to hide all clan sections
-    function hideAllClanSections() {
-      document.getElementById('clansResultsSection').classList.add('hidden');
-    }
-
-    function showRefreshControls() {
-      refreshClanSearchBtn.classList.remove('hidden');
-    }
-
-    function hideRefreshControls() {
-      refreshClanSearchBtn.classList.add('hidden');
-    }
-
-    // ============ DUMMY CLAN SEARCH FUNCTION ============
-    // This replaces your existing clan search - you can integrate with your actual API
-    
-    const searchClansBtn = document.getElementById('searchClansBtn');
-    searchClansBtn.addEventListener('click', handleClanSearch);
-    
-    clanSearchInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        handleClanSearch();
-      }
-    });
-
-    function handleClanSearch() {
-      const searchQuery = clanSearchInput.value.trim();
-      const locationId = hiddenLocationSelect.value;
-      
-      if (!searchQuery) {
-        showError('Please enter a clan tag or name to search');
-        return;
-      }
-      
-      // Show what we're searching for
-      const searchText = document.getElementById('searchText');
-      const currentSearchBar = document.getElementById('currentSearchBar');
-      
-      if (searchText && currentSearchBar) {
-        const locationText = hiddenLocationSelect.options[hiddenLocationSelect.selectedIndex].text;
-        const searchDisplay = `"${searchQuery}"`;
-        searchText.textContent = locationId ? `${searchDisplay} in ${locationText}` : searchDisplay;
-        currentSearchBar.classList.remove('hidden');
-      }
-      
-      // Show loading
-      document.getElementById('loadingIndicator').classList.remove('hidden');
-      hideAllClanSections();
-      clearAllMessages();
-      
-      // Simulate API call
-      setTimeout(() => {
-        document.getElementById('loadingIndicator').classList.add('hidden');
-        
-        // Show results section
-        document.getElementById('clansResultsSection').classList.remove('hidden');
-        showRefreshControls();
-        
-        // Add some dummy clan cards
-        const clansList = document.getElementById('clansList');
-        clansList.innerHTML = `
-          <div class="clan-card">
-            <div class="clan-card-content">
-              <div class="clan-card-left">
-                <div class="clan-badge">
-                  <img src="./assets/magnifier.png" alt="Clan Badge" />
-                </div>
-              </div>
-              <div class="clan-card-center">
-                <div class="clan-card-header">
-                  <div class="clan-name-section">
-                    <h4 class="clan-name">Example Clan</h4>
-                    <div class="clan-tag">#ABC123</div>
-                  </div>
-                  <div class="clan-location">🇺🇸 United States</div>
-                </div>
-                <div class="clan-stats-row">
-                  <div class="clan-stat">
-                    <span class="stat-label">Members</span>
-                    <span class="stat-value">45/50</span>
-                  </div>
-                  <div class="clan-stat">
-                    <span class="stat-label">Score</span>
-                    <span class="stat-value">52,340</span>
-                  </div>
-                  <div class="clan-stat">
-                    <span class="stat-label">War</span>
-                    <span class="stat-value">3,210</span>
-                  </div>
-                </div>
-              </div>
-              <div class="clan-card-right">
-                <div class="join-indicator joinable">✓</div>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        showInfo('Search completed successfully!');
-      }, 1500);
-    }
   </script>
 
-  <!-- Enhanced styles for the custom dropdown -->
+  <!-- Clean CSS styles -->
   <style>
-    /* Hide the pull-tab arrow - using hamburger instead */
+    /* Hide the pull-tab arrow */
     .drawer-tab { 
       display: none !important; 
     }
 
-    /* Hide the native select */
-    .hidden-select {
-      display: none !important;
-    }
-
-    /* Custom Location Dropdown Styles */
-    .custom-location-dropdown {
+    /* Location Dropdown Wrapper - CRITICAL: position relative */
+    .location-dropdown-wrapper {
       position: relative;
       width: 100%;
       min-width: 200px;
     }
 
-    /* Location Display Button */
-    .location-display {
+    /* Location Button (looks like an input) */
+    .location-button {
       width: 100%;
       padding: 12px 16px;
       background: var(--navy-card);
@@ -721,12 +524,11 @@
       transition: all 0.2s ease;
     }
 
-    .location-display:hover {
+    .location-button:hover {
       border-color: var(--blue);
-      background: rgba(255,255,255,0.05);
     }
 
-    .location-display.active {
+    .location-button.active {
       border-color: var(--blue);
       background: rgba(45, 109, 246, 0.1);
     }
@@ -739,60 +541,40 @@
       text-overflow: ellipsis;
     }
 
-    .dropdown-arrow {
+    .dropdown-icon {
       font-size: calc(12px * var(--user-font-scale));
-      transition: transform 0.3s ease;
+      transition: transform 0.2s ease;
       margin-left: 8px;
-      flex-shrink: 0;
     }
 
-    /* Dropdown Panel */
-    .location-dropdown-panel {
-      position: fixed;
-      top: 0;
+    .location-button.active .dropdown-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Dropdown Panel - CRITICAL: position absolute, not fixed */
+    .location-dropdown {
+      position: absolute;
+      top: 100%;
       left: 0;
       right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
       z-index: 1000;
+      margin-top: 4px;
+      background: var(--navy-card);
+      border-radius: var(--radius-md);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
       opacity: 0;
       visibility: hidden;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      max-height: 200px;
+      overflow: hidden;
     }
 
-    .location-dropdown-panel.open {
+    .location-dropdown.show {
       opacity: 1;
       visibility: visible;
-    }
-
-    .location-dropdown-panel::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-    }
-
-    /* Dropdown Content Container */
-    .location-dropdown-panel .dropdown-options {
-      position: relative;
-      z-index: 1001;
-      background: var(--navy-card);
-      border-radius: var(--radius-xl);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.1);
-      width: 100%;
-      max-width: 400px;
-      max-height: 60vh;
-      overflow-y: auto;
-      padding: 0;
+      transform: translateY(0);
     }
 
     /* Dropdown Header */
@@ -800,42 +582,45 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
+      padding: 8px 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: var(--blue);
-      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    }
-
-    .dropdown-title {
+      background: rgba(45, 109, 246, 0.1);
       font-family: "Montserrat", sans-serif;
-      font-weight: 700;
-      font-size: calc(16px * var(--user-font-scale));
-      color: white;
+      font-weight: 600;
+      font-size: calc(13px * var(--user-font-scale));
+      color: var(--blue);
     }
 
-    .dropdown-close {
+    .close-btn {
       background: none;
       border: none;
-      color: white;
-      font-size: calc(20px * var(--user-font-scale));
+      color: var(--blue);
+      font-size: calc(16px * var(--user-font-scale));
       cursor: pointer;
-      padding: 4px 8px;
+      padding: 2px 6px;
       border-radius: 4px;
       transition: background 0.2s ease;
       line-height: 1;
+      font-weight: bold;
     }
 
-    .dropdown-close:hover {
-      background: rgba(255,255,255,0.2);
+    .close-btn:hover {
+      background: rgba(45, 109, 246, 0.2);
     }
 
-    /* Location Options */
+    /* Location Options Container */
+    .location-options {
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    /* Individual Location Options */
     .location-option {
-      padding: 12px 20px;
+      padding: 8px 12px;
       cursor: pointer;
       transition: background 0.2s ease;
       border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: calc(15px * var(--user-font-scale));
+      font-size: calc(14px * var(--user-font-scale));
       color: var(--ink);
     }
 
@@ -853,55 +638,54 @@
       font-weight: 600;
     }
 
+    /* Scrollbar for dropdown */
+    .location-options::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .location-options::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .location-options::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 3px;
+    }
+
     /* Enhanced message styles */
-    .warning-message {
+    .warning-message, .info-message, .error-message, .loading-message {
       text-align: center;
-      color: #ffa726;
       font-weight: 600;
       margin-top: 12px;
-      background: rgba(255, 167, 38, 0.1);
       padding: 8px 16px;
       border-radius: var(--radius-md);
-      border: 1px solid rgba(255, 167, 38, 0.3);
       font-size: calc(14px * var(--user-font-scale));
+    }
+
+    .warning-message {
+      color: #ffa726;
+      background: rgba(255, 167, 38, 0.1);
+      border: 1px solid rgba(255, 167, 38, 0.3);
     }
 
     .info-message {
-      text-align: center;
       color: #42a5f5;
-      font-weight: 600;
-      margin-top: 12px;
       background: rgba(66, 165, 245, 0.1);
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
       border: 1px solid rgba(66, 165, 245, 0.3);
-      font-size: calc(14px * var(--user-font-scale));
     }
 
     .error-message {
-      text-align: center;
       color: #ff6b6b;
-      font-weight: 600;
-      margin-top: 12px;
       background: rgba(255, 107, 107, 0.1);
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
       border: 1px solid rgba(255, 107, 107, 0.3);
-      font-size: calc(14px * var(--user-font-scale));
     }
 
     .loading-message {
-      text-align: center;
       color: var(--blue);
-      font-weight: 600;
-      margin-top: 12px;
-      padding: 8px 16px;
       background: rgba(45, 109, 246, 0.1);
-      border-radius: var(--radius-md);
-      font-size: calc(14px * var(--user-font-scale));
     }
 
-    /* Mobile search layout improvements */
+    /* Mobile search layout */
     .clan-search-container {
       display: flex;
       flex-direction: column;
@@ -921,455 +705,3 @@
       align-items: center;
       flex-wrap: wrap;
       justify-content: center;
-    }
-
-    .refresh-matches-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--gold);
-      color: white;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: calc(18px * var(--user-font-scale));
-      flex-shrink: 0;
-    }
-
-    .refresh-matches-btn:hover {
-      background: #d4a017;
-      transform: scale(1.05);
-    }
-
-    .refresh-matches-btn.refreshing {
-      animation: spin 1s linear infinite;
-    }
-
-    .refresh-icon {
-      display: block;
-      line-height: 1;
-    }
-
-    /* Section header with refresh button */
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .refresh-section-btn {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: var(--gold);
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: calc(18px * var(--user-font-scale));
-      transition: all 0.3s ease;
-    }
-
-    .refresh-section-btn:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(360deg);
-    }
-
-    .refresh-section-btn.refreshing {
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin { 
-      to { transform: rotate(360deg); } 
-    }
-
-    /* Pull to refresh indicator */
-    .pull-indicator {
-      position: fixed;
-      top: -60px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--navy-card);
-      padding: 10px 20px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 100;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      font-size: calc(14px * var(--user-font-scale));
-    }
-
-    .pull-indicator.ready { 
-      background: var(--blue); 
-    }
-
-    .pull-spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--gold);
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    /* Scroll to top button */
-    .scroll-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--blue);
-      color: white;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: calc(20px * var(--user-font-scale));
-      font-weight: bold;
-      cursor: pointer;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      z-index: 20;
-    }
-
-    .scroll-to-top.visible { 
-      opacity: 1; 
-      visibility: visible; 
-    }
-
-    .scroll-to-top:hover { 
-      background: #1c5ff0; 
-      transform: translateY(-2px); 
-    }
-
-    .scroll-to-top:active { 
-      transform: translateY(0); 
-    }
-
-    /* Enhanced mobile responsiveness */
-    @media (max-width: 520px) {
-      .clan-search-container.mobile-stack .search-input-container {
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .clan-search-container.mobile-stack .button-group {
-        justify-content: center;
-        gap: 12px;
-      }
-
-      .location-dropdown-panel {
-        padding: 15px;
-      }
-
-      .location-dropdown-panel .dropdown-options {
-        max-height: 70vh;
-        max-width: 100%;
-      }
-
-      .dropdown-header {
-        padding: 12px 16px;
-      }
-
-      .dropdown-title {
-        font-size: calc(14px * var(--user-font-scale));
-      }
-
-      .location-option {
-        padding: 10px 16px;
-        font-size: calc(14px * var(--user-font-scale));
-      }
-
-      .refresh-matches-btn {
-        width: 40px;
-        height: 40px;
-        font-size: calc(16px * var(--user-font-scale));
-      }
-
-      .refresh-section-btn {
-        width: 32px;
-        height: 32px;
-        font-size: calc(16px * var(--user-font-scale));
-      }
-
-      .scroll-to-top {
-        width: 40px;
-        height: 40px;
-        font-size: calc(18px * var(--user-font-scale));
-        bottom: 20px;
-        right: 15px;
-      }
-
-      .pull-indicator {
-        font-size: calc(12px * var(--user-font-scale));
-        padding: 8px 16px;
-      }
-    }
-
-    /* Very small screens */
-    @media (max-width: 360px) {
-      .button-group {
-        flex-direction: column;
-        gap: 8px;
-        width: 100%;
-      }
-
-      .load-matches-btn, .clear-btn {
-        width: 100%;
-        max-width: 200px;
-      }
-
-      .refresh-matches-btn {
-        align-self: center;
-        width: 36px;
-        height: 36px;
-      }
-
-      .location-dropdown-panel .dropdown-options {
-        max-height: 180px;
-      }
-
-      .dropdown-header {
-        padding: 5px 8px;
-      }
-
-      .location-option {
-        padding: 6px 8px;
-        font-size: calc(12px * var(--user-font-scale));
-      }
-    }
-
-    /* Light theme adjustments */
-    body.light-theme .warning-message {
-      background: rgba(255, 167, 38, 0.15);
-      color: #e65100;
-      border-color: rgba(255, 167, 38, 0.5);
-    }
-
-    body.light-theme .info-message {
-      background: rgba(66, 165, 245, 0.15);
-      color: #1565c0;
-      border-color: rgba(66, 165, 245, 0.5);
-    }
-
-    body.light-theme .error-message {
-      background: rgba(255, 107, 107, 0.15);
-      color: #d32f2f;
-      border-color: rgba(255, 107, 107, 0.5);
-    }
-
-    body.light-theme .refresh-matches-btn {
-      background: var(--gold);
-      color: white;
-    }
-
-    body.light-theme .refresh-section-btn {
-      background: rgba(0,0,0,0.1);
-      border: 1px solid rgba(0,0,0,0.2);
-      color: var(--gold);
-    }
-
-    body.light-theme .refresh-section-btn:hover {
-      background: rgba(0,0,0,0.2);
-    }
-
-    body.light-theme .pull-indicator {
-      background: var(--navy-card);
-      border: 1px solid rgba(0,0,0,0.1);
-    }
-
-    body.light-theme .pull-indicator.ready {
-      background: var(--blue);
-    }
-
-    body.light-theme .location-display {
-      background: white;
-      border-color: rgba(0,0,0,0.2);
-      color: var(--ink);
-    }
-
-    body.light-theme .location-display:hover,
-    body.light-theme .location-display.active {
-      border-color: var(--blue);
-    }
-
-    body.light-theme .location-dropdown-panel .dropdown-options {
-      background: white;
-      border: 1px solid rgba(0,0,0,0.2);
-    }
-
-    body.light-theme .location-option {
-      color: var(--ink);
-    }
-
-    body.light-theme .location-option:hover {
-      background: rgba(0,0,0,0.05);
-    }
-
-    body.light-theme .location-option.selected {
-      background: rgba(45, 109, 246, 0.1);
-      color: var(--blue);
-    }
-
-    /* Clan card styles - assuming you have these from your existing CSS */
-    .clans-results-section {
-      background: var(--navy-card);
-      border-radius: var(--radius-xl);
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .clans-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .clan-card {
-      background: rgba(255,255,255,0.05);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      border-left: 4px solid var(--gold);
-      transition: background 0.2s ease;
-    }
-
-    .clan-card:hover {
-      background: rgba(255,255,255,0.08);
-    }
-
-    .clan-card-content {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .clan-card-left {
-      flex-shrink: 0;
-    }
-
-    .clan-badge {
-      width: 32px;
-      height: 32px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .clan-badge img {
-      width: 18px;
-      height: 18px;
-      max-width: 18px !important;
-      max-height: 18px !important;
-      object-fit: contain !important;
-    }
-
-    .clan-card-center {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .clan-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
-
-    .clan-name-section h4.clan-name {
-      font-family: "Montserrat", sans-serif;
-      font-size: calc(16px * var(--user-font-scale));
-      font-weight: 700;
-      margin: 0 0 2px 0;
-      color: var(--ink);
-    }
-
-    .clan-tag {
-      font-size: calc(12px * var(--user-font-scale));
-      color: var(--gold);
-      font-family: "Montserrat", sans-serif;
-      font-weight: 600;
-    }
-
-    .clan-location {
-      font-size: calc(12px * var(--user-font-scale));
-      color: rgba(255,255,255,0.7);
-      text-align: right;
-    }
-
-    .clan-stats-row {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-    }
-
-    .clan-stat {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 60px;
-    }
-
-    .clan-stat .stat-label {
-      font-size: calc(10px * var(--user-font-scale));
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 2px;
-      font-weight: 600;
-    }
-
-    .clan-stat .stat-value {
-      font-size: calc(13px * var(--user-font-scale));
-      color: var(--gold);
-      font-family: "Montserrat", sans-serif;
-      font-weight: 700;
-    }
-
-    .clan-card-right {
-      flex-shrink: 0;
-    }
-
-    .join-indicator {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      font-weight: 700;
-      font-size: calc(18px * var(--user-font-scale));
-    }
-
-    .join-indicator.joinable {
-      background: rgba(76, 205, 196, 0.2);
-      color: #4ecdc4;
-    }
-
-    .join-indicator.not-joinable {
-      background: rgba(255, 107, 107, 0.2);
-      color: #ff6b6b;
-    }
-  </style>
-
-  <!-- clan search functionality -->
-  <script src="./js/clans.js"></script>
-  <!-- settings functionality for all pages -->
-  <script src="./js/settings.js"></script>
-</body>
-</html>
