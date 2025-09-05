@@ -93,15 +93,15 @@
     <div class="player-search-section">
       <div class="hi">Find Your Perfect Clan</div>
       
-      <!-- search inputs container -->
-      <div class="clan-search-container">
+      <!-- search inputs container - standardized layout -->
+      <div class="player-lookup-container">
         <div class="search-input-container">
           <input type="text" id="clanSearchInput" placeholder="Enter clan tag (e.g., #2PP) or name" class="player-tag-input" maxlength="50" />
           
-          <!-- UPDATED: Compact Custom Location Dropdown -->
-          <div class="custom-location-select" id="customLocationSelect">
+          <!-- UPDATED: More compact location dropdown with X button -->
+          <div class="custom-location-select compact" id="customLocationSelect">
             <div class="location-display" id="locationDisplay">
-              <span class="location-text" id="locationText">🌍 All Locations</span>
+              <span class="location-text" id="locationText">🌍 All</span>
               <span class="dropdown-arrow">▼</span>
             </div>
             
@@ -485,7 +485,7 @@
     // Adjust UI based on screen size
     function adjustForMobile() {
       const isMobile = window.innerWidth <= 520;
-      const searchContainer = document.querySelector('.clan-search-container');
+      const searchContainer = document.querySelector('.player-lookup-container');
       
       if (isMobile) {
         searchContainer.classList.add('mobile-stack');
@@ -544,7 +544,7 @@
       const hiddenLocationSelect = document.getElementById('locationSelect');
       const locationOptions = document.querySelectorAll('.location-option');
       
-      locationText.textContent = '🌍 All Locations';
+      locationText.textContent = '🌍 All';
       hiddenLocationSelect.value = '';
       
       // Update selected state
@@ -602,8 +602,17 @@
       const value = option.dataset.value;
       const text = option.textContent;
       
-      // Update display
-      locationText.textContent = text;
+      // Update display - make it more compact
+      if (value) {
+        // Just show flag + short name for selected countries
+        const flagEmoji = text.split(' ')[0];
+        const countryName = text.split(' ').slice(1).join(' ');
+        // truncate long names for compact display
+        const shortName = countryName.length > 8 ? countryName.substring(0, 6) + '...' : countryName;
+        locationText.textContent = `${flagEmoji} ${shortName}`;
+      } else {
+        locationText.textContent = '🌍 All';
+      }
       
       // Update hidden select for API compatibility
       hiddenLocationSelect.value = value;
@@ -687,17 +696,22 @@
     .custom-location-select {
       position: relative;
       display: inline-block;
-      min-width: 180px;
+      min-width: 120px; /* smaller default width */
+    }
+
+    .custom-location-select.compact {
+      min-width: 100px; /* even more compact */
+      max-width: 140px;
     }
 
     .location-display {
-      padding: 12px 16px;
+      padding: 12px 12px;
       background: var(--navy-card);
       border: 2px solid rgba(255,255,255,0.1);
       border-radius: var(--radius-md);
       color: var(--ink);
       font-family: "Open Sans", sans-serif;
-      font-size: calc(16px * var(--user-font-scale));
+      font-size: calc(14px * var(--user-font-scale)); /* slightly smaller */
       cursor: pointer;
       display: flex;
       justify-content: space-between;
@@ -717,12 +731,15 @@
 
     .location-text {
       flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .dropdown-arrow {
-      font-size: calc(12px * var(--user-font-scale));
+      font-size: calc(10px * var(--user-font-scale));
       transition: transform 0.3s ease;
-      margin-left: 8px;
+      margin-left: 4px;
     }
 
     .location-display.active .dropdown-arrow {
@@ -758,7 +775,7 @@
       border: 1px solid rgba(255,255,255,0.1);
       max-width: 90vw;
       max-height: 70vh;
-      width: 400px;
+      width: 380px; /* slightly smaller */
       display: flex;
       flex-direction: column;
       transform: scale(0.9);
@@ -773,7 +790,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
+      padding: 14px 18px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
       background: rgba(255,255,255,0.05);
       border-radius: var(--radius-xl) var(--radius-xl) 0 0;
@@ -782,7 +799,7 @@
     .dropdown-title {
       font-family: "Montserrat", sans-serif;
       font-weight: 600;
-      font-size: calc(16px * var(--user-font-scale));
+      font-size: calc(15px * var(--user-font-scale));
       color: var(--gold);
     }
 
@@ -790,14 +807,14 @@
       background: rgba(255,107,107,0.2);
       border: none;
       color: #ff6b6b;
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: calc(14px * var(--user-font-scale));
+      font-size: calc(13px * var(--user-font-scale));
       font-weight: bold;
       transition: all 0.2s ease;
     }
@@ -808,16 +825,16 @@
     }
 
     .location-options-container {
-      max-height: 300px;
+      max-height: 280px;
       overflow-y: auto;
-      padding: 8px 0;
+      padding: 6px 0;
     }
 
     .location-option {
-      padding: 12px 20px;
+      padding: 10px 18px;
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: calc(14px * var(--user-font-scale));
+      font-size: calc(13px * var(--user-font-scale));
       border-left: 3px solid transparent;
     }
 
@@ -877,8 +894,8 @@
       font-size: calc(14px * var(--user-font-scale));
     }
 
-    /* Mobile search layout improvements */
-    .clan-search-container {
+    /* Standardized search layout - matches player.html */
+    .player-lookup-container {
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -888,7 +905,7 @@
       display: flex;
       gap: 12px;
       margin-top: 12px;
-      flex-wrap: wrap;
+      align-items: center; /* align items vertically */
     }
 
     .button-group {
@@ -1037,12 +1054,12 @@
 
     /* Enhanced mobile responsiveness */
     @media (max-width: 520px) {
-      .clan-search-container.mobile-stack .search-input-container {
+      .player-lookup-container.mobile-stack .search-input-container {
         flex-direction: column;
         gap: 12px;
       }
 
-      .clan-search-container.mobile-stack .button-group {
+      .player-lookup-container.mobile-stack .button-group {
         justify-content: center;
         gap: 12px;
       }
@@ -1050,6 +1067,10 @@
       .custom-location-select {
         min-width: auto;
         width: 100%;
+      }
+
+      .custom-location-select.compact {
+        max-width: 100%;
       }
 
       .location-dropdown-content {

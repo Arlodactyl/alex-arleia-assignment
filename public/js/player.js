@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // main search function with enhanced error handling
+    // main search function with enhanced error handling - case insensitive
     async function handlePlayerSearch() {
         const playerTag = playerTagInput.value.trim();
         
@@ -62,9 +62,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // enhanced tag validation
-        const cleanTag = playerTag.replace(/^#/, '');
-        if (!cleanTag.match(/^[A-Z0-9]{3,}$/i)) {
+        // enhanced tag validation - make case insensitive
+        const cleanTag = playerTag.replace(/^#/, '').toUpperCase();
+        if (!cleanTag.match(/^[A-Z0-9]{3,}$/)) {
             showError('Invalid player tag format - use only letters and numbers (e.g., #9Q2YJ0U)');
             return;
         }
@@ -143,9 +143,10 @@ document.addEventListener('DOMContentLoaded', function() {
         playerTagInput.focus();
     }
 
-    // loads player data from the api with better error handling
+    // loads player data from the api with better error handling - case insensitive
     async function loadPlayerData(tag) {
-        const cleanTag = encodeURIComponent(tag.replace(/^#/, ''));
+        // ensure tag is uppercase for API
+        const cleanTag = encodeURIComponent(tag.toUpperCase().replace(/^#/, ''));
         const response = await fetch(`/api/royale?path=players&tag=${cleanTag}`);
         
         if (!response.ok) {

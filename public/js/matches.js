@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // normalize player tag for api + display
+        // normalize player tag for api + display - make case insensitive
         const normalized = raw.replace(/^#/, '').toUpperCase();
         const displayTag = `#${normalized}`;
 
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // process and display the data
             displayMatches(matches);
-            calculateAndShowStats(matches);      // ← last-25 stats
+            calculateAndShowStats(matches);      // last-25 stats
             showRecentGamePattern(matches.slice(0, 5));
             
             // show everything
@@ -83,10 +83,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // makes the actual api request through our proxy
+    // makes the actual api request through our proxy - handles case insensitive tags
     async function loadRecentMatches(tag) {
-        // clean up the tag for the url
-        const cleanTag = encodeURIComponent(String(tag).replace(/^#/, ""));
+        // clean up the tag for the url - ensure uppercase
+        const cleanTag = encodeURIComponent(String(tag).toUpperCase().replace(/^#/, ""));
         const apiUrl = `/api/royale?path=players&tag=${cleanTag}&battlelog=true`;
         
         console.log('calling api:', apiUrl);
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // figure out if we won or lost
         const result = analyzeMatchResult(match);
-        const timeAgo = formatTimeAgo(match.battleTime);   // ← fixed parsing
+        const timeAgo = formatTimeAgo(match.battleTime);   // fixed parsing
         const opponentInfo = getOpponentInfo(match);
 
         // pick the right-side icon based on result
