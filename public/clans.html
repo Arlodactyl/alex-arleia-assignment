@@ -785,7 +785,10 @@
     .location-dropdown-overlay.show .location-dropdown-content {
       transform: scale(1);
     }
-
+/* Prevent location dropdown flash on page load */
+.location-dropdown-overlay:not(.show) {
+  display: none !important;
+}
     .dropdown-header {
       display: flex;
       justify-content: space-between;
