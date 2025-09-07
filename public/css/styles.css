@@ -1316,7 +1316,31 @@ body.light-theme .required-trophies,
 body.light-theme .setting-description {
   color: rgba(0,0,0,0.6);
 }
+/* Add this at the end of your light theme section */
 
+body.light-theme .match-time,
+body.light-theme .clan-location,
+body.light-theme .required-trophies,
+body.light-theme .setting-description {
+  color: rgba(0,0,0,0.6);
+}
+
+/* ADD THIS NEW SECTION - Hamburger menu fix for light theme */
+body.light-theme .hamburger {
+  background: rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.2);
+}
+
+body.light-theme .hamburger:hover {
+  background: rgba(0,0,0,0.2);
+  transform: scale(1.05);
+}
+
+body.light-theme .hamburger .bars::before,
+body.light-theme .hamburger .bars::after,
+body.light-theme .hamburger .line {
+  background: var(--ink);
+}
 body.light-theme .opponent-clan,
 body.light-theme .arena-name {
   color: var(--gold);
