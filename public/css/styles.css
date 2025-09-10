@@ -1325,7 +1325,7 @@ body.light-theme .setting-description {
   color: rgba(0,0,0,0.6);
 }
 
-/* ADD THIS NEW SECTION - Hamburger menu fix for light theme */
+/*  Hamburger menu fix for light theme */
 body.light-theme .hamburger {
   background: rgba(0,0,0,0.1);
   border: 1px solid rgba(0,0,0,0.2);

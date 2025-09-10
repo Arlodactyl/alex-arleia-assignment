@@ -433,27 +433,51 @@
     // Input validation and feedback
     const clanSearchInput = document.getElementById('clanSearchInput');
     
-    clanSearchInput.addEventListener('input', function() {
-      const value = this.value;
-      clearAllMessages();
-      
-      // Provide real-time feedback
-      if (value.length > 30) {
+clanSearchInput.addEventListener('input', function() {
+  const value = this.value;
+  clearAllMessages();
+  
+  // Auto-format input - clean up multiple spaces
+  let cleanValue = value.replace(/\s+/g, ' ');
+  if (cleanValue !== value) {
+    this.value = cleanValue;
+  }
+  
+  // Provide real-time feedback for clan names
+  if (value.length > 0) {
+    // Check if it's a tag search (starts with # or looks like a tag)
+    const upperValue = value.toUpperCase();
+    const isTagSearch = upperValue.startsWith('#') || upperValue.match(/^[A-Z0-9]{3,}$/);
+    
+    if (isTagSearch) {
+      // Tag validation feedback
+      if (value.length > 15) {
+        showWarning('Clan tags are usually shorter - check for extra characters');
+      } else if (value.length < 4 && value.startsWith('#')) {
+        showWarning('Clan tag seems too short - need at least 3 characters after #');
+      }F
+    } else {
+      // Name validation feedback - THIS IS THE NEW PART
+      if (value.length < 3) {
+        showWarning('Clan name too short - enter at least 3 characters for better results');
+      } else if (value.length > 30) {
         showWarning('Very long clan names are rare - try shorter search terms for better results');
       } else if (value.length > 20) {
         showInfo('Long clan name detected - search will try multiple variations');
       }
-      
-      // Check for common issues
-      if (value.includes('  ')) {
-        showWarning('Extra spaces detected - these will be cleaned up automatically');
-      }
-      
-      if (value.match(/[^\w\s#]/g)) {
-        const symbols = value.match(/[^\w\s#]/g).join('');
-        showInfo(`Special characters (${symbols}) will be removed during search`);
-      }
-    });
+    }
+    
+    // Check for common issues
+    if (value.includes('  ')) {
+      showWarning('Extra spaces detected - these will be cleaned up automatically');
+    }
+    
+    if (value.match(/[^\w\s#]/g)) {
+      const symbols = value.match(/[^\w\s#]/g).join('');
+      showInfo(`Special characters (${symbols}) will be removed during search`);
+    }
+  }
+});
 
     // Message display functions
     function showWarning(message) {
@@ -1223,82 +1247,108 @@
     }
   </style>
 
-  <!-- clan search functionality -->
-  <script src="./js/clans.js"></script>
-  <!-- settings functionality for all pages -->
-  <script src="./js/settings.js"></script>
+<!-- clan search functionality -->
+<script src="./js/clans.js"></script>
+<!-- settings functionality for all pages -->
+<script src="./js/settings.js"></script>
 
-  <!-- Enhanced clan search functionality -->
-  <script>
-    // Override the original handleClanSearch to show refresh controls and feedback
-    document.addEventListener('DOMContentLoaded', function() {
+<!-- Enhanced clan search functionality -->
+<script>
+  // Override the original handleClanSearch to show refresh controls and feedback
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // Get the original clans.js functions
+    const originalHandleClanSearch = window.handleClanSearch;
+    
+    // Enhanced clan search with feedback
+    window.handleClanSearch = async function() {
+      const searchQuery = document.getElementById('clanSearchInput').value.trim();
       
-      // Get the original clans.js functions
-      const originalHandleClanSearch = window.handleClanSearch;
+      // Enhanced validation before search
+      if (!searchQuery) {
+        showError('Please enter a clan tag or name to search');
+        return;
+      }
+
+      if (searchQuery.length < 2) {
+        showError('Search term too short - enter at least 2 characters');
+        return;
+      }
+
+      // Determine search type - make case insensitive
+      const upperQuery = searchQuery.toUpperCase();
+      const isTagSearch = upperQuery.startsWith('#') || upperQuery.match(/^[A-Z0-9]{3,}$/);
+
+      // Specific validation for names vs tags
+      if (!isTagSearch && searchQuery.length < 3) {
+        showError('Clan name too short - enter at least 3 characters for meaningful results');
+        return;
+      }
+
+      if (isTagSearch && searchQuery.replace('#', '').length < 3) {
+        showError('Clan tag too short - need at least 3 characters');
+        return;
+      }
+
+      // Provide feedback before search
+      if (searchQuery.length > 30) {
+        showWarning('Searching very long clan name - this may take longer or return fewer results');
+      }
       
-      // Enhanced clan search with feedback
-      window.handleClanSearch = async function() {
-        const searchQuery = document.getElementById('clanSearchInput').value.trim();
+      // Call original search function
+      try {
+        await originalHandleClanSearch();
         
-        // Provide feedback before search
-        if (searchQuery.length > 30) {
-          showWarning('Searching very long clan name - this may take longer or return fewer results');
-        }
-        
-        // Call original search function
-        try {
-          await originalHandleClanSearch();
+        // Show refresh controls after successful search
+        const resultsSection = document.getElementById('clansResultsSection');
+        if (!resultsSection.classList.contains('hidden')) {
+          showRefreshControls();
+          addTouchFeedback();
           
-          // Show refresh controls after successful search
-          const resultsSection = document.getElementById('clansResultsSection');
-          if (!resultsSection.classList.contains('hidden')) {
-            showRefreshControls();
-            addTouchFeedback();
-            
-            // Provide feedback based on results
-            const clanCards = document.querySelectorAll('.clan-card');
-            provideFeedbackForSearch(searchQuery, Array.from(clanCards));
-          }
-        } catch (error) {
-          console.error('Search failed:', error);
-          showError('Search failed - please try again or check your connection');
+          // Provide feedback based on results
+          const clanCards = document.querySelectorAll('.clan-card');
+          provideFeedbackForSearch(searchQuery, Array.from(clanCards));
         }
-      };
+      } catch (error) {
+        console.error('Search failed:', error);
+        showError('Search failed - please try again or check your connection');
+      }
+    };
 
-      // Initialize mobile optimizations
-      adjustForMobile();
-      
-      // Add enter key support for search
-      const clanSearchInput = document.getElementById('clanSearchInput');
-      clanSearchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          handleClanSearch();
-        }
-      });
-
-      // Enhanced clear function
-      const clearSearchBtn = document.getElementById('clearSearchBtn');
-      clearSearchBtn.addEventListener('click', function() {
-        clearAllMessages();
-        hideRefreshControls();
-      });
-
-      // Auto-format input
-      clanSearchInput.addEventListener('input', function(e) {
-        let value = this.value;
-        // Clean up multiple spaces
-        value = value.replace(/\s+/g, ' ');
-        this.value = value;
-      });
-
-      // Show helpful info on focus
-      clanSearchInput.addEventListener('focus', function() {
-        if (!this.value) {
-          showInfo('Search by clan name or tag (#ABC123) - use location filter to narrow results');
-        }
-      });
+    // Initialize mobile optimizations
+    adjustForMobile();
+    
+    // Add enter key support for search
+    const clanSearchInput = document.getElementById('clanSearchInput');
+    clanSearchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        handleClanSearch();
+      }
     });
-    </script>
+
+    // Enhanced clear function
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    clearSearchBtn.addEventListener('click', function() {
+      clearAllMessages();
+      hideRefreshControls();
+    });
+
+    // Auto-format input
+    clanSearchInput.addEventListener('input', function(e) {
+      let value = this.value;
+      // Clean up multiple spaces
+      value = value.replace(/\s+/g, ' ');
+      this.value = value;
+    });
+
+    // Show helpful info on focus
+    clanSearchInput.addEventListener('focus', function() {
+      if (!this.value) {
+        showInfo('Search by clan name or tag (#ABC123) - use location filter to narrow results');
+      }
+    });
+  });
+</script>
 
     <style>
     /* === Clan search input: match player page look & width === */
@@ -1344,4 +1394,4 @@
     }
     </style>
 </body>
-</html>
+</html>F
