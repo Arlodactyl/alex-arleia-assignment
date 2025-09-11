@@ -161,15 +161,35 @@
           ↻
         </button>
       </div>
-      <div id="gamePattern" class="game-pattern-container">
-        <!-- w/l letters get added here by javascript -->
-      </div>
-    </section>
-
-    <!-- Scroll to top button - appears after content loads -->
-    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
-      ↑
+<!-- game pattern section - shows w/l pattern for last 5 games -->
+<section class="game-pattern-section hidden" id="gamePatternSection">
+  <div class="section-header">
+    <h3 class="pattern-title">LAST 5 GAMES</h3>
+    <button class="refresh-section-btn" id="refreshSectionBtnPattern" title="Refresh pattern">
+      ↻
     </button>
+  </div>
+  <div id="gamePattern" class="game-pattern-container">
+    <!-- w/l letters get added here by javascript -->
+  </div>
+  
+  <!-- ADD THE ARROWS HERE -->
+  <div class="pattern-arrows">
+    <div class="arrow-indicator oldest">
+      <div class="arrow-symbol">←</div>
+      <div class="arrow-label">Oldest</div>
+    </div>
+    <div class="arrow-indicator recent">
+      <div class="arrow-symbol">→</div>
+      <div class="arrow-label">Recent</div>
+    </div>
+  </div>
+</section>
+
+<!-- Scroll to top button - appears after content loads -->
+<button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+  ↑
+</button>
 
     <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
     <footer class="footer">
