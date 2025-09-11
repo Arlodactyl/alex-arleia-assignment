@@ -153,7 +153,7 @@
       </div>
     </section>
 
-    <!-- game pattern section - shows w/l pattern for last 5 games -->
+    <!-- FIXED: game pattern section - shows w/l pattern for last 5 games with arrows -->
     <section class="game-pattern-section hidden" id="gamePatternSection">
       <div class="section-header">
         <h3 class="pattern-title">LAST 5 GAMES</h3>
@@ -161,35 +161,27 @@
           ↻
         </button>
       </div>
-<!-- game pattern section - shows w/l pattern for last 5 games -->
-<section class="game-pattern-section hidden" id="gamePatternSection">
-  <div class="section-header">
-    <h3 class="pattern-title">LAST 5 GAMES</h3>
-    <button class="refresh-section-btn" id="refreshSectionBtnPattern" title="Refresh pattern">
-      ↻
-    </button>
-  </div>
-  <div id="gamePattern" class="game-pattern-container">
-    <!-- w/l letters get added here by javascript -->
-  </div>
-  
-  <!-- ADD THE ARROWS HERE -->
-  <div class="pattern-arrows">
-    <div class="arrow-indicator oldest">
-      <div class="arrow-symbol">←</div>
-      <div class="arrow-label">Oldest</div>
-    </div>
-    <div class="arrow-indicator recent">
-      <div class="arrow-symbol">→</div>
-      <div class="arrow-label">Recent</div>
-    </div>
-  </div>
-</section>
+      <div id="gamePattern" class="game-pattern-container">
+        <!-- w/l letters get added here by javascript -->
+      </div>
+      
+      <!-- Direction arrows underneath game pattern -->
+      <div class="pattern-arrows">
+        <div class="arrow-indicator oldest">
+          <div class="arrow-symbol">←</div>
+          <div class="arrow-label">Oldest</div>
+        </div>
+        <div class="arrow-indicator recent">
+          <div class="arrow-symbol">→</div>
+          <div class="arrow-label">Recent</div>
+        </div>
+      </div>
+    </section>
 
-<!-- Scroll to top button - appears after content loads -->
-<button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
-  ↑
-</button>
+    <!-- Scroll to top button - appears after content loads -->
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+      ↑
+    </button>
 
     <!-- FOOTER WITH SOCIAL ICONS - this will be on all pages -->
     <footer class="footer">
@@ -365,14 +357,17 @@
             </div>
           `;
           
+          // FIXED: This should now work because gamePattern container exists
           const gamePattern = document.getElementById('gamePattern');
-          gamePattern.innerHTML = `
-            <span class="pattern-letter won">W</span>
-            <span class="pattern-letter lost">L</span>
-            <span class="pattern-letter won">W</span>
-            <span class="pattern-letter won">W</span>
-            <span class="pattern-letter lost">L</span>
-          `;
+          if (gamePattern) {
+            gamePattern.innerHTML = `
+              <span class="pattern-letter won">W</span>
+              <span class="pattern-letter lost">L</span>
+              <span class="pattern-letter won">W</span>
+              <span class="pattern-letter won">W</span>
+              <span class="pattern-letter lost">L</span>
+            `;
+          }
         }, 1500);
         
       } catch (error) {
